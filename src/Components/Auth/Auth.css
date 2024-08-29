@@ -1,0 +1,153 @@
+/* Container for the authentication form */
+.auth-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Overlay background */
+    display: flex;
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Box that contains the form and additional info */
+  .auth-box {
+    display: flex;
+    width: 80%;
+    max-width: 900px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  /* Form and additional information sections */
+  .auth-form, .auth-info {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  /* Heading styles */
+  .auth-form h1, .auth-info h2 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  /* Form layout */
+  .auth-form form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Google sign-in button */
+  .google-btn {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #4285F4;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 15px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .google-btn:hover {
+    background: #357ae8;
+  }
+  
+  /* Divider between Google button and form inputs */
+  .divider {
+    text-align: center;
+    margin: 15px 0;
+    color: #888;
+  }
+  
+  /* Form input fields */
+  input[type="text"], input[type="password"] {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  /* Submit button styles */
+  .submit-btn {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #28a745;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 15px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .submit-btn:hover {
+    background: #218838;
+  }
+  
+  /* Link to toggle between sign-in and sign-up */
+  .toggle-link {
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+  }
+  
+  .toggle-link:hover {
+    color: #0056b3;
+  }
+  
+  /* Additional information section styling */
+  .auth-info {
+    background-image: url('/public/3c77e519-3fb4-4fc5-9391-92a6701b50c6.png');
+    background-position: center;
+    background-size: cover;
+  }
+  
+  .auth-info h2 {
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  .auth-info p {
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  /* Handling order for sign-in and sign-up forms */
+  .auth-box.signin .auth-form {
+    order: 1;
+  }
+  
+  .auth-box.register .auth-form {
+    order: 2;
+  }
+/* .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #f44336;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 10px;
+    transition: background 0.3s;
+  }
+  
+  .close-btn:hover {
+    background: #d32f2f;
+  } */
+  
+  

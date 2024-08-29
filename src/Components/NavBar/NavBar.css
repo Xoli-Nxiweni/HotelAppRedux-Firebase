@@ -1,0 +1,164 @@
+/* Base styles for the navbar */
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 5%;
+    align-items: center;
+    z-index: 1000; /* Ensure it is on top of other elements */
+    width: 100%;
+    border-bottom: 1px solid;
+    position: fixed; /* Ensure the navbar sticks to the top */
+    top: 0;
+    transition: background-color 0.3s linear; /* Smooth background color transition */
+}
+
+/* Styles for the navbar when scrolled */
+.nav-container.scrolled {
+    background-color: rgb(255, 255, 255); /* Change background color when scrolled */
+    color: #000000;
+}
+
+.nav-container.scrolled svg {
+    color: #000000;
+}
+
+.nav-container.scrolled a {
+    color: #777777;
+}
+
+.nav-container.scrolled a.active {
+    color: #000000;
+}
+
+.nav-container.scrolled a:hover {
+    color: #000000;
+}
+
+/* Navigation links */
+.nav-links {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+}
+
+/* Link styles */
+.nav-links li a {
+    text-decoration: none;
+    color: #ffffff87;
+    transition: all 0.4s linear;
+}
+
+.nav-links li a:hover {
+    color: #ffffff;
+}
+
+.nav-links li a.active {
+    color: #ffffff;
+}
+
+/* Logo */
+.logo {
+    border-radius: 50%;
+}
+
+.logo svg {
+    font-size: 4em;
+    color: #fff;
+}
+
+/* User Profile */
+.userProfile {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    transition: all 0.3s linear;
+}
+
+.userProfile svg {
+    font-size: 1.2em;
+    color: #fff;
+}
+
+/* Authentication Button */
+.authBtn {
+    padding: 10px 15px;
+    border-radius: 15px 0 15px 0;
+    border: 0;
+    cursor: pointer;
+    background: #2f7b2f;
+    color: #fff;
+    transition: all 0.2s linear;
+}
+
+.authBtn:hover {
+    background: rgba(25, 80, 25, 0.361)
+}
+
+/* Drawer for mobile view */
+.hamburger {
+    display: none; /* Adjust visibility based on screen size with media queries */
+    font-size: 2em;
+    color: #fff;
+    cursor: pointer;
+}
+
+.drawer {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 250px;
+    height: 100%;
+    background: rgb(63, 102, 130);
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+    transition: right 0.3s ease;
+    padding: 20px;
+    z-index: 10;
+}
+
+.drawer.open {
+    right: 0;
+}
+
+.drawer ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.drawer ul li a {
+    color: #ffffff87;
+    text-decoration: none;
+    transition: all 0.4s linear;
+}
+
+.drawer ul li a:hover {
+    color: #ffffff;
+}
+
+.closeDrawer {
+    align-self: flex-end;
+    font-size: 2em;
+    cursor: pointer;
+}
+
+/* Ensure responsiveness with media queries */
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+    }
+
+    .nav-links {
+        display: none; /* Hide links on mobile by default */
+    }
+}
+
+@media (min-width: 769px) {
+    .drawer {
+        display: none; /* Hide drawer on larger screens */
+    }
+}

@@ -1,0 +1,29 @@
+.HomeWrapper{
+    display: flex;
+    /* width: 100%; */
+    padding: 0 10%;
+    height: 100vh;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+.homeContainer{
+    background: #fff;
+    padding: 20px;
+}
+.button{
+    margin: 30px 0 0 0;
+}
+.button button{
+    padding: 20px;
+    border-radius: 15px 0 15px 0;
+    border: 0;
+    background: #2f7b2f;
+    color: #fff;
+    transition: all .4s linear;
+    cursor: pointer;
+}
+.button button:hover {
+    background: rgba(25, 80, 25, 0.882);
+}
