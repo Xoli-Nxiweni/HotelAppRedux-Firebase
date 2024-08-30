@@ -1,11 +1,16 @@
 import { useState, useEffect, useRef } from "react";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import './auth.css';
+import {auth} from '../../Firebase/firebase'
 
 // eslint-disable-next-line react/prop-types
 const Auth = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [isRegistered, setIsRegistered] = useState(false);
   
   // Create a ref for the auth-box
@@ -32,16 +37,27 @@ const Auth = ({ isOpen, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (isRegistered) {
       if (password === confirmPassword) {
-        // Replace with your sign-up logic
-        alert('Signing up with email and password');
+        // Replace with your sign-up logic using Firebase
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredentials) => {
+            console.log('User registered:', userCredentials);
+            alert(`Signing up with ${name} ${surname}, phone: ${phoneNumber}, email: ${email}, password: ${password}`);
+          })
+          .catch((error) => console.error(error.message));
       } else {
         alert('Passwords do not match');
       }
     } else {
-      // Replace with your sign-in logic
-      alert('Signing in with email and password');
+      // Replace with your sign-in logic using Firebase
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredentials) => {
+          console.log('User signed in:', userCredentials);
+          alert('Signing in with email and password');
+        })
+        .catch((error) => console.error(error.message));
     }
   };
 
@@ -60,9 +76,34 @@ const Auth = ({ isOpen, onClose }) => {
                 <span className="divider">--or--</span>
               </>
             )}
+            {isRegistered && (
+              <>
+                <input
+                  type="text"
+                  placeholder="Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder="Surname"
+                  value={surname}
+                  onChange={(e) => setSurname(e.target.value)}
+                  required
+                />
+                <input
+                  type="tel"
+                  placeholder="Phone Number"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  required
+                />
+              </>
+            )}
             <input
               type="text"
-              placeholder="Username"
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -93,7 +134,6 @@ const Auth = ({ isOpen, onClose }) => {
               </span>
             </p>
           </form>
-          {/* <button className="close-btn" onClick={onClose}>Close</button> */}
         </div>
         <div className="auth-info">
           {/* Additional content or imagery */}

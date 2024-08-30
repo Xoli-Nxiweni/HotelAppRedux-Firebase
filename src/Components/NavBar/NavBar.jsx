@@ -4,10 +4,12 @@ import { IoLogoWordpress } from "react-icons/io";
 import Auth from '../Auth/Auth';
 import './NavBar.css';
 
-const NavBar = () => {
+// eslint-disable-next-line react/prop-types
+const NavBar = ({ setActivePage }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [authOpen, setAuthOpen] = useState(false); // State to control auth popup
+  const [authOpen, setAuthOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState('home'); // Track the active page
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,11 +25,17 @@ const NavBar = () => {
   };
 
   const handleSignInClick = () => {
-    setAuthOpen(true); // Open the auth popup
+    setAuthOpen(true);
   };
 
   const closeAuthPopup = () => {
-    setAuthOpen(false); // Close the auth popup
+    setAuthOpen(false);
+  };
+
+  const handleNavClick = (page) => {
+    setCurrentPage(page);
+    setActivePage(page);
+    setDrawerOpen(false); // Close the drawer after selecting a page
   };
 
   return (
@@ -36,10 +44,42 @@ const NavBar = () => {
         <a href="#"><IoLogoWordpress /></a>
       </div>
       <ul className={`nav-links ${drawerOpen ? 'open' : ''}`}>
-        <li><a href="#" onClick={() => console.log('Home clicked')} className="active">Home</a></li>
-        <li><a href="#" onClick={() => console.log('About Us clicked')}>About Us</a></li>
-        <li><a href="#" onClick={() => console.log('Rooms clicked')}>Rooms</a></li>
-        <li><a href="#" onClick={() => console.log('Contact Us clicked')}>Contact Us</a></li>
+        <li>
+          <a 
+            href="#" 
+            onClick={() => handleNavClick('home')} 
+            className={currentPage === 'home' ? 'active' : ''}
+          >
+            Home
+          </a>
+        </li>
+        <li>
+          <a 
+            href="#" 
+            onClick={() => handleNavClick('about')} 
+            className={currentPage === 'about' ? 'active' : ''}
+          >
+            About Us
+          </a>
+        </li>
+        <li>
+          <a 
+            href="#" 
+            onClick={() => handleNavClick('rooms')} 
+            className={currentPage === 'rooms' ? 'active' : ''}
+          >
+            Rooms
+          </a>
+        </li>
+        <li>
+          <a 
+            href="#" 
+            onClick={() => handleNavClick('contact')} 
+            className={currentPage === 'contact' ? 'active' : ''}
+          >
+            Contact Us
+          </a>
+        </li>
       </ul>
       <div className="userProfile">
         <button className="authBtn" onClick={handleSignInClick}>Sign In</button>
@@ -48,20 +88,50 @@ const NavBar = () => {
         </div>
       </div>
 
-      {/* Drawer for mobile view */}
       <div className={`drawer ${drawerOpen ? 'open' : ''}`}>
         <div className="closeDrawer" onClick={toggleDrawer}>
           <FaTimes />
         </div>
         <ul>
-          <li><a href="#" onClick={() => console.log('Home clicked')} className="active">Home</a></li>
-          <li><a href="#" onClick={() => console.log('About Us clicked')}>About Us</a></li>
-          <li><a href="#" onClick={() => console.log('Rooms clicked')}>Rooms</a></li>
-          <li><a href="#" onClick={() => console.log('Contact Us clicked')}>Contact Us</a></li>
+          <li>
+            <a 
+              href="#" 
+              onClick={() => handleNavClick('home')} 
+              className={currentPage === 'home' ? 'active' : ''}
+            >
+              Home
+            </a>
+          </li>
+          <li>
+            <a 
+              href="#" 
+              onClick={() => handleNavClick('about')} 
+              className={currentPage === 'about' ? 'active' : ''}
+            >
+              About Us
+            </a>
+          </li>
+          <li>
+            <a 
+              href="#" 
+              onClick={() => handleNavClick('rooms')} 
+              className={currentPage === 'rooms' ? 'active' : ''}
+            >
+              Rooms
+            </a>
+          </li>
+          <li>
+            <a 
+              href="#" 
+              onClick={() => handleNavClick('contact')} 
+              className={currentPage === 'contact' ? 'active' : ''}
+            >
+              Contact Us
+            </a>
+          </li>
         </ul>
       </div>
 
-      {/* Auth Popup */}
       <Auth isOpen={authOpen} onClose={closeAuthPopup} />
     </div>
   );

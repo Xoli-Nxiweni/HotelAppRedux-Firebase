@@ -1,0 +1,51 @@
+.Rooms{
+    /* height: 100vh; */
+    background: #fff;
+    border-radius: 25px 0 25px 0;
+    margin: 100px 5%;
+    border: 1px solid;
+}
+.topPart{
+    border: 2px solid;
+    padding: 10px;
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 15px;
+    
+}
+.topPart svg{
+    font-size: 25px;
+}
+.searchPart{
+    display: flex;
+    align-items: center;
+    background: #fff;
+}
+.searchPart input{
+    display: flex;
+    align-items: center;
+    margin-bottom: unset;
+    border: 0;
+}
+.searchBtn{
+    background: #3f6682;
+    border: 0;
+    padding: 12px 25px;
+    color: #fff;
+    border-radius: 15px;
+}
+.checkIn,
+.checkOut,
+.guestsAndRooms{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.checkIn input,
+.checkOut input,
+.guestsAndRooms select{
+    background-color: transparent;
+    border: 0;
+}

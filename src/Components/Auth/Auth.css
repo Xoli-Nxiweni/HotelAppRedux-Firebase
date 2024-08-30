@@ -70,12 +70,13 @@
   }
   
   /* Form input fields */
-  input[type="text"], input[type="password"] {
+  input[type="text"], input[type="password"], input[type="tel"] {
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1rem;
+    outline: 0;
   }
   
   /* Submit button styles */
@@ -83,7 +84,7 @@
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background: #28a745;
+    background: #3f6682;
     color: #fff;
     font-size: 1rem;
     cursor: pointer;
@@ -92,13 +93,13 @@
   }
   
   .submit-btn:hover {
-    background: #218838;
+    background: #284d67;
   }
   
   /* Link to toggle between sign-in and sign-up */
   .toggle-link {
     cursor: pointer;
-    color: #007bff;
+    color: #3f6682;
     text-decoration: underline;
     transition: color 0.3s ease;
   }

@@ -6,8 +6,16 @@
   font-family: Moderustic;
 }
 ::selection{
-  background: rgb(63, 102, 130);
+  background: #3f6682;
   color: #fff;
+}
+::-webkit-scrollbar{
+  width: 8px;
+  background: transparent;
+}
+::-webkit-scrollbar-thumb{
+  background: rgb(63, 102, 130);
+  border-radius: 15px;
 }
 .Wrapper{
   display: grid;
