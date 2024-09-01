@@ -1,88 +1,107 @@
 import { useState, useEffect } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
+import { FaRegUserCircle } from "react-icons/fa";
 import { IoLogoWordpress } from "react-icons/io";
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { signOutUser } from '../../Features/slices/authSlice';
 import Auth from '../Auth/Auth';
+import UserProfile from "../UserProfile/UserProfile";
 import './NavBar.css';
 
-// eslint-disable-next-line react/prop-types
 const NavBar = ({ setActivePage }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState('home'); // Track the active page
+  const [showProfile, setShowProfile] = useState(false);
+  const [currentPage, setCurrentPage] = useState(window.location.pathname);
+
+  const navigate = useNavigate(); // Initialize useNavigate
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+  const isAuthenticated = !!user;
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleDrawer = () => {
-    setDrawerOpen(!drawerOpen);
-  };
+  useEffect(() => {
+    // Update current page when the path changes
+    setCurrentPage(window.location.pathname);
+  }, [window.location.pathname]);
 
-  const handleSignInClick = () => {
-    setAuthOpen(true);
-  };
-
-  const closeAuthPopup = () => {
-    setAuthOpen(false);
-  };
+  const toggleDrawer = () => setDrawerOpen(prev => !prev);
+  const handleSignInClick = () => setAuthOpen(true);
+  const closeAuthPopup = () => setAuthOpen(false);
 
   const handleNavClick = (page) => {
     setCurrentPage(page);
+    navigate(page); // Navigate to the page
     setActivePage(page);
-    setDrawerOpen(false); // Close the drawer after selecting a page
+    setDrawerOpen(false);
+  };
+
+  const handleSignOut = () => {
+    dispatch(signOutUser());
+    setShowProfile(false);
   };
 
   return (
     <div className={`nav-container ${scrolled ? 'scrolled' : ''}`}>
       <div className="logo">
-        <a href="#"><IoLogoWordpress /></a>
+        <a href="/"><IoLogoWordpress /></a>
       </div>
       <ul className={`nav-links ${drawerOpen ? 'open' : ''}`}>
         <li>
           <a 
-            href="#" 
-            onClick={() => handleNavClick('home')} 
-            className={currentPage === 'home' ? 'active' : ''}
+            href="/" 
+            onClick={(e) => { e.preventDefault(); handleNavClick('/'); }} 
+            className={currentPage === '/' ? 'active' : ''}
           >
             Home
           </a>
         </li>
         <li>
           <a 
-            href="#" 
-            onClick={() => handleNavClick('about')} 
-            className={currentPage === 'about' ? 'active' : ''}
+            href="/about" 
+            onClick={(e) => { e.preventDefault(); handleNavClick('/about'); }} 
+            className={currentPage === '/about' ? 'active' : ''}
           >
             About Us
           </a>
         </li>
         <li>
           <a 
-            href="#" 
-            onClick={() => handleNavClick('rooms')} 
-            className={currentPage === 'rooms' ? 'active' : ''}
+            href="/rooms" 
+            onClick={(e) => { e.preventDefault(); handleNavClick('/rooms'); }} 
+            className={currentPage === '/rooms' ? 'active' : ''}
           >
             Rooms
           </a>
         </li>
         <li>
           <a 
-            href="#" 
-            onClick={() => handleNavClick('contact')} 
-            className={currentPage === 'contact' ? 'active' : ''}
+            href="/contact" 
+            onClick={(e) => { e.preventDefault(); handleNavClick('/contact'); }} 
+            className={currentPage === '/contact' ? 'active' : ''}
           >
             Contact Us
           </a>
         </li>
       </ul>
       <div className="userProfile">
-        <button className="authBtn" onClick={handleSignInClick}>Sign In</button>
+        {isAuthenticated ? (
+          <>
+            <button className="user-icon-btn" onClick={() => setShowProfile(prev => !prev)}>
+              <FaRegUserCircle />
+            </button>
+            {showProfile && <UserProfile user={user} onSignOut={handleSignOut} />}
+          </>
+        ) : (
+          <button className="authBtn" onClick={handleSignInClick}>Sign In</button>
+        )}
         <div className="hamburger" onClick={toggleDrawer}>
           <FaBars />
         </div>
@@ -95,36 +114,36 @@ const NavBar = ({ setActivePage }) => {
         <ul>
           <li>
             <a 
-              href="#" 
-              onClick={() => handleNavClick('home')} 
-              className={currentPage === 'home' ? 'active' : ''}
+              href="/" 
+              onClick={(e) => { e.preventDefault(); handleNavClick('/'); }} 
+              className={currentPage === '/' ? 'active' : ''}
             >
               Home
             </a>
           </li>
           <li>
             <a 
-              href="#" 
-              onClick={() => handleNavClick('about')} 
-              className={currentPage === 'about' ? 'active' : ''}
+              href="/about" 
+              onClick={(e) => { e.preventDefault(); handleNavClick('/about'); }} 
+              className={currentPage === '/about' ? 'active' : ''}
             >
               About Us
             </a>
           </li>
           <li>
             <a 
-              href="#" 
-              onClick={() => handleNavClick('rooms')} 
-              className={currentPage === 'rooms' ? 'active' : ''}
+              href="/rooms" 
+              onClick={(e) => { e.preventDefault(); handleNavClick('/rooms'); }} 
+              className={currentPage === '/rooms' ? 'active' : ''}
             >
               Rooms
             </a>
           </li>
           <li>
             <a 
-              href="#" 
-              onClick={() => handleNavClick('contact')} 
-              className={currentPage === 'contact' ? 'active' : ''}
+              href="/contact" 
+              onClick={(e) => { e.preventDefault(); handleNavClick('/contact'); }} 
+              className={currentPage === '/contact' ? 'active' : ''}
             >
               Contact Us
             </a>

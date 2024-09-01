@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from "react";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { signUpUser, signInUser } from "../../Features/slices/authSlice";
 import './auth.css';
-import {auth} from '../../Firebase/firebase'
 
 // eslint-disable-next-line react/prop-types
 const Auth = ({ isOpen, onClose }) => {
@@ -12,24 +13,41 @@ const Auth = ({ isOpen, onClose }) => {
   const [surname, setSurname] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isRegistered, setIsRegistered] = useState(false);
-  
-  // Create a ref for the auth-box
+  const [hasNavigated, setHasNavigated] = useState(false); // Add state to prevent multiple navigations
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const authState = useSelector(state => state.auth);
+
   const authBoxRef = useRef(null);
+
+  const memoizedOnClose = useCallback(() => {
+    onClose();
+  }, [onClose]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (authBoxRef.current && !authBoxRef.current.contains(event.target)) {
-        onClose(); // Close the popup if clicked outside
+        memoizedOnClose();
       }
     };
 
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, memoizedOnClose]);
+
+  useEffect(() => {
+    if (authState.user && !hasNavigated) {
+      navigate('/rooms');
+      setHasNavigated(true);
+      memoizedOnClose();
+    }
+  }, [authState.user, navigate, memoizedOnClose, hasNavigated]);
 
   const toggleForm = () => {
     setIsRegistered(prev => !prev);
@@ -40,28 +58,15 @@ const Auth = ({ isOpen, onClose }) => {
 
     if (isRegistered) {
       if (password === confirmPassword) {
-        // Replace with your sign-up logic using Firebase
-        createUserWithEmailAndPassword(auth, email, password)
-          .then((userCredentials) => {
-            console.log('User registered:', userCredentials);
-            alert(`Signing up with ${name} ${surname}, phone: ${phoneNumber}, email: ${email}, password: ${password}`);
-          })
-          .catch((error) => console.error(error.message));
+        dispatch(signUpUser({ email, password }));
       } else {
         alert('Passwords do not match');
       }
     } else {
-      // Replace with your sign-in logic using Firebase
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredentials) => {
-          console.log('User signed in:', userCredentials);
-          alert('Signing in with email and password');
-        })
-        .catch((error) => console.error(error.message));
+      dispatch(signInUser({ email, password }));
     }
   };
 
-  // Render nothing if `isOpen` is false
   if (!isOpen) return null;
 
   return (
@@ -134,6 +139,7 @@ const Auth = ({ isOpen, onClose }) => {
               </span>
             </p>
           </form>
+          {authState.error && <p className="error">{authState.error}</p>}
         </div>
         <div className="auth-info">
           {/* Additional content or imagery */}

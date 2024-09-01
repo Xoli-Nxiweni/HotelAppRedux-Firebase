@@ -1,0 +1,26 @@
+/* UserProfile.css */
+.userProfileDrawer {
+    position: absolute;
+    top: 60px; /* Adjust based on your navbar height */
+    right: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .signOutBtn {
+    margin-top: 10px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .signOutBtn:hover {
+    background-color: #ff1a1a;
+  }
+  

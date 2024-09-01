@@ -1,51 +1,224 @@
-.Rooms{
-    /* height: 100vh; */
-    background: #fff;
+.Rooms {
+    /* background: #fff; */
     border-radius: 25px 0 25px 0;
-    margin: 100px 5%;
-    border: 1px solid;
-}
-.topPart{
-    border: 2px solid;
-    padding: 10px;
-    margin: 20px;
+    /* margin: 100px 5%; */
+    width: 100%;
+    /* border: 1px solid #ddd; */
     display: flex;
+    /* overflow: hidden; */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    /* padding: 20px; */
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+}
+.bottomPart {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    /* background: red; */
+    /* overflow-x: auto; */
+
+}
+.terms{
+    padding: 0 0 0 1%;
+    color: #fff;
+}
+label{
+    font-size: 12px;
+}
+
+.topPart {
+    border: 2px solid #ddd;
+    background: #fff;
+    padding:  10px 20px;
+    /* margin: 20px 0; */
+    display: flex;
+    gap: 20px;
     align-items: center;
     justify-content: space-between;
     border-radius: 15px;
-    
+    box-shadow: 0 5px 4px rgba(0, 0, 0, 0.1);
 }
-.topPart svg{
+
+.topPart svg {
     font-size: 25px;
 }
-.searchPart{
+
+.searchPart {
     display: flex;
     align-items: center;
     background: #fff;
 }
-.searchPart input{
-    display: flex;
-    align-items: center;
+
+.searchPart input {
+    margin-left: 10px;
     margin-bottom: unset;
     border: 0;
-}
-.searchBtn{
-    background: #3f6682;
-    border: 0;
-    padding: 12px 25px;
-    color: #fff;
     border-radius: 15px;
+    padding: 8px 12px;
+    width: 200px;
+    border-radius: 35%;
 }
-.checkIn,
-.checkOut,
-.guestsAndRooms{
+
+.dateInputs {
+    display: flex;
+    gap: 20px;
+    margin: 10px 0;
+}
+
+.dateInput {
+    border: 0;
+    border-radius: 15px;
+    padding: 8px 12px;
+    width: 150px;
+}
+
+.guestsAndRooms {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.checkIn input,
-.checkOut input,
-.guestsAndRooms select{
-    background-color: transparent;
-    border: 0;
+
+.dropDowns {
+    display: flex;
+    gap: 20px;
 }
+.checkIn,
+.checkOut{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.guestsSelect,
+.roomsSelect {
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    padding: 4px 8px;
+    /* width: 150px; */
+    background-color: #fff;
+}
+
+.searchBtn {
+    background: #3f6682;
+    border: none;
+    padding: 15px 25px;
+    color: #fff;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.searchBtn:hover {
+    background: #345a6f;
+}
+
+
+.roomCard {
+    display: flex;
+    width: 1220px;
+    overflow: auto;
+    gap: 20px;
+    padding: 10px;
+    /* width: 100%; */
+    /* background: blue; */
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 285px;
+    flex-shrink: 0;
+}
+
+.card img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.cardBottom {
+    margin-top: 10px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.cardBottom s {
+    color: #888;
+}
+
+.cardBottom span {
+    color: #3f6682;
+    font-weight: bold;
+}
+.reviews{
+    margin: auto;
+    display: flex;
+    align-items: center;
+}
+.reviews b{
+    background-color: rgba(255, 200, 0, 0.416);
+    font-size: 12px;
+    padding: 5px;
+    border-radius: 10%;
+}
+.reviews svg{
+    color: orange;
+}
+/* Rooms.css */
+
+.popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .popupContent {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    text-align: center;
+  }
+  .popupContent img{
+    width: 220px;
+  }
+  
+  .closeBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
+  .bookNowBtn {
+    background-color: #3f6682;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+  
+  .bookNowBtn:hover {
+    background-color: #2b4b6d;
+  }
+  

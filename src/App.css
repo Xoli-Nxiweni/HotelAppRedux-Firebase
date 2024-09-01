@@ -1,36 +1,128 @@
 @import url('https://fonts.googleapis.com/css2?family=Moderustic:wght@300..800&display=swap');
-*{
+
+/* Resetting default padding, margin, and box-sizing for all elements */
+* {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: Moderustic;
+  font-family: 'Moderustic', sans-serif;
 }
-::selection{
-  background: #3f6682;
+
+/* Custom selection color */
+::selection {
+  background-color: #3f6682;
   color: #fff;
 }
-::-webkit-scrollbar{
+
+/* Styling the scrollbar */
+::-webkit-scrollbar {
   width: 8px;
   background: transparent;
 }
-::-webkit-scrollbar-thumb{
-  background: rgb(63, 102, 130);
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(63, 102, 130);
   border-radius: 15px;
 }
-.Wrapper{
+
+/* Wrapper styling */
+/* .Wrapper {
   display: grid;
   background-image: url('public/362619.jpg');
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
   margin: 0;
-}
-/* nav{
-  grid-area: nav;
-}
-section{
-  grid-area: section;
-}
-footer{
-  grid-area: footer;
+  min-height: 100vh; 
 } */
+
+/* Define the keyframes for the background image change */
+@keyframes changeBackground {
+  0%, 100% {
+    background-image: url('https://images.pexels.com/photos/593576/pexels-photo-593576.jpeg'); /* Initial background image */
+  }
+  20% {
+    background-image: url('https://images.pexels.com/photos/3801255/pexels-photo-3801255.jpeg'); /* Second background image */
+  }
+  40% {
+    background-image: url('https://images.pexels.com/photos/933054/pexels-photo-933054.jpeg'); /* Third background image */
+  }
+  60% {
+    background-image: url('https://images.pexels.com/photos/355926/pexels-photo-355926.jpeg'); /* Fourth background image */
+  }
+  
+  100% {
+    background-image: url('https://images.pexels.com/photos/3667761/pexels-photo-3667761.jpeg'); /* Final background image */
+  }
+}
+
+
+
+.Wrapper {
+  display: grid;
+  background-image: url('https://images.pexels.com/photos/593576/pexels-photo-593576.jpeg'); /* Initial background image */
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 0;
+  min-height: 100vh; /* Ensures the wrapper takes up full viewport height */
+  animation: changeBackground 60s infinite; /* Apply the animation */
+}
+
+
+
+/* Main content styling */
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1; /* Allows main content to grow and take up available space */
+  /* padding: 20px; Adds some padding around the main content */
+}
+
+/* Nav and Footer can be customized further as needed */
+
+/* Optional: Ensuring smooth transitions if elements change */
+.page-enter {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.page-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.page-exit-active {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 300ms, transform 300ms;
+}
+/* App.css */
+.page-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 500ms, transform 500ms;
+}
+
+.page-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.page-exit-active {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: opacity 500ms, transform 500ms;
+}
