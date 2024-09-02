@@ -1,58 +1,110 @@
-.AboutContainer {
+.about-container {
     display: flex;
-    flex-direction: row;
-    background: rgb(179, 179, 179);
     height: 100vh;
-    padding: 0 5%;
+    padding: 120px 5%;
     align-items: center;
+    background: linear-gradient(to right, #ece9e6, #ffffff);
     box-sizing: border-box;
-}
-
-.leftAboutContainer {
+    gap: 40px;
+  }
+  
+  .about-image-container {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
     text-align: center;
-}
-
-.hotelImage {
-    width: 80%;
+    /* padding: 20px; */
+  }
+  
+  .about-image {
+    width: 100%;
+    max-width: 500px;
+    max-height: 300px;
+    object-fit: cover;
     height: auto;
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
-
-.hotelName {
+    border-radius: 15px;
+    /* margin-bottom: 20px; */
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .about-image:hover {
+    transform: scale(1.05);
+  }
+  
+  .hotel-name {
     font-size: 2.5rem;
-    color: #333;
+    color: #222;
     margin-top: 20px;
-    font-weight: bold;
-}
-
-.rightAboutContainer {
+    font-weight: 700;
+    letter-spacing: 1.5px;
+  }
+  
+  .proceed-button {
+    margin-top: 20px;
+    padding: 12px 24px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .proceed-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .about-content-container {
     flex: 1.5;
-    padding: 20px;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    padding: 40px;
     background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.rightAboutContainer h2 {
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    margin: auto;
+    text-align: left;
+  }
+  
+  .about-content-container h2 {
     font-size: 2rem;
     margin-bottom: 20px;
-    color: #444;
-}
-
-.rightAboutContainer p {
+    color: #333;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+  }
+  
+  .about-content-container p {
     font-size: 1.1rem;
-    line-height: 1.6;
-    color: #555;
+    line-height: 1.8;
+    color: #666;
     margin-bottom: 15px;
-}
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .about-container {
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+    }
+  
+    .about-image-container {
+      margin-bottom: 40px;
+    }
+  
+    .about-content-container {
+      padding: 20px;
+    }
+  
+    .about-content-container h2 {
+      font-size: 1.8rem;
+    }
+  
+    .about-content-container p {
+      font-size: 1rem;
+    }
+  }
+  

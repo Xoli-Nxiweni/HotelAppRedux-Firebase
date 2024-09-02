@@ -21,7 +21,7 @@ const ContactUs = () => {
 
   const validateForm = () => {
     let isValid = true;
-    const newErrors = { name: '', email: '', message: '' };
+    const newErrors = { name: '', email: '', message: ''};
 
     if (!formData.name) {
       newErrors.name = 'Name is required';

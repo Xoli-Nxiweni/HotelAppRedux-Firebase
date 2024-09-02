@@ -1,0 +1,99 @@
+.bookingWrapper{
+    /* position: fixed; */
+    height: 100vh;
+    background: rgb(213, 213, 213);
+    width: 100%;
+    display: flex;
+}
+.bookingLeftContainer{
+    /* padding: 5% 0 0 0; */
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10% 5%;
+}
+.bookingRightContainer{
+    flex: 1;
+    background: rgb(167, 167, 167);
+    padding: 10% 5%;
+}
+.roomDetails{
+    background: #fff;
+    display: flex;
+    position: relative;
+    border-radius: 50%;
+}
+.roomDetailsLeft{
+    flex: 1;
+    background: rgb(164, 137, 137);
+    border-radius: 15px 0 0 15px;
+    overflow: hidden;
+}
+.roomDetailsLeft img{
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    overflow: hidden;
+}
+.roomDetailsRight{
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    background: rgb(246, 246, 246);
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 0 15px 15px 0;
+}
+.UserDetails,
+.extrasDetails,
+.reviewsDetails{
+    display: flex;
+    align-items: center;
+    background: #fff;
+    padding: 0 0 0 15px;
+    gap: 20px;
+    justify-content: space-between;
+    cursor: pointer;
+    border-radius: 10px;
+}
+.num{
+    background: grey;
+    border-radius: 50%;
+    padding: 10px 15px;
+    border: 1px solid;
+}
+.UserDetails svg,
+.extrasDetails svg,
+.reviewsDetails svg{
+    font-size: 3em;
+}
+.info{
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+.sleeps{
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+.extraInfo{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.price{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+}
+.bookingDetails{
+    background: #fff;
+    padding: 10px;
+    border-radius: 15px;
+}
+.stayDetails{
+    display: flex;
+    justify-content: space-between;
+}

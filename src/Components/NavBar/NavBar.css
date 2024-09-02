@@ -8,7 +8,7 @@
     width: 100%;
     border-bottom: 1px solid;
     position: fixed; /* Ensure the navbar sticks to the top */
-    background: #8383835c;
+    background: #ffffff;
     top: 0;
     transition: background-color 0.3s linear; /* Smooth background color transition */
 }
@@ -56,7 +56,10 @@
 .nav-links li a.active {
     color: #ffcc00;
 }
-
+.home-active{
+    background: transparent;
+    border: 0;
+}
 /* Logo */
 .logo {
     border-radius: 50%;
@@ -64,7 +67,7 @@
 
 .logo svg {
     font-size: 4em;
-    color: #fff;
+    color: #000000;
 }
 
 /* User Profile */
@@ -72,12 +75,25 @@
     display: flex;
     gap: 10px;
     align-items: center;
+    background: transparent;
     transition: all 0.3s linear;
+}
+.userProfile .user-icon-btn{
+    display: flex;
+    align-items: center;
+    background: transparent;
+    border: 0;
+    color: #fff;
+    background: rgb(66, 66, 66);
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
 }
 
 .userProfile svg {
-    font-size: 1.2em;
-    color: #fff;
+    font-size: 3em;
+    /* color: #fff; */
+
 }
 
 /* Authentication Button */

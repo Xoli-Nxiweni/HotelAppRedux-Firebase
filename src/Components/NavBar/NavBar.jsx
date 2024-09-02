@@ -9,6 +9,7 @@ import Auth from '../Auth/Auth';
 import UserProfile from "../UserProfile/UserProfile";
 import './NavBar.css';
 
+// eslint-disable-next-line react/prop-types
 const NavBar = ({ setActivePage }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -49,7 +50,7 @@ const NavBar = ({ setActivePage }) => {
   };
 
   return (
-    <div className={`nav-container ${scrolled ? 'scrolled' : ''}`}>
+    <div className={`nav-container ${scrolled ? 'scrolled' : ''} ${currentPage === '/' ? 'home-active' : ''}`}>
       <div className="logo">
         <a href="/"><IoLogoWordpress /></a>
       </div>
@@ -83,6 +84,15 @@ const NavBar = ({ setActivePage }) => {
         </li>
         <li>
           <a 
+            href="/gallery" 
+            onClick={(e) => { e.preventDefault(); handleNavClick('/gallery'); }} 
+            className={currentPage === '/gallery' ? 'active' : ''}
+          >
+            Gallery
+          </a>
+        </li>
+        <li>
+          <a 
             href="/contact" 
             onClick={(e) => { e.preventDefault(); handleNavClick('/contact'); }} 
             className={currentPage === '/contact' ? 'active' : ''}
@@ -112,11 +122,11 @@ const NavBar = ({ setActivePage }) => {
           <FaTimes />
         </div>
         <ul>
-          <li>
+            <li>
             <a 
               href="/" 
               onClick={(e) => { e.preventDefault(); handleNavClick('/'); }} 
-              className={currentPage === '/' ? 'active' : ''}
+              className={`${currentPage === '/' ? 'active' : ''}`}
             >
               Home
             </a>

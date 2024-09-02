@@ -25,62 +25,75 @@
   border-radius: 15px;
 }
 
-/* Wrapper styling */
-/* .Wrapper {
-  display: grid;
-  background-image: url('public/362619.jpg');
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  background-size: cover;
-  margin: 0;
-  min-height: 100vh; 
-} */
+/* Preload images to avoid jumps */
+@keyframes preloadImages {
+  0%, 100% { background-image: url('thaba-eco-hotel.jpg'); }
+  10% { background-image: url('pic2.jpg'); }
+  20% { background-image: url('pic3.jpg'); }
+  30% { background-image: url('pic4.jpg'); }
+  40% { background-image: url('pic5.jpg'); }
+  50% { background-image: url('pic6.jpg'); }
+  60% { background-image: url('pic7.jpg'); }
+  70% { background-image: url('pic8.jpg'); }
+  80% { background-image: url('pic9.jpg'); }
+  90% { background-image: url('pic10.jpg'); }
+  100% { background-image: url('pic11.jpg'); }
+}
 
 /* Define the keyframes for the background image change */
 @keyframes changeBackground {
   0%, 100% {
-    background-image: url('https://images.pexels.com/photos/593576/pexels-photo-593576.jpeg'); /* Initial background image */
+    background-image: url('thaba-eco-hotel.jpg');
   }
   20% {
-    background-image: url('https://images.pexels.com/photos/3801255/pexels-photo-3801255.jpeg'); /* Second background image */
+    background-image: url('pic2.jpg');
+  }
+  30% {
+    background-image: url('pic3.jpg');
   }
   40% {
-    background-image: url('https://images.pexels.com/photos/933054/pexels-photo-933054.jpeg'); /* Third background image */
+    background-image: url('pic4.jpg');
+  }
+  50% {
+    background-image: url('pic5.jpg');
   }
   60% {
-    background-image: url('https://images.pexels.com/photos/355926/pexels-photo-355926.jpeg'); /* Fourth background image */
+    background-image: url('pic6.jpg');
   }
-  
+  70% {
+    background-image: url('pic7.jpg');
+  }
+  80% {
+    background-image: url('pic8.jpg');
+  }
+  90% {
+    background-image: url('pic9.jpg');
+  }
   100% {
-    background-image: url('https://images.pexels.com/photos/3667761/pexels-photo-3667761.jpeg'); /* Final background image */
+    background-image: url('pic10.jpg');
   }
 }
 
-
-
+/* Wrapper styling */
 .Wrapper {
   display: grid;
-  background-image: url('https://images.pexels.com/photos/593576/pexels-photo-593576.jpeg'); /* Initial background image */
+  background-image: url('thaba-eco-hotel.jpg');
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
   margin: 0;
   min-height: 100vh; /* Ensures the wrapper takes up full viewport height */
-  animation: changeBackground 60s infinite; /* Apply the animation */
+  animation: changeBackground 1200s 3s infinite; 
+  transition: background-image 1s linear; /* Smooth transition for background images */
 }
-
-
 
 /* Main content styling */
 main {
-  display: flex;
+  /* display: flex; */
   align-items: center;
   justify-content: center;
   flex-grow: 1; /* Allows main content to grow and take up available space */
-  /* padding: 20px; Adds some padding around the main content */
 }
-
-/* Nav and Footer can be customized further as needed */
 
 /* Optional: Ensuring smooth transitions if elements change */
 .page-enter {
@@ -104,7 +117,8 @@ main {
   transform: scale(0.95);
   transition: opacity 300ms, transform 300ms;
 }
-/* App.css */
+
+/* Optional page transitions for route changes */
 .page-enter {
   opacity: 0;
   transform: translateX(100%);
