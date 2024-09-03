@@ -140,3 +140,7 @@ main {
   transform: translateX(-100%);
   transition: opacity 500ms, transform 500ms;
 }
+
+button{
+  border-radius: 15px 0;
+}

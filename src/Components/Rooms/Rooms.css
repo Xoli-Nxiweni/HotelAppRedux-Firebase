@@ -139,7 +139,8 @@ label{
     transition: all.2s linear;
 }
 .card:hover {
-    border: 1px solid red;
+    transform: translateY(-5px);
+    box-shadow: 0 5px 5px #00000088;
 }
 
 .card img {
@@ -233,4 +234,61 @@ label{
     background-color: #2b4b6d;
   }
   
-  
+  @media (max-width:1024px) {
+    .roomCard {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        /* width: 1220px; */
+        /* overflow: auto; */
+        gap: 20px;
+        padding: 10px;
+        /* width: 100%; */
+        /* background: blue; */
+    }
+  }
+  @media (max-width:425px) {
+    .roomCard {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        /* width: 1220px; */
+        /* overflow: auto; */
+        gap: 20px;
+        padding: 10px;
+        /* width: 100%; */
+        /* background: blue; */
+    }
+    .topPart {
+        border: 2px solid #ddd;
+        width: 20px;
+        background: #fff;
+        padding:  10px 20px;
+        margin: 70px 0;
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 15px;
+        box-shadow: 0 5px 4px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    
+    .topPart svg {
+        font-size: 25px;
+    }
+    
+    .searchPart {
+        display: flex;
+        align-items: center;
+        background: #fff;
+    }
+    
+    .searchPart input {
+        margin-left: 10px;
+        margin-bottom: unset;
+        border: 0;
+        border-radius: 15px;
+        padding: 8px 12px;
+        width: 200px;
+        border-radius: 35%;
+    }
+  }

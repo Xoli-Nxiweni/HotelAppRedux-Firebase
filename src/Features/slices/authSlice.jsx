@@ -695,6 +695,9 @@ const authSlice = createSlice({
       state.user = null;
       state.error = null;
     },
+    toggleAuthOpen: (state) => {
+      state.authOpen = !state.authOpen;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -735,5 +738,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setUser } = authSlice.actions;
+export const { setUser, toggleAuthOpen } = authSlice.actions;
 export default authSlice.reducer;

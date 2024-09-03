@@ -10,7 +10,7 @@ const Home = () => {
         <p>
           Experience the pinnacle of luxury and tranquility in our serene surroundings, meticulously designed to enhance your stay.
         </p>
-        <button className="cta-button">Get Started</button>
+        <button className="cta-button" onClick={()=>{return}}>Get Started</button>
       </div>
     </div>
   );
