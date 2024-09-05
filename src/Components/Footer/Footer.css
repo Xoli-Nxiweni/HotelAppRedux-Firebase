@@ -91,6 +91,9 @@
   height: 100%; /* Increased height for better visibility */
   max-width: 100%;
 }
+.leaflet-container{
+  height: 100vh;
+}
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {

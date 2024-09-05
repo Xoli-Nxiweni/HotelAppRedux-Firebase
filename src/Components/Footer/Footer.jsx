@@ -1,20 +1,37 @@
+import 'leaflet/dist/leaflet.css';
 import './Footer.css';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
+
+// Custom marker icon if needed
+const icon = L.icon({
+  iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
+  iconSize: [38, 95], // size of the icon
+  iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
+  popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
 
 const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-section map">
-          <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3579.2002098656035!2d27.896870574723415!3d-26.222683464725616!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e95a0c990fefdbf%3A0x84641bbf54b62bec!2sNdofaya%20Mall!5e0!3m2!1sen!2sza!4v1725346717376!5m2!1sen!2sza" 
-            width="100%" 
-            height="100%" 
-            frameBorder="0" 
-            allowFullScreen="" 
-            aria-hidden="false" 
-            tabIndex="0">
-          </iframe>
+          <MapContainer 
+            center={[-26.222683464725616, 27.896870574723415]} 
+            zoom={13} 
+            scrollWheelZoom={false} 
+            style={{ height: "100%", width: "100%" }}>
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            />
+            <Marker position={[-26.222683464725616, 27.896870574723415]} icon={icon}>
+              <Popup>
+                Ndofaya Mall
+              </Popup>
+            </Marker>
+          </MapContainer>
         </div>
         <div className="footer-section contact">
           <h3>Contact Us</h3>

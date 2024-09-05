@@ -588,14 +588,15 @@
 // export default NavBar;
 
 
-// NavBar.jsx
 import { useState, useEffect } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { IoLogoWordpress } from "react-icons/io";
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { signOutUser } from '../../Features/slices/authSlice';
-import Auth from '../Auth/Auth';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../Firebase/firebase'; // Import Firebase auth
+import { setUser } from '../../Features/slices/authSlice'; // Import Redux action
+import Auth from '../Auth/Auth'; // Import Auth for the Auth component'
 import UserProfile from "../UserProfile/UserProfile";
 import './NavBar.css';
 
@@ -632,9 +633,14 @@ const NavBar = ({ setActivePage }) => {
     setDrawerOpen(false);
   };
 
-  const handleSignOut = () => {
-    dispatch(signOutUser());
-    setShowProfile(false);
+  const handleSignOut = async ()  => {
+    try {
+      await signOut(auth); 
+      dispatch(setUser(null)); 
+      navigate('/'); 
+    } catch (error) {
+      console.error('Sign out error:', error);
+    }
   };
 
   return (

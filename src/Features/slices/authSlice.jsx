@@ -635,6 +635,115 @@
 // export default authSlice.reducer;
 
 
+// import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+// import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
+// import { auth } from '../../Firebase/firebase';
+
+// // Thunk for signing in the user
+// export const signInUser = createAsyncThunk(
+//   'auth/signInUser',
+//   async ({ email, password }, { rejectWithValue }) => {
+//     try {
+//       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+//       return userCredential.user;
+//     } catch (error) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
+
+// // Thunk for signing up the user
+// export const signUpUser = createAsyncThunk(
+//   'auth/signUpUser',
+//   async ({ email, password }, { rejectWithValue }) => {
+//     try {
+//       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+//       return userCredential.user;
+//     } catch (error) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
+
+// // Thunk for signing out the user
+// export const signOutUser = createAsyncThunk(
+//   'auth/signOutUser',
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       await signOut(auth);
+//       return true;
+//     } catch (error) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
+
+// const authSlice = createSlice({
+//   name: 'auth',
+//   initialState: {
+//     user: null,
+//     error: null,
+//     status: 'idle',
+//   },
+//   reducers: {
+//     // Directly set the user, useful for session persistence
+//     setUser: (state, action) => {
+//       state.user = action.payload;
+//       state.status = 'succeeded';
+//       localStorage.setItem('user', JSON.stringify(action.payload)); // Save to localStorage
+//     },
+//     signOutUser: (state, action) => {
+//       state.user = null;
+//       state.error = null;
+//       localStorage.setItem('user', JSON.stringify(action.payload)); // Save to localStorage
+//     },
+//     toggleAuthOpen: (state) => {
+//       state.authOpen = !state.authOpen;
+//     },
+//   },
+//   extraReducers: (builder) => {
+//     builder
+//       .addCase(signInUser.pending, (state) => {
+//         state.status = 'loading';
+//       })
+//       .addCase(signInUser.fulfilled, (state, action) => {
+//         state.status = 'succeeded';
+//         state.user = action.payload;
+//       })
+//       .addCase(signInUser.rejected, (state, action) => {
+//         state.status = 'failed';
+//         state.error = action.payload;
+//       })
+//       .addCase(signUpUser.pending, (state) => {
+//         state.status = 'loading';
+//       })
+//       .addCase(signUpUser.fulfilled, (state, action) => {
+//         state.status = 'succeeded';
+//         state.user = action.payload;
+//       })
+//       .addCase(signUpUser.rejected, (state, action) => {
+//         state.status = 'failed';
+//         state.error = action.payload;
+//       })
+//       .addCase(signOutUser.pending, (state) => {
+//         state.status = 'loading';
+//       })
+//       .addCase(signOutUser.fulfilled, (state) => {
+//         state.status = 'succeeded';
+//         state.user = null;
+//         state.error = null;
+//       })
+//       .addCase(signOutUser.rejected, (state, action) => {
+//         state.status = 'failed';
+//         state.error = action.payload;
+//       });
+//   },
+// });
+
+// export const { setUser, toggleAuthOpen } = authSlice.actions;
+// export default authSlice.reducer;
+
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from '../../Firebase/firebase';
@@ -680,20 +789,26 @@ export const signOutUser = createAsyncThunk(
 
 const authSlice = createSlice({
   name: 'auth',
+  user: '',
+  role: '',
   initialState: {
-    user: null,
+    user: JSON.parse(localStorage.getItem('user')) || null,
     error: null,
     status: 'idle',
+    authOpen: false,  // Initialize authOpen state
   },
   reducers: {
     // Directly set the user, useful for session persistence
     setUser: (state, action) => {
       state.user = action.payload;
       state.status = 'succeeded';
+      localStorage.setItem('user', JSON.stringify(action.payload)); // Save to localStorage
     },
     signOutUser: (state) => {
       state.user = null;
       state.error = null;
+      state.status = 'idle';
+      localStorage.removeItem('user'); // Remove from localStorage
     },
     toggleAuthOpen: (state) => {
       state.authOpen = !state.authOpen;

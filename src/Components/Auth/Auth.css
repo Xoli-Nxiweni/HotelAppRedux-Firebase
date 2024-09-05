@@ -70,7 +70,7 @@
   }
   
   /* Form input fields */
-  input[type="text"], input[type="password"], input[type="tel"] {
+  input[type="text"], input[type="password"], input[type="tel"], input[type="email"] {
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
