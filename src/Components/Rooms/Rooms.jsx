@@ -605,6 +605,7 @@ import { fetchRooms, setSearchQuery, setSelectedRoom, clearSelectedRoom } from '
 import { auth } from '../../Firebase/firebase'; 
 import { onAuthStateChanged } from 'firebase/auth';
 import { uploadRoomsToFirestore } from '../../UploadRooms';
+import { deleteDuplicateRoomsFromFirestore } from '../../RemovingRooms';
 
 
 const Rooms = () => {
@@ -620,10 +621,11 @@ const Rooms = () => {
     error: state.rooms.error,
   }));
 
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isAuthenticated = useSelector((state) => state.auth);
+  // uploadRoomsToFirestore()
 
   useEffect(()=>{
-    uploadRoomsToFirestore()
+    deleteDuplicateRoomsFromFirestore()
   }, [])
 
   useEffect(() => {

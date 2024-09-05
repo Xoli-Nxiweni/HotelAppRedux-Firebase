@@ -1,5 +1,6 @@
 import { db } from "../src/Firebase/firebase"; // Adjust the path based on your file structure
-import { collection, addDoc } from "firebase/firestore";
+// import { collection, addDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, query, where } from "firebase/firestore";
 
 
 const rooms = [
@@ -125,14 +126,43 @@ const rooms = [
     }
   ];
 
+// export const uploadRoomsToFirestore = async () => {
+//   try {
+//     const roomsCollectionRef = collection(db, "hotelRooms");
+
+//     const promises = rooms.map(room => addDoc(roomsCollectionRef, room));
+//     await Promise.all(promises);
+
+//     console.log("All rooms have been uploaded!");
+//   } catch (e) {
+//     // console.error("Error uploading rooms: ", e);
+//   }
+// };
+
+// // Execute the upload function
+// uploadRoomsToFirestore();
+
+
+
 export const uploadRoomsToFirestore = async () => {
   try {
     const roomsCollectionRef = collection(db, "hotelRooms");
 
-    const promises = rooms.map(room => addDoc(roomsCollectionRef, room));
-    await Promise.all(promises);
+    for (const room of rooms) {
+      // Query Firestore to see if a room with the same ID already exists
+      const q = query(roomsCollectionRef, where("id", "==", room.id));
+      const querySnapshot = await getDocs(q);
 
-    console.log("All rooms have been uploaded!");
+      if (querySnapshot.empty) {
+        // If no document with the same ID exists, upload the room
+        await addDoc(roomsCollectionRef, room);
+        console.log(`Room with ID ${room.id} uploaded.`);
+      } else {
+        console.log(`Room with ID ${room.id} already exists. Skipping upload.`);
+      }
+    }
+
+    console.log("All rooms processed!");
   } catch (e) {
     console.error("Error uploading rooms: ", e);
   }
@@ -140,4 +170,3 @@ export const uploadRoomsToFirestore = async () => {
 
 // Execute the upload function
 uploadRoomsToFirestore();
-

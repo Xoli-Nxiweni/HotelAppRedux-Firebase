@@ -598,6 +598,7 @@ import { auth } from '../../Firebase/firebase'; // Import Firebase auth
 import { setUser } from '../../Features/slices/authSlice'; // Import Redux action
 import Auth from '../Auth/Auth'; // Import Auth for the Auth component'
 import UserProfile from "../UserProfile/UserProfile";
+import { FaAnglesUp } from "react-icons/fa6";
 import './NavBar.css';
 
 // eslint-disable-next-line react/prop-types
