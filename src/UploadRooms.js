@@ -1,160 +1,199 @@
 import { db } from "../src/Firebase/firebase"; // Adjust the path based on your file structure
-// import { collection, addDoc } from "firebase/firestore";
 import { collection, getDocs, addDoc, query, where } from "firebase/firestore";
 
-
+// Define all your room objects here
 const rooms = [
-    {
-      id: 1,
-      image: 'https://www.travelandleisure.com/thmb/OiDnPGo3k9QLRT9__TPhFZcr7PU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/rosewood-carlyle-presidential-suite-LUXESUITE0122-0046808a88924e57922d78c7f1d9ca60.jpg', 
-      heading: 'Luxury Suite',
-      location: 'Johannesburg, South Africa',
-      reviews: '4.5',
-      originalPrice: 'R2,800',
-      discountedPrice: 'R2,400',
-      nights: '3 nights'
-    },
-    {
-      id: 2,
-      image: 'https://amorgoshotel.com/wp-content/uploads/2014/12/Amorgos-Standard-Room1-e1464286427430.jpg',
-      heading: 'Standard Room',
-      location: 'Cape Town, South Africa',
-      reviews: '4.1',
-      originalPrice: 'R1,700',
-      discountedPrice: 'R1,300',
-      nights: '2 nights'
-    },
-    {
-      id: 3,
-      image: 'https://media.timeout.com/images/105211701/750/422/image.jpg',
-      heading: 'Deluxe Room',
-      location: 'Durban, South Africa',
-      reviews: '4.3',
-      originalPrice: 'R2,900',
-      discountedPrice: 'R2,400',
-      nights: '4 nights'
-    },
-    {
-      id: 4,
-      image: 'https://media.timeout.com/images/105211701/750/422/image.jpg',
-      heading: 'Family Suite',
-      location: 'Pretoria, South Africa',
-      reviews: '4.7',
-      originalPrice: 'R3,800',
-      discountedPrice: 'R3,300',
-      nights: '5 nights'
-    },
-    {
-      id: 5,
-      image: 'https://www.travelandleisure.com/thmb/OiDnPGo3k9QLRT9__TPhFZcr7PU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/rosewood-carlyle-presidential-suite-LUXESUITE0122-0046808a88924e57922d78c7f1d9ca60.jpg',
-      heading: 'Beachfront Room',
-      location: 'Port Elizabeth, South Africa',
-      reviews: '4.2',
-      originalPrice: 'R2,300',
-      discountedPrice: 'R1,900',
-      nights: '3 nights'
-    },
-    {
-      id: 6,
-      image: 'https://www.travelandleisure.com/thmb/OiDnPGo3k9QLRT9__TPhFZcr7PU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/rosewood-carlyle-presidential-suite-LUXESUITE0122-0046808a88924e57922d78c7f1d9ca60.jpg',
-      heading: 'Penthouse Suite',
-      location: 'Sandton, South Africa',
-      reviews: '4.8',
-      originalPrice: 'R5,900',
-      discountedPrice: 'R5,200',
-      nights: '2 nights'
-    },
-    {
-      id: 7,
-      image: 'https://www.travelandleisure.com/thmb/OiDnPGo3k9QLRT9__TPhFZcr7PU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/rosewood-carlyle-presidential-suite-LUXESUITE0122-0046808a88924e57922d78c7f1d9ca60.jpg',
-      heading: 'Corner Suite',
-      location: 'Stellenbosch, South Africa',
-      reviews: '4.6',
-      originalPrice: 'R3,500',
-      discountedPrice: 'R3,000',
-      nights: '3 nights'
-    },
-    {
-      id: 8,
-      image: 'https://www.travelandleisure.com/thmb/OiDnPGo3k9QLRT9__TPhFZcr7PU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/rosewood-carlyle-presidential-suite-LUXESUITE0122-0046808a88924e57922d78c7f1d9ca60.jpg',
-      heading: 'One-Bedroom Suite',
-      location: 'Durban, South Africa',
-      reviews: '4.4',
-      originalPrice: 'R3,700',
-      discountedPrice: 'R3,100',
-      nights: '4 nights'
-    },
-    {
-      id: 9,
-      image: 'https://www.travelandleisure.com/thmb/OiDnPGo3k9QLRT9__TPhFZcr7PU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/rosewood-carlyle-presidential-suite-LUXESUITE0122-0046808a88924e57922d78c7f1d9ca60.jpg',
-      heading: 'Executive Suite',
-      location: 'Cape Town, South Africa',
-      reviews: '4.7',
-      originalPrice: 'R4,400',
-      discountedPrice: 'R3,700',
-      nights: '3 nights'
-    },
-    {
-      id: 10,
-      image: 'https://www.travelandleisure.com/thmb/OiDnPGo3k9QLRT9__TPhFZcr7PU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/rosewood-carlyle-presidential-suite-LUXESUITE0122-0046808a88924e57922d78c7f1d9ca60.jpg',
-      heading: 'Garden View Room',
-      location: 'Bloemfontein, South Africa',
-      reviews: '4.0',
-      originalPrice: 'R1,900',
-      discountedPrice: 'R1,500',
-      nights: '2 nights'
-    },
-    {
-      id: 11,
-      image: 'https://www.travelandleisure.com/thmb/OiDnPGo3k9QLRT9__TPhFZcr7PU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/rosewood-carlyle-presidential-suite-LUXESUITE0122-0046808a88924e57922d78c7f1d9ca60.jpg',
-      heading: 'Panorama Suite',
-      location: 'Knysna, South Africa',
-      reviews: '4.8',
-      originalPrice: 'R5,300',
-      discountedPrice: 'R4,600',
-      nights: '5 nights'
-    },
-    {
-      id: 12,
-      image: 'https://www.travelandleisure.com/thmb/OiDnPGo3k9QLRT9__TPhFZcr7PU=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/rosewood-carlyle-presidential-suite-LUXESUITE0122-0046808a88924e57922d78c7f1d9ca60.jpg',
-      heading: 'Grand Luxe Room',
-      location: 'Franschhoek, South Africa',
-      reviews: '4.7',
-      originalPrice: 'R3,700',
-      discountedPrice: 'R3,100',
-      nights: '4 nights'
-    }
-  ];
-
-// export const uploadRoomsToFirestore = async () => {
-//   try {
-//     const roomsCollectionRef = collection(db, "hotelRooms");
-
-//     const promises = rooms.map(room => addDoc(roomsCollectionRef, room));
-//     await Promise.all(promises);
-
-//     console.log("All rooms have been uploaded!");
-//   } catch (e) {
-//     // console.error("Error uploading rooms: ", e);
-//   }
-// };
-
-// // Execute the upload function
-// uploadRoomsToFirestore();
-
-
+  {
+    id: 1,
+    image: 'https://example.com/image1.jpg',
+    heading: 'Luxury Suite',
+    guests: 2,
+    beds: 1,
+    bathrooms: 1,
+    size: '50',
+    view: 'Ocean',
+    nonSmoking: true,
+    discountedPrice: 'R2,400',
+    checkIn: '2024-10-01',
+    checkOut: '2024-10-04',
+    nights: 3
+  },
+  {
+    id: 2,
+    image: 'https://example.com/image2.jpg',
+    heading: 'Deluxe Room',
+    guests: 4,
+    beds: 2,
+    bathrooms: 1,
+    size: '60',
+    view: 'Mountain',
+    nonSmoking: false,
+    discountedPrice: 'R3,000',
+    checkIn: '2024-10-05',
+    checkOut: '2024-10-10',
+    nights: 5
+  },
+  {
+    id: 3,
+    image: 'https://example.com/image3.jpg',
+    heading: 'Standard Room',
+    guests: 2,
+    beds: 1,
+    bathrooms: 1,
+    size: '35',
+    view: 'City',
+    nonSmoking: true,
+    discountedPrice: 'R1,800',
+    checkIn: '2024-10-10',
+    checkOut: '2024-10-12',
+    nights: 2
+  },
+  {
+    id: 4,
+    image: 'https://example.com/image4.jpg',
+    heading: 'Executive Suite',
+    guests: 3,
+    beds: 2,
+    bathrooms: 2,
+    size: '80',
+    view: 'Garden',
+    nonSmoking: true,
+    discountedPrice: 'R3,500',
+    checkIn: '2024-10-12',
+    checkOut: '2024-10-15',
+    nights: 3
+  },
+  {
+    id: 5,
+    image: 'https://example.com/image5.jpg',
+    heading: 'Penthouse Suite',
+    guests: 4,
+    beds: 2,
+    bathrooms: 2,
+    size: '100',
+    view: 'Panoramic',
+    nonSmoking: true,
+    discountedPrice: 'R5,000',
+    checkIn: '2024-10-15',
+    checkOut: '2024-10-20',
+    nights: 5
+  },
+  {
+    id: 6,
+    image: 'https://example.com/image6.jpg',
+    heading: 'Family Room',
+    guests: 5,
+    beds: 3,
+    bathrooms: 1,
+    size: '70',
+    view: 'Park',
+    nonSmoking: false,
+    discountedPrice: 'R4,000',
+    checkIn: '2024-10-20',
+    checkOut: '2024-10-25',
+    nights: 5
+  },
+  {
+    id: 7,
+    image: 'https://example.com/image7.jpg',
+    heading: 'Single Room',
+    guests: 1,
+    beds: 1,
+    bathrooms: 1,
+    size: '20',
+    view: 'Street',
+    nonSmoking: true,
+    discountedPrice: 'R1,200',
+    checkIn: '2024-10-25',
+    checkOut: '2024-10-28',
+    nights: 3
+  },
+  {
+    id: 8,
+    image: 'https://example.com/image8.jpg',
+    heading: 'Double Room',
+    guests: 2,
+    beds: 2,
+    bathrooms: 1,
+    size: '30',
+    view: 'Garden',
+    nonSmoking: false,
+    discountedPrice: 'R2,000',
+    checkIn: '2024-10-28',
+    checkOut: '2024-10-31',
+    nights: 3
+  },
+  {
+    id: 9,
+    image: 'https://example.com/image9.jpg',
+    heading: 'Suite Room',
+    guests: 2,
+    beds: 1,
+    bathrooms: 2,
+    size: '55',
+    view: 'City',
+    nonSmoking: true,
+    discountedPrice: 'R2,800',
+    checkIn: '2024-10-31',
+    checkOut: '2024-11-03',
+    nights: 3
+  },
+  {
+    id: 10,
+    image: 'https://example.com/image10.jpg',
+    heading: 'Junior Suite',
+    guests: 2,
+    beds: 1,
+    bathrooms: 1,
+    size: '45',
+    view: 'Pool',
+    nonSmoking: true,
+    discountedPrice: 'R2,200',
+    checkIn: '2024-11-03',
+    checkOut: '2024-11-07',
+    nights: 4
+  },
+  {
+    id: 11,
+    image: 'https://example.com/image11.jpg',
+    heading: 'Executive Room',
+    guests: 2,
+    beds: 1,
+    bathrooms: 1,
+    size: '40',
+    view: 'City',
+    nonSmoking: false,
+    discountedPrice: 'R2,500',
+    checkIn: '2024-11-07',
+    checkOut: '2024-11-10',
+    nights: 3
+  },
+  {
+    id: 12,
+    image: 'https://example.com/image12.jpg',
+    heading: 'Business Suite',
+    guests: 3,
+    beds: 2,
+    bathrooms: 2,
+    size: '65',
+    view: 'City',
+    nonSmoking: true,
+    discountedPrice: 'R3,200',
+    checkIn: '2024-11-10',
+    checkOut: '2024-11-15',
+    nights: 5
+  }
+];
 
 export const uploadRoomsToFirestore = async () => {
   try {
     const roomsCollectionRef = collection(db, "hotelRooms");
 
     for (const room of rooms) {
-      // Query Firestore to see if a room with the same ID already exists
       const q = query(roomsCollectionRef, where("id", "==", room.id));
       const querySnapshot = await getDocs(q);
 
       if (querySnapshot.empty) {
-        // If no document with the same ID exists, upload the room
         await addDoc(roomsCollectionRef, room);
         console.log(`Room with ID ${room.id} uploaded.`);
       } else {

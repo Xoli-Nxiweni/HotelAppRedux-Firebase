@@ -1,41 +1,34 @@
 .Rooms {
-    background: #0000007b;
-    /* border-radius: 25px 0 25px 0; */
-    /* margin: 100px 5%; */
+    background: rgba(0, 0, 0, 0.7);
     width: 100%;
-    /* border: 1px solid #ddd; */
     display: flex;
-    /* overflow: hidden; */
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* height: 100vh; */
     padding: 10% 0;
-    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
 }
+
 .bottomPart {
     display: flex;
     width: 100%;
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
-    /* background: red; */
-    /* overflow-x: auto; */
-
 }
-.terms{
-    padding: 0 0 0 1%;
+
+.terms {
+    padding-left: 1%;
     color: #fff;
 }
-label{
+
+label {
     font-size: 12px;
 }
 
 .topPart {
     border: 2px solid #ddd;
     background: #fff;
-    padding:  10px 20px;
-    /* margin: 20px 0; */
+    padding: 10px 20px;
     display: flex;
     gap: 20px;
     align-items: center;
@@ -56,7 +49,6 @@ label{
 
 .searchPart input {
     margin-left: 10px;
-    margin-bottom: unset;
     border: 0;
     border-radius: 15px;
     padding: 8px 12px;
@@ -87,18 +79,19 @@ label{
     display: flex;
     gap: 20px;
 }
+
 .checkIn,
-.checkOut{
+.checkOut {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+
 .guestsSelect,
 .roomsSelect {
     border: 1px solid #ddd;
     border-radius: 15px;
     padding: 4px 8px;
-    /* width: 150px; */
     background-color: #fff;
 }
 
@@ -118,12 +111,8 @@ label{
 .roomCard {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    /* width: 1220px; */
-    /* overflow: auto; */
     gap: 20px;
     padding: 10px;
-    /* width: 100%; */
-    /* background: blue; */
 }
 
 .card {
@@ -136,11 +125,12 @@ label{
     flex-shrink: 0;
     cursor: pointer;
     border: 1px solid rgb(255, 255, 255);
-    transition: all.2s linear;
+    transition: all 0.2s linear;
 }
+
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 5px 5px #00000088;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.53);
 }
 
 .card img {
@@ -163,12 +153,14 @@ label{
     color: #3f6682;
     font-weight: bold;
 }
-.reviews{
+
+.reviews {
     margin: auto;
     display: flex;
     align-items: center;
 }
-.reviews b{
+
+.reviews b {
     background-color: rgba(255, 200, 0, 0.416);
     font-size: 12px;
     padding: 5px;
@@ -178,12 +170,12 @@ label{
     gap: 4px;
     margin: 5px 0;
 }
-.reviews svg{
+
+.reviews svg {
     color: orange;
 }
 
-/* Rooms.css */
-
+/* Popup Overlay */
 .popupOverlay {
     position: fixed;
     top: 0;
@@ -195,9 +187,10 @@ label{
     justify-content: center;
     align-items: center;
     z-index: 1000;
-  }
-  
-  .popupContent {
+}
+
+/* Popup Content */
+.popupContent {
     background: #fff;
     padding: 20px;
     border-radius: 8px;
@@ -205,12 +198,17 @@ label{
     width: 90%;
     position: relative;
     text-align: center;
-  }
-  .popupContent img{
-    width: 220px;
-  }
-  
-  .closeBtn {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.popupContent img {
+    width: 100%;
+    max-width: 220px;
+    border-radius: 8px;
+}
+
+/* Close Button */
+.closeBtn {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -218,9 +216,10 @@ label{
     border: none;
     font-size: 20px;
     cursor: pointer;
-  }
-  
-  .bookNowBtn {
+}
+
+/* Book Now Button */
+.bookNowBtn {
     background-color: #3f6682;
     color: white;
     padding: 10px 20px;
@@ -228,67 +227,36 @@ label{
     border-radius: 5px;
     cursor: pointer;
     margin-top: 15px;
-  }
-  
-  .bookNowBtn:hover {
+}
+
+.bookNowBtn:hover {
     background-color: #2b4b6d;
-  }
-  
-  @media (max-width:1024px) {
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
     .roomCard {
-        display: grid;
         grid-template-columns: repeat(3, 1fr);
-        /* width: 1220px; */
-        /* overflow: auto; */
-        gap: 20px;
-        padding: 10px;
-        /* width: 100%; */
-        /* background: blue; */
     }
-  }
-  @media (max-width:425px) {
+}
+
+@media (max-width: 425px) {
     .roomCard {
-        display: grid;
         grid-template-columns: repeat(2, 1fr);
-        /* width: 1220px; */
-        /* overflow: auto; */
-        gap: 20px;
-        padding: 10px;
-        /* width: 100%; */
-        /* background: blue; */
     }
+
     .topPart {
-        border: 2px solid #ddd;
-        width: 20px;
-        background: #fff;
-        padding:  10px 20px;
+        width: 100%;
+        padding: 10px;
         margin: 70px 0;
-        display: flex;
-        gap: 20px;
-        align-items: center;
-        justify-content: space-between;
-        border-radius: 15px;
-        box-shadow: 0 5px 4px rgba(0, 0, 0, 0.1);
         overflow: hidden;
     }
-    
+
     .topPart svg {
-        font-size: 25px;
+        font-size: 20px;
     }
-    
-    .searchPart {
-        display: flex;
-        align-items: center;
-        background: #fff;
-    }
-    
+
     .searchPart input {
-        margin-left: 10px;
-        margin-bottom: unset;
-        border: 0;
-        border-radius: 15px;
-        padding: 8px 12px;
-        width: 200px;
-        border-radius: 35%;
+        width: 150px;
     }
-  }
+}
