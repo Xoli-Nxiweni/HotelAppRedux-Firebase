@@ -1,29 +1,34 @@
-/* Loader.css */
 
-.loader-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.5); /* Optional: To give a dimmed background effect */
-    z-index: 9999; /* Ensures the loader is on top of everything */
+/* Container for the loader */
+.loader-overlay {
+  position: fixed; /* Fixed positioning for the overlay */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+  align-items: center;
+  background: rgba(133, 133, 133, 0.616); /* Semi-transparent background */
+  z-index: 1000; /* Ensure it appears above other content */
+}
+
+/* Expanding Circle Animation */
+.loader {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #123fff;
+  animation: expand 1.5s infinite ease-in-out;
+}
+
+@keyframes expand {
+  0%, 100% {
+      transform: scale(1);
   }
-  
-  .loader {
-    border: 8px solid #f3f3f3; 
-    border-top: 8px solid #3498db; 
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1s linear infinite;
+  50% {
+      transform: scale(4);
+      background: #5858586c;
   }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
+}

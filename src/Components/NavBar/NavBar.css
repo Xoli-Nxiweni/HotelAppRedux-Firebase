@@ -78,7 +78,7 @@
 /* User Profile */
 .userProfile {
     display: flex;
-    gap: 10px;
+    /* gap: 10px; */
     align-items: center;
     background: transparent;
     transition: all 0.3s linear;
@@ -89,14 +89,13 @@
     background: transparent;
     border: 0;
     color: #fff;
-    background: rgb(66, 66, 66);
     /* padding: 10px; */
-    border-radius: 50%;
     cursor: pointer;
     overflow: hidden;
 }
 .userProfile .user-icon-btn img{
-    width: 60px;
+    width: 100%;
+    border-radius: 50%;
     height: 100%;
     object-fit: contain;
 }

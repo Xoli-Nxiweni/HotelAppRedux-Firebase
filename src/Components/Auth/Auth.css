@@ -4,10 +4,10 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     background: rgba(0, 0, 0, 0.5); /* Overlay background */
     display: flex;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(6px);
     align-items: center;
     justify-content: center;
   }
@@ -72,7 +72,6 @@
   /* Form input fields */
   input[type="text"], input[type="password"], input[type="tel"], input[type="email"] {
     padding: 10px;
-    margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 1rem;

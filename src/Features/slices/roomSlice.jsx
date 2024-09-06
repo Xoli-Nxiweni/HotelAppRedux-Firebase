@@ -299,6 +299,7 @@ const roomsSlice = createSlice({
     status: 'idle',
     error: null,
     searchQuery: '',
+    roomOpened: false,
   },
   reducers: {
     selectRoom: (state, action) => {
