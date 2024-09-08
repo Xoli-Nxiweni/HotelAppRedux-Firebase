@@ -1,10 +1,10 @@
-import React from 'react';
+// import React from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { Button, Typography, Container, Paper, Grid, Box } from '@mui/material';
-import { CardElement, Elements as StripeElements } from '@stripe/react-stripe-js';
+import { Button, Typography, Container, Paper, Box } from '@mui/material';
+import { CardElement } from '@stripe/react-stripe-js';
 
-// Make sure to replace this with your own test or live key
+// Replace this with your own test or live key
 const stripePromise = loadStripe('pk_test_51Pw0PWH23g7ZtX12QkXjyxtCKNZsStiJUn2eJpykmWKLDR2dh9dCYooQCZhEgQjxRW08G0NXVDvOZ9QFuSIIoGwS00mSwX1Zhj');
 
 const PaymentForm = () => {
@@ -16,24 +16,30 @@ const PaymentForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <Box sx={{ mb: 3 }}>
-        <CardElement 
-          options={{ 
+        <CardElement
+          options={{
             style: {
               base: {
                 fontSize: '16px',
-                color: '#424770',
+                color: '#333',
                 '::placeholder': {
-                  color: '#aab7c4',
+                  color: '#888',
                 },
               },
               invalid: {
-                color: '#9e2146',
+                color: '#d32f2f',
               },
             },
-          }} 
+          }}
         />
       </Box>
-      <Button type="submit" variant="contained" color="primary" fullWidth>
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        fullWidth
+        sx={{ py: 1.5, fontSize: '16px' }}
+      >
         Pay Now
       </Button>
     </form>
@@ -42,17 +48,17 @@ const PaymentForm = () => {
 
 const Payment = () => {
   return (
-    <Container maxWidth="sm" sx={{ mt: 8 }}>
-      <Paper elevation={3} sx={{ padding: 3, textAlign: 'center' }}>
-        <Typography variant="h4" gutterBottom>
+    <Container maxWidth="xs" sx={{ mt: 8 }}>
+      <Paper elevation={6} sx={{ padding: 4, textAlign: 'center', borderRadius: 2 }}>
+        <Typography variant="h4" gutterBottom sx={{ mb: 2 }}>
           Secure Payment
         </Typography>
-        <Typography variant="body1" paragraph>
+        <Typography variant="body1" paragraph sx={{ mb: 3 }}>
           Please provide your payment details to complete the transaction. Your information is secure and will be processed safely.
         </Typography>
-        <StripeElements stripe={stripePromise}>
+        <Elements stripe={stripePromise}>
           <PaymentForm />
-        </StripeElements>
+        </Elements>
       </Paper>
     </Container>
   );

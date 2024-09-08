@@ -6,11 +6,12 @@
   margin: 0;
   box-sizing: border-box;
   font-family: 'Moderustic', sans-serif;
+  list-style: none;
 }
 
 /* Custom selection color */
 ::selection {
-  background-color: #3f6682;
+  background-color: #ff7f50;
   color: #fff;
 }
 
@@ -21,7 +22,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgb(63, 102, 130);
+  background-color: #ff7f50;
   border-radius: 15px;
 }
 
@@ -142,7 +143,8 @@ main {
 }
 
 button{
-  border-radius: 15px 0;
+  border-radius: 15px;
+  background: #ff7f50;
 }
 .upArrow{
   position: fixed;
@@ -153,16 +155,30 @@ button{
   padding: 10px;
   display: flex;
   cursor: pointer;
-  background: #3f6682;
+  background: #ff7f50;
   color: #fff;
   font-size: 2em;
-  border: 1px solid #3f6682;
+  border: 1px solid #ff7f50;
   transition: all .2s linear;
+  z-index: 99;
 }
 .upArrow:hover{
   transform: scale(1.1);
   background: #fff;
-  color: #3f6682;
-  border: 1px solid #3f6682;
+  color: #ff7f50;
+  border: 1px solid #ff7f50;
   box-shadow: 0 0 4px 1px #00000080;
+}
+
+/* App.css */
+.animated {
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.fade-in {
+  opacity: 1;
+}
+
+.fade-out {
+  opacity: 0;
 }

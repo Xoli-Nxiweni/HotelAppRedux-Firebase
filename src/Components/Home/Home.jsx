@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react';
 import './Home.css';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
   const sectionRefs = useRef([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const options = {
@@ -31,33 +33,36 @@ const Home = () => {
   }, []);
 
   return (
-    <>
-      <div
-        className="home-wrapper hidden" 
-        ref={(el) => (sectionRefs.current[0] = el)} // Store each section in the ref array
+    <div className="home-container">
+      <section
+        className="home-section home-section-main"
+        ref={(el) => (sectionRefs.current[0] = el)}
       >
         <div className="home-content">
           <h1>Welcome to our splendid hotel, where your comfort is our top priority.</h1>
           <p>
             Experience the pinnacle of luxury and tranquility in our serene surroundings, meticulously designed to enhance your stay.
           </p>
-          <button className="cta-button" onClick={() => {}}>Get Started</button>
+          <button className="cta-button" onClick={() => navigate('/rooms')}>Get Started</button>
         </div>
-      </div>
-      <div
-        className="home-wrapper hidden" 
+      </section>
+      <section
+        className="home-section home-section-split"
         ref={(el) => (sectionRefs.current[1] = el)}
-        style={{ background: '#fff' }}
       >
-        <div className="home-content">
+        <div className="home-content home-content-left">
           <h1>Discover our exclusive offers and world-class amenities.</h1>
           <p>
             Indulge in a stay that promises to exceed all your expectations with premium services and attention to detail.
           </p>
-          <button className="cta-button" onClick={() => {}}>Explore More</button>
+          <button className="cta-button" onClick={() => navigate('/about')}>Explore More</button>
         </div>
-      </div>
-    </>
+        <div className="home-image">
+          <div className="image-overlay"></div>
+          <img src="your-image-url.jpg" alt="Exclusive offers and amenities" />
+        </div>
+      </section>
+    </div>
   );
 };
 

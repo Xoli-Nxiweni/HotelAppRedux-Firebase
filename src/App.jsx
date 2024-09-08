@@ -1,39 +1,43 @@
-
-import { useState, useEffect } from 'react';
+import { Suspense, lazy, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import NavBar from './Components/NavBar/NavBar';
-import Home from './Components/Home/Home';
-import AboutUs from './Components/AboutUs/AboutUs';
-import Rooms from './Components/Rooms/Rooms';
-import ContactUs from './Components/Contact/Contact';
-import Gallery from './Components/Gallery/Gallery';
-import Booking from './Components/Booking/Booking';
 import Footer from './Components/Footer/Footer';
-import Auth from './Components/Auth/Auth';
 import Loader from './Components/Loader/Loader';
 import { setUser } from './Features/slices/authSlice'; 
 import './App.css';
 import { FaAnglesUp } from 'react-icons/fa6';
-import Payment from './Components/Payment/Payment';
+
+const Home = lazy(() => import('./Components/Home/Home'));
+const AboutUs = lazy(() => import('./Components/AboutUs/AboutUs'));
+const Rooms = lazy(() => import('./Components/Rooms/Rooms'));
+const Gallery = lazy(() => import('./Components/Gallery/Gallery'));
+const ContactUs = lazy(() => import('./Components/Contact/Contact'));
+const Auth = lazy(() => import('./Components/Auth/Auth'));
+const Booking = lazy(() => import('./Components/Booking/Booking'));
 
 const App = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const isLoading = useSelector((state) => state.loading.isLoading);
-  const user = useSelector((state) => state.auth.user); 
+  // const user = useSelector((state) => state.auth.user); 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('user'));
+    const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      dispatch(setUser(storedUser));
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        dispatch(setUser(parsedUser));
+      } catch (error) {
+        console.error("Failed to parse user from localStorage:", error);
+        localStorage.removeItem('user');
+      }
     }
   }, [dispatch]);
 
   useEffect(() => {
-    // Track the scroll position
     const handleScroll = () => {
-      if (window.scrollY > 200) {
+      if (window.scrollY > 100) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
@@ -51,18 +55,19 @@ const App = () => {
       <div className="Wrapper">
         <NavBar />
         <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/rooms" element={<Rooms />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/contact" element={<ContactUs />} />
-            <Route path="/signUp" element={<Auth />} />
-            <Route path="/booking" element={<Booking />} />
-            {/* Add more routes as needed */}
-          </Routes>
+          <Suspense fallback={<Loader />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<AboutUs />} />
+              <Route path="/rooms" element={<Rooms />} />
+              <Route path="/gallery" element={<Gallery />} />
+              <Route path="/contact" element={<ContactUs />} />
+              <Route path="/signUp" element={<Auth />} />
+              <Route path="/booking" element={<Booking />} />
+              {/* Add more routes as needed */}
+            </Routes>
+          </Suspense>
 
-          {/* Conditionally render the up arrow button */}
           {isScrolled && (
             <button
               className='upArrow'

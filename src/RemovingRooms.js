@@ -55,4 +55,4 @@ export const deleteDuplicateRoomsFromFirestore = async () => {
 };
 
 // Execute the delete function
-// deleteDuplicateRoomsFromFirestore();
+deleteDuplicateRoomsFromFirestore();

@@ -2,7 +2,7 @@
 .bookingWrapper {
   display: flex;
   justify-content: space-between;
-  padding: 150px 5%;
+  padding: 100px 5%; /* Adjusted padding for a better fit */
   gap: 20px;
   background-color: #f9f9f9;
 }
@@ -23,7 +23,7 @@
   margin-bottom: 20px;
 }
 
-.roomDetailsLeft img {
+.roomDetails img {
   width: 180px;
   height: 180px;
   border-radius: 10px;
@@ -121,7 +121,7 @@
 }
 
 /* Existing reviews */
-.existing-reviews {
+.existingReviews {
   margin-top: 20px;
   font-size: 15px;
   color: #777;
@@ -133,6 +133,8 @@
 }
 
 .bookingDetails p {
+  display: flex;
+  justify-content: space-between;
   margin: 5px 0;
   font-size: 16px;
   color: #333;
@@ -184,44 +186,6 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
   background-color: #218838;
-}
-
-/* Booking Right Container */
-.bookingRightContainer {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  width: 48%;
-}
-
-/* Booking details */
-.bookingDetails {
-  margin-bottom: 20px;
-}
-
-.bookingDetails p {
-  margin: 5px 0;
-  font-size: 16px;
-  color: #333;
-}
-
-.priceSummary {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.priceSummary p {
-  font-size: 16px;
-  color: #333;
-}
-
-.priceSummary h4 {
-  font-size: 20px;
-  font-weight: 700;
-  color: #e74c3c;
 }
 
 /* Payment Information */

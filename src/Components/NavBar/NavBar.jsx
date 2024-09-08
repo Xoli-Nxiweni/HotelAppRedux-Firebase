@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaBars, FaTimes } from 'react-icons/fa';
 import { IoLogoWordpress } from 'react-icons/io';
 import { useSelector, useDispatch } from 'react-redux';
@@ -11,6 +11,7 @@ import UserProfile from '../UserProfile/UserProfile';
 import { setLoader } from '../../Features/slices/loadingSlice';
 import './NavBar.css';
 
+// eslint-disable-next-line react/prop-types
 const NavBar = ({ setActivePage }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);

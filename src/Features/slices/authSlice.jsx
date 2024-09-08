@@ -744,8 +744,121 @@
 // export default authSlice.reducer;
 
 
+// import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+// import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
+// import { auth } from '../../Firebase/firebase';
+
+// // Thunk for signing in the user
+// export const signInUser = createAsyncThunk(
+//   'auth/signInUser',
+//   async ({ email, password }, { rejectWithValue }) => {
+//     try {
+//       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+//       return userCredential.user;
+//     } catch (error) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
+
+// // Thunk for signing up the user
+// export const signUpUser = createAsyncThunk(
+//   'auth/signUpUser',
+//   async ({ email, password }, { rejectWithValue }) => {
+//     try {
+//       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+//       return userCredential.user;
+//     } catch (error) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
+
+// // Thunk for signing out the user
+// export const signOutUser = createAsyncThunk(
+//   'auth/signOutUser',
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       await signOut(auth);
+//       return true;
+//     } catch (error) {
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
+
+// const authSlice = createSlice({
+//   name: 'auth',
+//   user: '',
+//   role: '',
+//   initialState: {
+//     user: JSON.parse(localStorage.getItem('user')) || null,
+//     error: null,
+//     status: 'idle',
+//     authOpen: false,  // Initialize authOpen state
+//   },
+//   reducers: {
+//     // Directly set the user, useful for session persistence
+//     setUser: (state, action) => {
+//       state.user = action.payload;
+//       state.status = 'succeeded';
+//       localStorage.setItem('user', JSON.stringify(action.payload)); // Save to localStorage
+//     },
+//     signOutUser: (state) => {
+//       state.user = null;
+//       state.error = null;
+//       state.status = 'idle';
+//       localStorage.removeItem('user'); // Remove from localStorage
+//     },
+//     toggleAuthOpen: (state) => {
+//       state.authOpen = !state.authOpen;
+//     },
+//   },
+//   extraReducers: (builder) => {
+//     builder
+//       .addCase(signInUser.pending, (state) => {
+//         state.status = 'loading';
+//       })
+//       .addCase(signInUser.fulfilled, (state, action) => {
+//         state.status = 'succeeded';
+//         state.user = action.payload;
+//       })
+//       .addCase(signInUser.rejected, (state, action) => {
+//         state.status = 'failed';
+//         state.error = action.payload;
+//       })
+//       .addCase(signUpUser.pending, (state) => {
+//         state.status = 'loading';
+//       })
+//       .addCase(signUpUser.fulfilled, (state, action) => {
+//         state.status = 'succeeded';
+//         state.user = action.payload;
+//       })
+//       .addCase(signUpUser.rejected, (state, action) => {
+//         state.status = 'failed';
+//         state.error = action.payload;
+//       })
+//       .addCase(signOutUser.pending, (state) => {
+//         state.status = 'loading';
+//       })
+//       .addCase(signOutUser.fulfilled, (state) => {
+//         state.status = 'succeeded';
+//         state.user = null;
+//         state.error = null;
+//       })
+//       .addCase(signOutUser.rejected, (state, action) => {
+//         state.status = 'failed';
+//         state.error = action.payload;
+//       });
+//   },
+// });
+
+// export const { setUser, toggleAuthOpen } = authSlice.actions;
+// export default authSlice.reducer;
+
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '../../Firebase/firebase';
 
 // Thunk for signing in the user
@@ -754,6 +867,7 @@ export const signInUser = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      localStorage.setItem('user', JSON.stringify(userCredential.user)); // Persist user
       return userCredential.user;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -767,6 +881,7 @@ export const signUpUser = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      localStorage.setItem('user', JSON.stringify(userCredential.user)); // Persist user
       return userCredential.user;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -780,22 +895,33 @@ export const signOutUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await signOut(auth);
-      return true;
+      localStorage.removeItem('user'); // Remove user from localStorage
+      return null; // Return null on success
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
+// Safe function to load user from localStorage
+const loadUserFromLocalStorage = () => {
+  try {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null; // If user is found, parse it, otherwise return null
+  } catch (error) {
+    console.error("Error parsing user from localStorage:", error);
+    return null; // Return null if there's an error
+  }
+};
+
 const authSlice = createSlice({
   name: 'auth',
-  user: '',
-  role: '',
   initialState: {
-    user: JSON.parse(localStorage.getItem('user')) || null,
+    user: loadUserFromLocalStorage(), 
     error: null,
     status: 'idle',
-    authOpen: false,  // Initialize authOpen state
+    authOpen: false,
+    canBook: false,
   },
   reducers: {
     // Directly set the user, useful for session persistence
@@ -804,40 +930,54 @@ const authSlice = createSlice({
       state.status = 'succeeded';
       localStorage.setItem('user', JSON.stringify(action.payload)); // Save to localStorage
     },
+    // Clear user state and localStorage
     signOutUser: (state) => {
       state.user = null;
       state.error = null;
       state.status = 'idle';
       localStorage.removeItem('user'); // Remove from localStorage
     },
+    // Toggle authentication modal open/close
     toggleAuthOpen: (state) => {
       state.authOpen = !state.authOpen;
+    },
+    setCanBook: (state) => {
+      console.log('user?', state.user)
+      if(state.user){
+        console.log('user?', state.user)
+        state.canBook = !state.canBook;
+      }
     },
   },
   extraReducers: (builder) => {
     builder
+      // Sign in user cases
       .addCase(signInUser.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(signInUser.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.user = action.payload;
+        state.error = null;
       })
       .addCase(signInUser.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
       })
+      // Sign up user cases
       .addCase(signUpUser.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(signUpUser.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.user = action.payload;
+        state.error = null;
       })
       .addCase(signUpUser.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
       })
+      // Sign out user cases
       .addCase(signOutUser.pending, (state) => {
         state.status = 'loading';
       })
@@ -853,5 +993,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setUser, toggleAuthOpen } = authSlice.actions;
+export const { setUser, toggleAuthOpen, setCanBook } = authSlice.actions;
 export default authSlice.reducer;
