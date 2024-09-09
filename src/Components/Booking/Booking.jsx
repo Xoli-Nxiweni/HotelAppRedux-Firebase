@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { LuBedDouble } from 'react-icons/lu';
 import { GiBathtub } from 'react-icons/gi';
 import { SiTicktick } from 'react-icons/si';
@@ -7,7 +7,10 @@ import { PiWarningCircleLight } from 'react-icons/pi';
 import { RiArrowDropUpLine, RiArrowDropDownLine } from 'react-icons/ri';
 import { FaPerson } from 'react-icons/fa6';
 import './Booking.css';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import Payment from '../Payment/Payment';
+import { bookRoom } from '../../Features/slices/bookingSlice';
 
 const Booking = () => {
   const [isSectionOpen, setIsSectionOpen] = useState({
@@ -15,7 +18,7 @@ const Booking = () => {
     extrasDetails: false,
     reviewsDetails: false
   });
-
+  
   const [formState, setFormState] = useState({
     extras: [],
     specialRequests: '',
@@ -27,8 +30,13 @@ const Booking = () => {
     guestName: '',
     contactInfo: ''
   });
-  const [isChecked, setIsChecked] = useState(false)
 
+  const stripePromise = loadStripe('pk_test_51Pw0PWH23g7ZtX12QkXjyxtCKNZsStiJUn2eJpykmWKLDR2dh9dCYooQCZhEgQjxRW08G0NXVDvOZ9QFuSIIoGwS00mSwX1Zhj');
+
+  const [isChecked, setIsChecked] = useState(false);
+  const [paymentMethodId, setPaymentMethodId] = useState(null);
+
+  const dispatch = useDispatch();
   const selectedRoom = useSelector((state) => state.rooms.selectedRoom);
   const user = useSelector((state) => state.auth.user);
 
@@ -60,14 +68,40 @@ const Booking = () => {
     }
   };
 
-  const handleCheckout = () =>{
-    setIsChecked(true)
-  }
+  const handleCheckout = () => {
+    setIsChecked(true);
+  };
+
+  const handlePaymentMethodChange = (paymentMethod) => {
+    setPaymentMethodId(paymentMethod.id);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formState);
-    alert('Booking details submitted.');
+    
+    if (!paymentMethodId) {
+      alert("Please complete payment details.");
+      return;
+    }
+
+    const bookingData = {
+      checkInDate: formState.checkInDate,
+      checkOutDate: formState.checkOutDate,
+      guestName: formState.guestName || user.displayName,
+      contactInfo: formState.contactInfo,
+      extras: formState.extras,
+      specialRequests: formState.specialRequests,
+      paymentMethodId: paymentMethodId,
+      totalAmount: selectedRoom.discountedPrice,
+      numRooms: formState.numRooms,
+      numGuests: formState.numGuests,
+      review: formState.review,
+      userId: user.uid,
+      selectedRoomId: selectedRoom.id
+    };
+
+    dispatch(bookRoom(bookingData));
+    handleCheckout(); // Handle checkout logic
   };
 
   return (
@@ -193,47 +227,26 @@ const Booking = () => {
                 <textarea 
                   id="review" 
                   rows="4" 
-                  placeholder="Write your review here" 
+                  placeholder="Enter your review" 
                   value={formState.review} 
                   onChange={handleInputChange}
                 ></textarea>
               </div>
-              <button type="submit">Submit Review</button>
+              <button type="submit" className='addThings'>Submit</button>
             </form>
-            <div className="existing-reviews">
-              <p>No reviews yet. Be the first to leave a review!</p>
-            </div>
           </div>
         )}
-      </div>
 
-      {/* Booking Right Container */}
-      <div className="bookingRightContainer">
-        <div className="bookingDetails">
-          <h2>Booking Summary</h2>
-          <p><strong>Name:</strong> <span>{user.displayName}</span></p>
-          <p><strong>Email:</strong> <span>{user.email}</span></p>
-          <p><strong>Phone Number:</strong> <span>{formState.contactInfo}</span></p>
-          <p><strong>Room:</strong> {selectedRoom.heading}</p>
-          <p><strong>Guests:</strong> {selectedRoom.guests}</p>
-          <p><strong>Check-in Date:</strong> <span><input type="date" required /></span> </p>
-          <p><strong>Check-out Date:</strong> <span><input type="date" required/></span></p>
-          <p><strong>Number of Rooms:</strong> <span>{formState.numRooms}</span></p>
-          <p><strong>Number of Guests:</strong> <span>{formState.numGuests}</span></p>
-          <p><strong>Extras:</strong> {formState.extras.join(', ')}</p>
-          <p><strong>Special Requests:</strong> {formState.specialRequests}</p>
-          <p><strong>Review:</strong> {formState.review}</p>
-          <button onClick={handleCheckout}>Checkout</button>
+        {/* Payment */}
+        <div className="sectionHeader">
+          <div className="num">4</div><h1>Payment</h1>
+        </div>
+        <div className="drawerContent">
+          <Elements stripe={stripePromise}>
+            <Payment onPaymentMethodChange={handlePaymentMethodChange} />
+          </Elements>
         </div>
       </div>
-
-      {isChecked ? 
-      <div className="payments">
-          <div className="paymentsModal">
-            <Payment />
-          </div>
-      </div>: <></>
-      }
     </div>
   );
 };

@@ -1,20 +1,63 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../../Firebase/firebase'; // Ensure this path is correct
+import { db } from '../../Firebase/firebase';
 
 // Thunk to book a room and store booking details in Firestore
-export const bookRoom = createAsyncThunk('booking/bookRoom', async (bookingDetails, { rejectWithValue }) => {
-  try {
-    console.log('Booking Details:', bookingDetails); // Log booking details for debugging
-    const bookingsCollectionRef = collection(db, 'bookings');
-    const docRef = await addDoc(bookingsCollectionRef, bookingDetails);
-    console.log('Booking added with ID:', docRef.id); // Log success with document ID
-    return { id: docRef.id, ...bookingDetails };
-  } catch (error) {
-    console.error('Error booking room:', error);
-    return rejectWithValue(error.message);
+export const bookRoom = createAsyncThunk(
+  'booking/bookRoom',
+  async (bookingDetails, { rejectWithValue }) => {
+    try {
+      console.log('Attempting to add booking:', bookingDetails);
+
+      const {
+        userId,
+        selectedRoomId,
+        checkInDate,
+        checkOutDate,
+        guestName,
+        contactInfo,
+        extras,
+        specialRequests,
+        review,
+        paymentMethodId,
+        totalAmount,
+        numRooms,
+        numGuests
+      } = bookingDetails;
+
+      // Validate required booking details
+      if (!userId || !selectedRoomId || !checkInDate || !checkOutDate || !guestName || !contactInfo) {
+        throw new Error('Missing required booking details');
+      }
+
+      // Add booking details to Firestore
+      const bookingsCollectionRef = collection(db, 'bookings');
+      const docRef = await addDoc(bookingsCollectionRef, {
+        userId,
+        selectedRoomId,
+        checkInDate,
+        checkOutDate,
+        guestName,
+        contactInfo,
+        extras,
+        specialRequests,
+        review,
+        paymentMethodId,
+        totalAmount,
+        numRooms,
+        numGuests,
+        createdAt: new Date(),
+      });
+
+      console.log('Booking added with ID:', docRef.id);
+
+      return { id: docRef.id, ...bookingDetails };
+    } catch (error) {
+      console.error('Error adding booking:', error.message);
+      return rejectWithValue(error.message);
+    }
   }
-});
+);
 
 const bookingSlice = createSlice({
   name: 'booking',
@@ -28,6 +71,13 @@ const bookingSlice = createSlice({
       contactInfo: '',
       extras: [],
       specialRequests: '',
+      review: '',
+      paymentMethodId: '',
+      totalAmount: 0,
+      userId: '',
+      selectedRoomId: '',
+      numRooms: 1,
+      numGuests: 1
     },
     status: 'idle',
     error: null,
@@ -51,13 +101,20 @@ const bookingSlice = createSlice({
         contactInfo: '',
         extras: [],
         specialRequests: '',
+        review: '',
+        paymentMethodId: '',
+        totalAmount: 0,
+        userId: '',
+        selectedRoomId: '',
+        numRooms: 1,
+        numGuests: 1
       };
     },
     toggleFavorite: (state, action) => {
       const roomId = action.payload;
       const room = state.rooms.find(room => room.id === roomId);
       if (room) {
-        room.isFavorite = !room.isFavorite; // Toggle the isFavorite status
+        room.isFavorite = !room.isFavorite;
       }
     },
   },
@@ -66,9 +123,10 @@ const bookingSlice = createSlice({
       .addCase(bookRoom.pending, (state) => {
         state.bookingStatus = 'loading';
       })
-      .addCase(bookRoom.fulfilled, (state) => {
+      .addCase(bookRoom.fulfilled, (state, action) => {
         state.bookingStatus = 'succeeded';
-        // Reset booking details after successful booking
+        console.log('Booking success:', action.payload);
+        // Reset booking details after a successful booking
         state.bookingDetails = {
           checkInDate: '',
           checkOutDate: '',
@@ -76,11 +134,19 @@ const bookingSlice = createSlice({
           contactInfo: '',
           extras: [],
           specialRequests: '',
+          review: '',
+          paymentMethodId: '',
+          totalAmount: 0,
+          userId: '',
+          selectedRoomId: '',
+          numRooms: 1,
+          numGuests: 1
         };
       })
       .addCase(bookRoom.rejected, (state, action) => {
         state.bookingStatus = 'failed';
-        state.error = action.payload; // Use action.payload for error message
+        console.error('Booking error:', action.payload);
+        state.error = action.payload;
       });
   },
 });
