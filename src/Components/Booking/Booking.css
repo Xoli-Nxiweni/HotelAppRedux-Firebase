@@ -221,3 +221,22 @@ button[type="submit"]:hover {
   font-size: 16px;
   color: #555;
 }
+
+.payments{
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  right: 0;
+  /* bottom: 0; */
+  backdrop-filter: blur(5px);
+  background: #33333399;
+}
+.paymentsModal{
+  position: absolute;
+  left: 0;
+  right: 0;
+  /* bottom: 0; */
+  top:10em;
+  margin: auto 0;
+}

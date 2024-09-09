@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { FaBars, FaTimes } from 'react-icons/fa';
-import { IoLogoWordpress } from 'react-icons/io';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
@@ -74,7 +73,7 @@ const NavBar = ({ setActivePage }) => {
     <div className={`nav-container ${scrolled ? 'scrolled' : ''} ${location.pathname === '/' ? 'home-active' : ''}`}>
       <div className="logo">
         <a href="/">
-          <IoLogoWordpress />
+          <h1>Rest<span>Q</span>uest</h1>
         </a>
       </div>
       <ul className={`nav-links ${drawerOpen ? 'open' : ''}`}>

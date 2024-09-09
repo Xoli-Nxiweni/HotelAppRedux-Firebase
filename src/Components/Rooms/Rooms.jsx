@@ -9,15 +9,14 @@ import { setCanBook } from '../../Features/slices/authSlice';
 import { auth } from '../../Firebase/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import Loader from '../Loader/Loader';
-import { FaRegHeart } from "react-icons/fa6";
-import { FaHeart } from "react-icons/fa6";
+import Auth from '../Auth/Auth';
+import { FaRegHeart, FaHeart } from "react-icons/fa6";
 
 const Rooms = () => {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Destructure rooms, filteredRooms, etc. from Redux state
+  // Destructure necessary state from Redux
   const { rooms, filteredRooms, searchQuery, selectedRoom, status, error } = useSelector((state) => ({
     rooms: state.rooms.rooms || [],
     filteredRooms: state.rooms.filteredRooms || [],
@@ -26,7 +25,6 @@ const Rooms = () => {
     status: state.rooms.status || 'idle',
     error: state.rooms.error || null,
   }));
-  rooms
 
   const isAuthenticated = useSelector((state) => state.auth.canBook);
 
@@ -37,12 +35,10 @@ const Rooms = () => {
     }
   }, [dispatch, status]);
 
-  
   // Handle user authentication state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       console.log(user ? `User is authenticated: ${user.uid}` : 'User is not authenticated');
-      // Update the ability to book based on authentication status
       if (user) {
         dispatch(setCanBook());
       }
@@ -53,11 +49,10 @@ const Rooms = () => {
 
   // Handle search query input change
   const handleSearchChange = (e) => {
-    const query = e.target.value;
-    dispatch(setSearchQuery(query));
+    dispatch(setSearchQuery(e.target.value));
   };
 
-  // Handle search button click using the searchQuery from state
+  // Handle search button click
   const handleSearch = useCallback(() => {
     dispatch(setSearchQuery(searchQuery));
   }, [dispatch, searchQuery]);
@@ -65,25 +60,24 @@ const Rooms = () => {
   // Open room pop-up by dispatching selected room ID
   const handlePopUp = (roomId) => {
     dispatch(setSelectedRoom(roomId));
-    
   };
 
   // Close the room pop-up
   const closePopUp = () => {
     dispatch(clearSelectedRoom());
   };
+
   const handleFavoriteClick = (roomId) => {
-    dispatch(toggleFavorite(roomId)); // Dispatch the action with room ID
+    // const dispatch = useDispatch();
+    dispatch(toggleFavorite(roomId));
   };
 
-  // Handle 'Book Now' click, navigate based on authentication status
+  // Handle 'Book Now' click
   const handleBookNow = () => {
     if (isAuthenticated) {
       navigate('/booking');
-      // closePopUp()
     } else {
       navigate('/signUp');
-      // closePopUp()
     }
   };
 
@@ -133,11 +127,11 @@ const Rooms = () => {
 
       <div className="bottomPart">
         <div className="roomCard">
-          {status === 'loading' && <Loader/>}
+          {status === 'loading' && <Loader />}
           {status === 'failed' && <p>Error: {error || 'Something went wrong.'}</p>}
           {filteredRooms.length > 0 ? (
-            filteredRooms.map((room, index) => ( // Use index as a fallback key
-              <div key={room.id || index} className="card">
+            filteredRooms.map((room) => (
+              <div key={room.id} className="card">
                 <img src={room.image} alt={room.heading || 'No image'} />
                 <div className="cardHeading">
                   <h4>{room.heading || 'No title'}</h4>
@@ -150,12 +144,12 @@ const Rooms = () => {
                   <b>
                     {room.reviews || 0} <IoIosStar />
                   </b>
-                  <h3 onClick={handleFavoriteClick}>
-                    {!room.isFavorite ? <FaRegHeart/> : <FaHeart />}
+                  <h3 onClick={() => handleFavoriteClick(room.id)}>
+                    {!room.isFavorite ? <FaRegHeart /> : <FaHeart />}
                   </h3>
                 </div>
                 <div className="cardBottom">
-                  <button onClick={() => handlePopUp(room.id)}>view room</button>
+                  <button onClick={() => handlePopUp(room.id)}>View Room</button>
                   <p>
                     {room.nights || 0} nights, <s>{room.originalPrice || ''}</s>
                   </p>
@@ -198,12 +192,14 @@ const Rooms = () => {
                 </p>
               </div>
             </div>
-            {!selectedRoom.isBooked && 
-              <button className="bookNowBtn" onClick={()=>{
-                // closePopUp();
-                handleBookNow();
-              }}>
+            {(!selectedRoom.isBooked && isAuthenticated) && 
+              <button className="bookNowBtn" onClick={handleBookNow}>
                 Book Now
+              </button>
+            }
+            {(selectedRoom && !isAuthenticated) && 
+              <button className="bookNowBtn" onClick={() => navigate('/signUp')}>
+                Sign In
               </button>
             }
           </div>

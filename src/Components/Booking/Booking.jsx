@@ -10,57 +10,64 @@ import './Booking.css';
 import Payment from '../Payment/Payment';
 
 const Booking = () => {
-  const [userDetailsOpen, setUserDetailsOpen] = useState(false);
-  const [extrasDetailsOpen, setExtrasDetailsOpen] = useState(false);
-  const [reviewsDetailsOpen, setReviewsDetailsOpen] = useState(false);
-  const [extras, setExtras] = useState([]);
-  const [specialRequests, setSpecialRequests] = useState('');
-  const [review, setReview] = useState('');
-  const [checkInDate] = useState('');
-  const [checkOutDate] = useState('');
-  const [numRooms] = useState(1);
-  const [numGuests] = useState(1);
-  const [guestName, setGuestName] = useState('');
-  const [contactInfo, setContactInfo] = useState('');
+  const [isSectionOpen, setIsSectionOpen] = useState({
+    userDetails: false,
+    extrasDetails: false,
+    reviewsDetails: false
+  });
+
+  const [formState, setFormState] = useState({
+    extras: [],
+    specialRequests: '',
+    review: '',
+    checkInDate: '',
+    checkOutDate: '',
+    numRooms: 1,
+    numGuests: 1,
+    guestName: '',
+    contactInfo: ''
+  });
+  const [isChecked, setIsChecked] = useState(false)
 
   const selectedRoom = useSelector((state) => state.rooms.selectedRoom);
   const user = useSelector((state) => state.auth.user);
-  console.log(user);
-  
-  // const navigate = useNavigate();
 
   if (!selectedRoom) {
     return <div className='noRoomSelected'>No room selected. Please go back and select a room.</div>;
   }
 
-  const handleAddStuff = () => {
-    console.log('Extras:', extras);
-    console.log('Special Requests:', specialRequests);
-    console.log('Check-in Date:', checkInDate);
-    console.log('Check-out Date:', checkOutDate);
-    console.log('Number of Rooms:', numRooms);
-    console.log('Number of Guests:', numGuests);
-    console.log('Guest Name:', guestName);
-    console.log('Contact Information:', contactInfo);
-    alert('Booking details submitted.');
+  const toggleSection = (section) => {
+    setIsSectionOpen((prev) => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
   };
 
-  const handleExtrasChange = (e) => {
-    const value = e.target.value;
-    setExtras(prevExtras =>
-      e.target.checked
-        ? [...prevExtras, value]
-        : prevExtras.filter(item => item !== value)
-    );
+  const handleInputChange = (e) => {
+    const { id, value, type, checked } = e.target;
+    if (type === 'checkbox') {
+      setFormState((prev) => ({
+        ...prev,
+        extras: checked
+          ? [...prev.extras, value]
+          : prev.extras.filter(item => item !== value)
+      }));
+    } else {
+      setFormState((prev) => ({
+        ...prev,
+        [id]: value
+      }));
+    }
   };
 
-  const handleSpecialRequestsChange = (e) => setSpecialRequests(e.target.value);
-  const handleReviewChange = (e) => setReview(e.target.value);
+  const handleCheckout = () =>{
+    setIsChecked(true)
+  }
 
-  const handleReviewSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Review submitted:', review);
-    alert('Review submitted successfully.');
+    console.log('Form submitted:', formState);
+    alert('Booking details submitted.');
   };
 
   return (
@@ -98,73 +105,62 @@ const Booking = () => {
         </div>
 
         {/* User Details */}
-        <div className="sectionHeader" onClick={() => setUserDetailsOpen(prev => !prev)}>
+        <div className="sectionHeader" onClick={() => toggleSection('userDetails')}>
           <div className="num">1</div><h1>Your Details</h1>
-          {userDetailsOpen ? <RiArrowDropUpLine className='svg' /> : <RiArrowDropDownLine className='svg' />}
+          {isSectionOpen.userDetails ? <RiArrowDropUpLine className='svg' /> : <RiArrowDropDownLine className='svg' />}
         </div>
-        {userDetailsOpen && (
+        {isSectionOpen.userDetails && (
           <div className="drawerContent">
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label htmlFor="fullName">Full Name</label>
+                <label htmlFor="guestName">Full Name</label>
                 <input 
                   type="text" 
-                  id="fullName" 
+                  id="guestName" 
                   placeholder="Enter your full name" 
-                  value={user.displayName}
-                  onChange={(e) => setGuestName(e.target.value)} 
+                  value={formState.guestName || user.displayName}
+                  onChange={handleInputChange} 
                   required 
                   readOnly
-                  />
+                />
               </div>
               <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input 
-                  type="email" 
-                  id="email" 
-                  placeholder="Enter your email" 
-                  value={user.email}
-                  required 
-                  readOnly
-                  />
-              </div>
-              <div className="form-group">
-                <label htmlFor="phone">Phone Number</label>
+                <label htmlFor="contactInfo">Phone Number</label>
                 <input 
                   type="tel" 
-                  id="phone" 
+                  id="contactInfo" 
                   placeholder="Enter your phone number" 
-                  value={contactInfo}
-                  onChange={(e) => setContactInfo(e.target.value)} 
+                  value={formState.contactInfo}
+                  onChange={handleInputChange} 
                   required 
                 />
               </div>
-              <button type="button" className='addThings' onClick={handleAddStuff}>Submit</button>
+              <button type="submit" className='addThings'>Submit</button>
             </form>
           </div>
         )}
 
         {/* Extras Details */}
-        <div className="sectionHeader" onClick={() => setExtrasDetailsOpen(prev => !prev)}>
+        <div className="sectionHeader" onClick={() => toggleSection('extrasDetails')}>
           <div className="num">2</div><h1>Extras</h1>
-          {extrasDetailsOpen ? <RiArrowDropUpLine className='svg' /> : <RiArrowDropDownLine className='svg' />}
+          {isSectionOpen.extrasDetails ? <RiArrowDropUpLine className='svg' /> : <RiArrowDropDownLine className='svg' />}
         </div>
-        {extrasDetailsOpen && (
+        {isSectionOpen.extrasDetails && (
           <div className="drawerContent">
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="add-ons">Select Extras</label>
                 <div id="add-ons">
                   <label>
-                    <input type="checkbox" value="breakfast" onChange={handleExtrasChange} />
+                    <input type="checkbox" value="breakfast" onChange={handleInputChange} />
                     Breakfast
                   </label>
                   <label>
-                    <input type="checkbox" value="parking" onChange={handleExtrasChange} />
+                    <input type="checkbox" value="parking" onChange={handleInputChange} />
                     Parking
                   </label>
                   <label>
-                    <input type="checkbox" value="wifi" onChange={handleExtrasChange} />
+                    <input type="checkbox" value="wifi" onChange={handleInputChange} />
                     WiFi Access
                   </label>
                 </div>
@@ -175,31 +171,31 @@ const Booking = () => {
                   id="specialRequests" 
                   rows="4" 
                   placeholder="Enter any special requests" 
-                  value={specialRequests} 
-                  onChange={handleSpecialRequestsChange}
+                  value={formState.specialRequests} 
+                  onChange={handleInputChange}
                 ></textarea>
               </div>
-              <button type="button" className='addThings' onClick={handleAddStuff}>Submit</button>
+              <button type="submit" className='addThings'>Submit</button>
             </form>
           </div>
         )}
 
         {/* Reviews Details */}
-        <div className="sectionHeader" onClick={() => setReviewsDetailsOpen(prev => !prev)}>
+        <div className="sectionHeader" onClick={() => toggleSection('reviewsDetails')}>
           <div className="num">3</div><h1>Reviews</h1>
-          {reviewsDetailsOpen ? <RiArrowDropUpLine className='svg' /> : <RiArrowDropDownLine className='svg' />}
+          {isSectionOpen.reviewsDetails ? <RiArrowDropUpLine className='svg' /> : <RiArrowDropDownLine className='svg' />}
         </div>
-        {reviewsDetailsOpen && (
+        {isSectionOpen.reviewsDetails && (
           <div className="drawerContent">
-            <form onSubmit={handleReviewSubmit}>
+            <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="review">Leave a Review</label>
                 <textarea 
                   id="review" 
                   rows="4" 
                   placeholder="Write your review here" 
-                  value={review} 
-                  onChange={handleReviewChange}
+                  value={formState.review} 
+                  onChange={handleInputChange}
                 ></textarea>
               </div>
               <button type="submit">Submit Review</button>
@@ -217,21 +213,27 @@ const Booking = () => {
           <h2>Booking Summary</h2>
           <p><strong>Name:</strong> <span>{user.displayName}</span></p>
           <p><strong>Email:</strong> <span>{user.email}</span></p>
-          <p><strong>Phone Number:</strong> <span>{contactInfo}</span></p>
+          <p><strong>Phone Number:</strong> <span>{formState.contactInfo}</span></p>
           <p><strong>Room:</strong> {selectedRoom.heading}</p>
           <p><strong>Guests:</strong> {selectedRoom.guests}</p>
-          <p><strong>Check-in Date:</strong> <span><input type="date" /></span> </p>
-          <p><strong>Check-out Date:</strong> <span><input type="date" /></span></p>
-          <p><strong>Number of Rooms:</strong> <span><input type="number" /></span></p>
-          <p><strong>Number of Guests:</strong> <span><input type="number" /></span></p>
-          <p><strong>Extras:</strong> {extras.join(', ') || 'None'}</p>
-          <p><strong>Special Requests:</strong> {specialRequests || 'None'}</p>
-          <div className="totalPrice">
-            <h3>Total Price: {selectedRoom.discountedPrice}</h3>
-          </div>
-          <Payment />
+          <p><strong>Check-in Date:</strong> <span><input type="date" required /></span> </p>
+          <p><strong>Check-out Date:</strong> <span><input type="date" required/></span></p>
+          <p><strong>Number of Rooms:</strong> <span>{formState.numRooms}</span></p>
+          <p><strong>Number of Guests:</strong> <span>{formState.numGuests}</span></p>
+          <p><strong>Extras:</strong> {formState.extras.join(', ')}</p>
+          <p><strong>Special Requests:</strong> {formState.specialRequests}</p>
+          <p><strong>Review:</strong> {formState.review}</p>
+          <button onClick={handleCheckout}>Checkout</button>
         </div>
       </div>
+
+      {isChecked ? 
+      <div className="payments">
+          <div className="paymentsModal">
+            <Payment />
+          </div>
+      </div>: <></>
+      }
     </div>
   );
 };

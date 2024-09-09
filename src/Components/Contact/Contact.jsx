@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './Contact.css';
+import { FaCheckCircle } from 'react-icons/fa';
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -7,28 +8,31 @@ const ContactUs = () => {
     email: '',
     message: '',
   });
-  
+
   const [errors, setErrors] = useState({
     name: '',
     email: '',
     message: '',
   });
 
+  const [submitted, setSubmitted] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: '' }); // Clear errors as user types
   };
 
   const validateForm = () => {
     let isValid = true;
-    const newErrors = { name: '', email: '', message: ''};
+    const newErrors = { name: '', email: '', message: '' };
 
-    if (!formData.name) {
+    if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
       isValid = false;
     }
 
-    if (!formData.email) {
+    if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
       isValid = false;
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -36,7 +40,7 @@ const ContactUs = () => {
       isValid = false;
     }
 
-    if (!formData.message) {
+    if (!formData.message.trim()) {
       newErrors.message = 'Message is required';
       isValid = false;
     }
@@ -48,8 +52,9 @@ const ContactUs = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // Handle successful form submission (e.g., send data to server)
-      alert('Message sent successfully!');
+      // Simulating successful submission
+      setSubmitted(true);
+      setTimeout(() => setSubmitted(false), 3000); // Reset success message after 3 seconds
       setFormData({ name: '', email: '', message: '' });
     }
   };
@@ -58,7 +63,7 @@ const ContactUs = () => {
     <div className="contactUsContainer">
       <h2>Contact Us</h2>
       <form onSubmit={handleSubmit} className="contactForm">
-        <div className="formGroup">
+        <div className={`formGroup ${errors.name ? 'error-active' : ''}`}>
           <label htmlFor="name">Name</label>
           <input
             type="text"
@@ -70,7 +75,7 @@ const ContactUs = () => {
           />
           {errors.name && <span className="error">{errors.name}</span>}
         </div>
-        <div className="formGroup">
+        <div className={`formGroup ${errors.email ? 'error-active' : ''}`}>
           <label htmlFor="email">Email</label>
           <input
             type="email"
@@ -82,7 +87,7 @@ const ContactUs = () => {
           />
           {errors.email && <span className="error">{errors.email}</span>}
         </div>
-        <div className="formGroup">
+        <div className={`formGroup ${errors.message ? 'error-active' : ''}`}>
           <label htmlFor="message">Message</label>
           <textarea
             id="message"
@@ -93,7 +98,14 @@ const ContactUs = () => {
           ></textarea>
           {errors.message && <span className="error">{errors.message}</span>}
         </div>
-        <button type="submit" className="submitButton">Send Message</button>
+        <button type="submit" className="submitButton">
+          {submitted ? <FaCheckCircle /> : 'Send Message'}
+        </button>
+        {submitted && (
+          <div className="successMessage">
+            <FaCheckCircle /> Message sent successfully!
+          </div>
+        )}
       </form>
     </div>
   );

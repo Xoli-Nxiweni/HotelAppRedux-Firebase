@@ -1,16 +1,33 @@
-// import React from 'react';
-import { Elements } from '@stripe/react-stripe-js';
+import { Elements, useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { Button, Typography, Container, Paper, Box } from '@mui/material';
-import { CardElement } from '@stripe/react-stripe-js';
 
-// Replace this with your own test or live key
 const stripePromise = loadStripe('pk_test_51Pw0PWH23g7ZtX12QkXjyxtCKNZsStiJUn2eJpykmWKLDR2dh9dCYooQCZhEgQjxRW08G0NXVDvOZ9QFuSIIoGwS00mSwX1Zhj');
 
 const PaymentForm = () => {
+  const stripe = useStripe();
+  const elements = useElements();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // Handle form submission here
+
+    if (!stripe || !elements) {
+      console.error('Stripe or Elements not loaded');
+      return;
+    }
+
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: 'card',
+      card: elements.getElement(CardElement),
+    });
+
+    if (error) {
+      console.error('Payment Error:', error);
+      alert('Payment failed. Please try again.');
+    } else {
+      console.log('Payment Method:', paymentMethod);
+      alert('Payment successful!');
+    }
   };
 
   return (
@@ -39,6 +56,7 @@ const PaymentForm = () => {
         color="primary"
         fullWidth
         sx={{ py: 1.5, fontSize: '16px' }}
+        disabled={!stripe}
       >
         Pay Now
       </Button>

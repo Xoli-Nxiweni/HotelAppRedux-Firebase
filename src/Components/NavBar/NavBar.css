@@ -6,33 +6,88 @@
     align-items: center;
     z-index: 1000; /* Ensure it is on top of other elements */
     width: 100%;
+    color: #000; /* Default text color (black) */
     border-bottom: 1px solid;
     position: fixed; /* Ensure the navbar sticks to the top */
     background: #ffffff;
     top: 0;
-    transition: background-color 0.3s linear; /* Smooth background color transition */
+    transition: background-color 0.3s linear, color 0.3s linear; /* Smooth background color transition */
+}
+
+/* Default link styles */
+.nav-links li a,
+.logo a,
+.userProfile .user-icon-btn,
+.authBtn {
+    color: #000; /* Default link colors (black) */
+}
+
+.nav-links li a:hover,
+.logo a:hover,
+.userProfile .user-icon-btn:hover,
+.authBtn:hover {
+    color: #ff7f50; /* Default hover effect color */
+}
+
+/* Active link style */
+.nav-links li a.active {
+    color: #ff7f50 !important; /* Active link color */
+}
+
+/* Navbar in the home-active state (homepage) */
+.nav-container.home-active {
+    background: unset;
+    backdrop-filter: blur(40px);
+    border: 0;
+    color: #fff; /* White text color */
+}
+
+/* Navbar links in home-active state (white links) */
+.nav-container.home-active .nav-links li a,
+.nav-container.home-active .logo a,
+.nav-container.home-active .userProfile .user-icon-btn,
+.nav-container.home-active .authBtn {
+    color: #fff; /* Set link colors to white */
+}
+
+/* Active link on homepage */
+.nav-container.home-active .nav-links li a.active {
+    color: #ff7f50 !important; /* Active link color on homepage */
+}
+
+/* Hover effect on homepage */
+.nav-container.home-active .nav-links li a:hover,
+.nav-container.home-active .logo a:hover,
+.nav-container.home-active .userProfile .user-icon-btn:hover,
+.nav-container.home-active .authBtn:hover {
+    color: #ff7f50; /* Hover effect */
 }
 
 /* Styles for the navbar when scrolled */
 .nav-container.scrolled {
     background-color: rgb(255, 255, 255); /* Change background color when scrolled */
-    color: #000000;
+    color: #000000; /* Change text color to black */
 }
 
-.nav-container.scrolled svg {
-    color: #000000;
+/* Link colors when scrolled */
+.nav-container.scrolled .nav-links li a,
+.nav-container.scrolled .logo a,
+.nav-container.scrolled .userProfile .user-icon-btn,
+.nav-container.scrolled .authBtn {
+    color: #000; /* Set link colors to black */
 }
 
-.nav-container.scrolled a {
-    color: #000;
+/* Active link when scrolled */
+.nav-container.scrolled .nav-links li a.active {
+    color: #ff7f50 !important; /* Active link color when scrolled */
 }
 
-.nav-container.scrolled a.active {
-    color: #ff7f50;
-}
-
-.nav-container.scrolled a:hover {
-    color: #ff7f50;
+/* Hover effect when scrolled */
+.nav-container.scrolled .nav-links li a:hover,
+.nav-container.scrolled .logo a:hover,
+.nav-container.scrolled .userProfile .user-icon-btn:hover,
+.nav-container.scrolled .authBtn:hover {
+    color: #ff7f50; /* Hover effect */
 }
 
 /* Navigation links */
@@ -45,86 +100,71 @@
 /* Link styles */
 .nav-links li a {
     text-decoration: none;
-    color: rgb(0, 0, 0);
-    transition: all 0.2s linear;
+    transition: color 0.2s linear;
     text-transform: uppercase;
     font-size: 14px;
     letter-spacing: 1px;
     font-weight: 600;
+    color: inherit; /* Inherit color based on state */
 }
 
-.nav-links li a:hover {
-    color: #ff7f50;
-}
-
-.nav-links li a.active {
-    color: #ff7f50;
-}
-.home-active{
-    background: rgba(118, 117, 114, 0.504);
-    backdrop-filter: blur(40px);
-    border: 0;
-}
 /* Logo */
 .logo {
     border-radius: 50%;
 }
 
-.logo svg {
-    font-size: 4em;
-    color: #000000;
+.logo a {
+    text-decoration: none;
+    color: inherit; /* Inherit color based on state */
+}
+
+.logo span {
+    color: #ff7f50;
 }
 
 /* User Profile */
 .userProfile {
     display: flex;
-    /* gap: 10px; */
     width: 65px;
     align-items: center;
     background: transparent;
     transition: all 0.3s linear;
 }
-.userProfile .user-icon-btn{
+
+.userProfile .user-icon-btn {
     display: flex;
     align-items: center;
     background: transparent;
     border: 0;
-    color: #fff;
-    /* padding: 10px; */
+    color: inherit; /* Inherit color */
     cursor: pointer;
-    overflow: hidden;
 }
-.userProfile .user-icon-btn img{
+
+.userProfile .user-icon-btn img {
     width: 100%;
     border-radius: 50%;
     height: 100%;
     object-fit: contain;
 }
 
-.userProfile svg {
-    font-size: 3em;
-    /* color: #fff; */
-
-}
-
 /* Authentication Button */
 .authBtn {
-    padding: 10px 15px;
-    border-radius: 15px 0 15px 0;
+    border-radius: 10px;
+    padding: 10px;
     border: 0;
+    font-size: 14px;
     cursor: pointer;
-    /* background: #3f6682; */
-    color: #fff;
+    color: inherit; /* Inherit color */
     transition: all 0.2s linear;
 }
 
 .authBtn:hover {
-    background: rgba(25, 80, 25, 0.361)
+    background-color: #ffffff;
 }
 
 /* Drawer for mobile view */
 .hamburger {
-    display: none; /* Adjust visibility based on screen size with media queries */
+    display: none;
     font-size: 2em;
     color: #fff;
     cursor: pointer;

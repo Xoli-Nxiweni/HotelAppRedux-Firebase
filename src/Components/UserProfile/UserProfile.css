@@ -1,26 +1,72 @@
-/* UserProfile.css */
-.userProfileDrawer {
-    position: absolute;
-    top: 60px; /* Adjust based on your navbar height */
-    right: 10px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .signOutBtn {
-    margin-top: 10px;
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .signOutBtn:hover {
-    background-color: #ff1a1a;
-  }
-  
+.userProfileContainer {
+  position: fixed;
+  background: rgb(255, 255, 255);
+  border-radius: 16px;
+  backdrop-filter: blur(15px);
+  padding: 2.5rem;
+  left: 0;
+  right: 0;
+  transform: translateY(50%);
+  margin: 1rem auto;
+  text-align: center;
+  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  /* max-width: 400px; */
+  height: 600px;
+  overflow: auto;
+}
+
+.userProfileContainer:hover {
+  /* transform: scale(1.05); */
+  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Favorites List Styling */
+ul {
+  /* max-height: 150px; */
+  /* overflow-y: auto; */
+  padding: 0;
+}
+
+li {
+  /* margin: 5px 0; */
+  border-radius: 10px;
+  /* padding: 10px; */
+}
+
+/* Buttons */
+.signOutBtn,
+.changePasswordBtn,
+.editProfileBtn {
+  background: linear-gradient(135deg, #ff6b81, #ff4757);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 30px;
+  text-transform: none;
+  font-weight: bold;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0px 8px 15px rgba(255, 71, 87, 0.3);
+  margin-bottom: 15px;
+}
+
+.signOutBtn:hover,
+.changePasswordBtn:hover,
+.editProfileBtn:hover {
+  background: linear-gradient(135deg, #ff4757, #ff6b81);
+  box-shadow: 0px 10px 20px rgba(255, 71, 87, 0.4);
+}
+
+/* Modal Styles */
+.modalStyle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  text-align: center;
+}

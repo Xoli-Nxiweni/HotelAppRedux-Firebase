@@ -25,6 +25,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../Features/slices/authSlice';
 import loadingReducer from '../Features/slices/loadingSlice'; 
 import roomReducer from '../Features/slices/roomSlice'; 
+import bookingReducer from '../Features/slices/bookingSlice';
 // import storage from 'redux-persist/lib/storage';
 // import persistStore from 'redux-persist/es/persistStore';
 // import persistReducer from 'redux-persist/es/persistReducer';
@@ -40,6 +41,7 @@ export const store = configureStore({
     auth: authReducer,
     loading: loadingReducer, 
     rooms: roomReducer,
+    booking: bookingReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

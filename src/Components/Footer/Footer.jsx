@@ -28,16 +28,16 @@ const Footer = () => {
             />
             <Marker position={[-26.222683464725616, 27.896870574723415]} icon={icon}>
               <Popup>
-                Ndofaya Mall
+                RestQuest Headquarters
               </Popup>
             </Marker>
           </MapContainer>
         </div>
         <div className="footer-section contact">
           <h3>Contact Us</h3>
-          <p><strong>Address:</strong> 123 Hotel St, Luxury City, HC 45678</p>
+          <p><strong>Address:</strong> 123 RestQuest Blvd, Luxury City, RC 45678</p>
           <p><strong>Phone:</strong> +1 (234) 567-8901</p>
-          <p><strong>Email:</strong> info@hotel.com</p>
+          <p><strong>Email:</strong> info@restquest.com</p>
         </div>
         <div className="footer-section links">
           <h3>Quick Links</h3>
@@ -59,7 +59,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>&copy; 2024 Serenity Suites. All Rights Reserved.</p>
+        <p>&copy; 2024 RestQuest. All Rights Reserved.</p>
       </div>
     </footer>
   );

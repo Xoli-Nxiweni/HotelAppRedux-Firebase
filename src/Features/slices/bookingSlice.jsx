@@ -1,25 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
-import { db } from '../../Firebase/firebase';
-
-// Thunk to fetch available rooms from Firestore
-export const fetchRooms = createAsyncThunk('booking/fetchRooms', async () => {
-  try {
-    const roomsCollectionRef = collection(db, 'hotelRooms');
-    const querySnapshot = await getDocs(roomsCollectionRef);
-    const roomsList = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    return roomsList;
-  } catch (error) {
-    console.error('Error fetching rooms:', error);
-    throw error;
-  }
-});
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../../Firebase/firebase'; // Ensure this path is correct
 
 // Thunk to book a room and store booking details in Firestore
 export const bookRoom = createAsyncThunk('booking/bookRoom', async (bookingDetails, { rejectWithValue }) => {
   try {
+    console.log('Booking Details:', bookingDetails); // Log booking details for debugging
     const bookingsCollectionRef = collection(db, 'bookings');
     const docRef = await addDoc(bookingsCollectionRef, bookingDetails);
+    console.log('Booking added with ID:', docRef.id); // Log success with document ID
     return { id: docRef.id, ...bookingDetails };
   } catch (error) {
     console.error('Error booking room:', error);
@@ -66,7 +55,7 @@ const bookingSlice = createSlice({
     },
     toggleFavorite: (state, action) => {
       const roomId = action.payload;
-      const room = state.rooms.find((room) => room.id === roomId);
+      const room = state.rooms.find(room => room.id === roomId);
       if (room) {
         room.isFavorite = !room.isFavorite; // Toggle the isFavorite status
       }
@@ -74,23 +63,20 @@ const bookingSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchRooms.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchRooms.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.rooms = action.payload;
-      })
-      .addCase(fetchRooms.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      })
       .addCase(bookRoom.pending, (state) => {
         state.bookingStatus = 'loading';
       })
       .addCase(bookRoom.fulfilled, (state) => {
         state.bookingStatus = 'succeeded';
-        // Optionally handle successful booking here
+        // Reset booking details after successful booking
+        state.bookingDetails = {
+          checkInDate: '',
+          checkOutDate: '',
+          guestName: '',
+          contactInfo: '',
+          extras: [],
+          specialRequests: '',
+        };
       })
       .addCase(bookRoom.rejected, (state, action) => {
         state.bookingStatus = 'failed';
@@ -99,6 +85,6 @@ const bookingSlice = createSlice({
   },
 });
 
-export const { selectRoom, clearSelectedRoom, updateBookingDetails, resetBookingDetails } = bookingSlice.actions;
+export const { selectRoom, clearSelectedRoom, updateBookingDetails, resetBookingDetails, toggleFavorite } = bookingSlice.actions;
 
 export default bookingSlice.reducer;

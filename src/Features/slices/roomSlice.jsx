@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getDocs, collection } from 'firebase/firestore';
+import { getDocs, getDoc, collection, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../Firebase/firebase';
 
 // Thunk for fetching rooms from Firestore
 export const fetchRooms = createAsyncThunk('rooms/fetchRooms', async (_, { rejectWithValue }) => {
   try {
     const querySnapshot = await getDocs(collection(db, 'hotelRooms'));
-    const rooms = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const rooms = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
     console.log('Rooms returned:', rooms); // Log the rooms data for debugging
     return rooms;
   } catch (error) {
@@ -15,36 +15,65 @@ export const fetchRooms = createAsyncThunk('rooms/fetchRooms', async (_, { rejec
   }
 });
 
+// Thunk for toggling favorite status
+export const toggleFavorite = createAsyncThunk(
+  'rooms/toggleFavorite',
+  async (roomId, { rejectWithValue }) => {
+    try {
+      const roomIdStr = String(roomId); // Ensure the ID is a string
+      console.log(`Attempting to toggle favorite status for room ID: ${roomIdStr}`);
+
+      // Create document reference
+      const roomRef = doc(db, 'hotelRooms', roomIdStr);
+      console.log(`Document reference path: ${roomRef.path}`);
+
+      // Get document
+      const roomDoc = await getDoc(roomRef);
+
+      if (!roomDoc.exists()) {
+        console.error(`No document found with ID: ${roomIdStr}`);
+        throw new Error('No document to update');
+      }
+
+      // Document exists, update favorite status
+      const roomData = roomDoc.data();
+      const newFavoriteStatus = !roomData.isFavorite;
+      console.log(`Current favorite status: ${roomData.isFavorite}`);
+      console.log(`Updating favorite status to: ${newFavoriteStatus}`);
+
+      await updateDoc(roomRef, { isFavorite: newFavoriteStatus });
+      console.log(`Successfully updated favorite status for room ID: ${roomIdStr}`);
+
+      return { roomId: roomIdStr, newFavoriteStatus };
+    } catch (error) {
+      console.error('Error updating favorite status in Firestore:', error.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const roomSlice = createSlice({
   name: 'rooms',
   initialState: {
-    rooms: [], // Initialize rooms as an empty array
-    filteredRooms: [], // Initialize filteredRooms as an empty array
-    searchQuery: '', // Track search query for filtering
-    selectedRoom: null, // Track selected room for details
-    status: 'idle', // Idle, loading, succeeded, or failed
-    error: null, // Handle errors
+    rooms: [],
+    filteredRooms: [],
+    searchQuery: '',
+    selectedRoom: null,
+    status: 'idle',
+    error: null,
   },
   reducers: {
     setSearchQuery: (state, action) => {
       state.searchQuery = action.payload;
-      // Filter rooms based on search query
-      state.filteredRooms = state.rooms.filter(room =>
+      state.filteredRooms = state.rooms.filter((room) =>
         room.heading?.toLowerCase().includes(state.searchQuery.toLowerCase())
       );
     },
     setSelectedRoom: (state, action) => {
-      state.selectedRoom = state.rooms.find(room => room.id === action.payload);
+      state.selectedRoom = state.rooms.find((room) => room.id === action.payload);
     },
     clearSelectedRoom: (state) => {
       state.selectedRoom = null;
-    },
-    toggleFavorite: (state, action) => {
-      const roomId = action.payload;
-      const room = state.rooms.find((room) => room.id === roomId);
-      if (room) {
-        room.isFavorite = !room.isFavorite;
-      }
     },
   },
   extraReducers: (builder) => {
@@ -60,9 +89,25 @@ const roomSlice = createSlice({
       .addCase(fetchRooms.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
+      })
+      .addCase(toggleFavorite.pending, (state) => {
+        // Optionally set a loading state for the favorite toggle
+      })
+      .addCase(toggleFavorite.fulfilled, (state, action) => {
+        const { roomId, newFavoriteStatus } = action.payload;
+        state.rooms = state.rooms.map(room =>
+          room.id === roomId ? { ...room, isFavorite: newFavoriteStatus } : room
+        );
+        state.filteredRooms = state.filteredRooms.map(room =>
+          room.id === roomId ? { ...room, isFavorite: newFavoriteStatus } : room
+        );
+      })
+      .addCase(toggleFavorite.rejected, (state, action) => {
+        console.error('Failed to update favorite status:', action.payload);
+        // Optionally revert local state if Firestore update fails
       });
   },
 });
 
-export const { setSearchQuery, setSelectedRoom, clearSelectedRoom, toggleFavorite } = roomSlice.actions;
+export const { setSearchQuery, setSelectedRoom, clearSelectedRoom } = roomSlice.actions;
 export default roomSlice.reducer;
