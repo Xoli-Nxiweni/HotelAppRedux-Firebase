@@ -1,6 +1,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../Firebase/firebase';
+
+// Async action to add booking to Firestore
+export const addBooking = createAsyncThunk('bookings/addBooking', async (bookingDetails, { rejectWithValue }) => {
+  try {
+    const bookingsRef = collection(db, 'bookings');
+    await addDoc(bookingsRef, bookingDetails);
+    return bookingDetails;
+  } catch (error) {
+    console.error('Error adding booking:', error);
+    return rejectWithValue(error.message);
+  }
+});
 
 // Thunk to book a room and store booking details in Firestore
 export const bookRoom = createAsyncThunk(
@@ -28,6 +40,15 @@ export const bookRoom = createAsyncThunk(
       // Validate required booking details
       if (!userId || !selectedRoomId || !checkInDate || !checkOutDate || !guestName || !contactInfo) {
         throw new Error('Missing required booking details');
+      }
+
+      // Validate userId exists in Firestore
+      const usersRef = collection(db, 'users');
+      const userQuery = query(usersRef, where('uid', '==', userId));
+      const userSnapshot = await getDocs(userQuery);
+
+      if (userSnapshot.empty) {
+        throw new Error('User does not exist');
       }
 
       // Add booking details to Firestore
@@ -126,7 +147,6 @@ const bookingSlice = createSlice({
       .addCase(bookRoom.fulfilled, (state, action) => {
         state.bookingStatus = 'succeeded';
         console.log('Booking success:', action.payload);
-        // Reset booking details after a successful booking
         state.bookingDetails = {
           checkInDate: '',
           checkOutDate: '',
