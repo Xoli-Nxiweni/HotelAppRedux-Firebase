@@ -1,6 +1,8 @@
+// src/Components/UserProfile/UserProfile.jsx
 import React, { useState, useEffect } from 'react';
 import { Button, Avatar, Typography, Box, Divider, Modal, TextField, List, ListItem, ListItemText, Paper, CircularProgress, Snackbar } from '@mui/material';
 import { Alert } from '@mui/lab';
+import { fetchBookings, fetchFavorites } from '../../Firebase/dataService'; // Adjust the import path
 import './UserProfile.css';
 
 const UserProfile = ({ user, onSignOut }) => {
@@ -123,33 +125,31 @@ const UserProfile = ({ user, onSignOut }) => {
       <Divider sx={{ mb: 2 }} />
 
       {/* Action Buttons */}
-      {/* Action Buttons */}
-<Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-  <Button 
-    variant="contained" 
-    className="editProfileBtn"
-    sx={{ mb: 1, width: '200px', fontSize: '14px' }} // Ensure consistent width
-  >
-    Edit Profile
-  </Button>
-  <Button 
-    variant="contained" 
-    className="changePasswordBtn" 
-    onClick={() => setOpenChangePassword(true)}
-    sx={{ mb: 1, width: '200px', fontSize: '14px' }} // Ensure consistent width
-  >
-    Change Password
-  </Button>
-  <Button 
-    variant="contained" 
-    className="signOutBtn" 
-    onClick={onSignOut}
-    sx={{ width: '200px', fontSize: '14px', fontWeight: 'bold' }} // Ensure consistent width
-  >
-    Sign Out
-  </Button>
-</Box>
-
+      <Box sx={{ textAlign: 'center', display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <Button 
+          variant="contained" 
+          className="editProfileBtn"
+          sx={{ mb: 1, width: '200px', fontSize: '14px' }} // Ensure consistent width
+        >
+          Edit Profile
+        </Button>
+        <Button 
+          variant="contained" 
+          className="changePasswordBtn" 
+          onClick={() => setOpenChangePassword(true)}
+          sx={{ mb: 1, width: '200px', fontSize: '14px' }} // Ensure consistent width
+        >
+          Change Password
+        </Button>
+        <Button 
+          variant="contained" 
+          className="signOutBtn" 
+          onClick={onSignOut}
+          sx={{ width: '200px', fontSize: '14px', fontWeight: 'bold' }} // Ensure consistent width
+        >
+          Sign Out
+        </Button>
+      </Box>
 
       {/* Change Password Modal */}
       <Modal

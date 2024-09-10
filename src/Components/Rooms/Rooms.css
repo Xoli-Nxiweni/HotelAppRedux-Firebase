@@ -54,6 +54,7 @@ label {
     padding: 8px 12px;
     width: 200px;
     /* border-radius: 35%; */
+    margin-bottom: 0px;
 }
 
 .dateInputs {
@@ -67,6 +68,7 @@ label {
     border-radius: 15px;
     padding: 8px 12px;
     width: 150px;
+    
 }
 
 .guestsAndRooms {
@@ -284,7 +286,7 @@ label {
         grid-template-columns: repeat(3, 1fr);
     } 
 }
-@media (max-width: 600px) {
+@media (max-width: 916px) {
     .roomCard {
         grid-template-columns: repeat(2, 1fr);
     } 

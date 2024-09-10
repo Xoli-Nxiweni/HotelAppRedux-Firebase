@@ -1,5 +1,5 @@
 import './Rooms.css';
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoSearchSharp } from 'react-icons/io5';
 import { IoIosStar } from 'react-icons/io';
@@ -13,6 +13,7 @@ import Auth from '../Auth/Auth';
 import { FaRegHeart, FaHeart } from "react-icons/fa6";
 
 const Rooms = () => {
+  const [authOpen, setAuthOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -38,7 +39,6 @@ const Rooms = () => {
   // Handle user authentication state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log(user ? `User is authenticated: ${user.uid}` : 'User is not authenticated');
       if (user) {
         dispatch(setCanBook());
       }
@@ -57,27 +57,25 @@ const Rooms = () => {
     dispatch(setSearchQuery(searchQuery));
   }, [dispatch, searchQuery]);
 
-  // Open room pop-up by dispatching selected room ID
   const handlePopUp = (roomId) => {
     dispatch(setSelectedRoom(roomId));
   };
 
-  // Close the room pop-up
   const closePopUp = () => {
     dispatch(clearSelectedRoom());
   };
 
   const handleFavoriteClick = (roomId) => {
-    // const dispatch = useDispatch();
     dispatch(toggleFavorite(roomId));
   };
 
   // Handle 'Book Now' click
   const handleBookNow = () => {
     if (isAuthenticated) {
-      navigate('/booking');
+      navigate('/booking'); // Navigate to the booking page route
     } else {
-      navigate('/signUp');
+      setAuthOpen(true);
+      closePopUp();
     }
   };
 
@@ -93,36 +91,6 @@ const Rooms = () => {
             onChange={handleSearchChange}
           />
         </div>
-        <div className="checkIn">
-          <label htmlFor="checkIn">Check in</label>
-          <input type="date" id="checkIn" className="dateInput" />
-        </div>
-        <div className="checkOut">
-          <label htmlFor="checkOut">Check out</label>
-          <input type="date" id="checkOut" className="dateInput" />
-        </div>
-        <div className="guestsAndRooms">
-          <label htmlFor="guests">Guests and rooms</label>
-          <div className="dropDowns">
-            <select id="guests" className="guestsSelect">
-              <option value="">Guests</option>
-              {[1, 2, 3, 4, 5, 6].map((num) => (
-                <option key={num} value={num}>
-                  {num} Guest{num > 1 ? 's' : ''}
-                </option>
-              ))}
-            </select>
-            <select id="rooms" className="roomsSelect">
-              <option value="">Rooms</option>
-              {[1, 2, 3].map((num) => (
-                <option key={num} value={num}>
-                  {num} Room{num > 1 ? 's' : ''}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        <button className="searchBtn" onClick={handleSearch}>Search</button>
       </div>
 
       <div className="bottomPart">
@@ -167,7 +135,7 @@ const Rooms = () => {
         <div className="popupOverlay" onClick={closePopUp}>
           <div className="popupContent" onClick={(e) => e.stopPropagation()}>
             <button className="closeBtn" onClick={closePopUp}>
-              Close
+              x
             </button>
             <div className="roomCard2">
               <img src={selectedRoom.image || 'default-image.jpg'} alt={selectedRoom.heading || 'No image'} />
@@ -197,13 +165,12 @@ const Rooms = () => {
                 Book Now
               </button>
             }
-            {(selectedRoom && !isAuthenticated) && 
-              <button className="bookNowBtn" onClick={() => navigate('/signUp')}>
-                Sign In
-              </button>
-            }
           </div>
         </div>
+      )}
+
+      {authOpen && (
+        <Auth isOpen={authOpen} onClose={() => setAuthOpen(false)} />
       )}
     </div>
   );
