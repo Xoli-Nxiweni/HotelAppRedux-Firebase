@@ -34,7 +34,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="home-container">
+    <div className="home-container" style={{background: '#ff000045'}}>
       {/* Main Section */}
       <section
         className="home-section home-section-main"

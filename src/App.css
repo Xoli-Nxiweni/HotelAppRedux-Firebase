@@ -15,6 +15,10 @@
   color: #fff;
 }
 
+::placeholder{
+  text-align: center;
+}
+
 /* Styling the scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -77,20 +81,24 @@
 
 /* Wrapper styling */
 .Wrapper {
+  
   display: grid;
-  background-image: url('thaba-eco-hotel.jpg');
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
   margin: 0;
-  min-height: 100vh; /* Ensures the wrapper takes up full viewport height */
-  animation: changeBackground 1200s 3s infinite; 
-  transition: background-image 1s linear; /* Smooth transition for background images */
+  /* width: 100vw; */
+  /* min-height: 100vh; Ensures the wrapper takes up full viewport height */
 }
 
 /* Main content styling */
 main {
+  background-attachment: fixed;
+  background-image: url('thaba-eco-hotel.jpg');
+  animation: changeBackground 1200s 3s infinite; 
   /* display: flex; */
+  transition: background-image 1s linear; /* Smooth transition for background images */
+  /* background: red; */
   align-items: center;
   justify-content: center;
   flex-grow: 1; /* Allows main content to grow and take up available space */
@@ -181,4 +189,19 @@ button{
 
 .fade-out {
   opacity: 0;
+}
+
+@media (max-width: 412px) {
+  main {
+    background-position: cover;
+    background-image: url('thaba-eco-hotel.jpg');
+    animation: changeBackground 1200s 3s infinite; 
+    /* display: flex; */
+    background-repeat: no-repeat;
+    transition: background-image 1s linear; /* Smooth transition for background images */
+    /* background: red; */
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1; /* Allows main content to grow and take up available space */
+  }
 }

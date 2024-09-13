@@ -10,7 +10,6 @@ const AboutUs = () => {
           className="about-image" 
         />
         <h1 className="hotel-name">Splendid Stay Hotel</h1>
-        <button className="proceed-button">Proceed</button>
       </div>
       <div className="about-content-container">
         <h2>About Us</h2>

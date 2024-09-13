@@ -3,7 +3,7 @@
     height: 100vh;
     padding: 120px 5%;
     align-items: center;
-    /* background: linear-gradient(to right, #ece9e6, #ffffff); */
+    background: linear-gradient(to right, #ece9e6b0, #ffffff36);
     box-sizing: border-box;
     gap: 40px;
   }
@@ -15,7 +15,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    /* padding: 20px; */
+    padding: 20px;
   }
   
   .about-image {
