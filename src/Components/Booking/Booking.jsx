@@ -12,6 +12,7 @@ import './Booking.css';
 import { Card, CardContent, Typography, Divider } from '@mui/material';
 import Payment from '../Payment/Payment';
 import { addBooking } from '../../Features/slices/bookingSlice'; // Adjust the import path based on your file structure
+import { clearSelectedRoom } from '../../Features/slices/roomSlice';
 
 const stripePromise = loadStripe('pk_test_51Pw0PWH23g7ZtX12QkXjyxtCKNZsStiJUn2eJpykmWKLDR2dh9dCYooQCZhEgQjxRW08G0NXVDvOZ9QFuSIIoGwS00mSwX1Zhj');
 
@@ -99,6 +100,10 @@ const Booking = () => {
     dispatch(addBooking(bookingDetails));
 
     alert('Booking details submitted. Redirecting to payment...');
+  };
+
+  const closePopUp = () => {
+    dispatch(clearSelectedRoom());
   };
 
   return (
@@ -347,7 +352,7 @@ const Booking = () => {
       </CardContent>
     </Card>
     <br />
-          <button type="submit" disabled={isChecked}>Confirm Booking</button>
+          <button type="submit" disabled={isChecked} >Confirm Booking</button>
         </form>
         <br />
 

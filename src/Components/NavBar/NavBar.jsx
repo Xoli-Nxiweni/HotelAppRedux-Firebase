@@ -52,6 +52,9 @@ const NavBar = ({ setActivePage }) => {
   // Close Auth Popup
   const closeAuthPopup = () => setAuthOpen(false);
 
+  // Close UserProfile Popup
+  const closeProfilePopup = () => setShowProfile(false);
+
   // Handle Navigation Links Click
   const handleNavClick = (page) => {
     navigate(page);
@@ -109,7 +112,7 @@ const NavBar = ({ setActivePage }) => {
             <button className="user-icon-btn" onClick={() => setShowProfile((prev) => !prev)}>
               <img src={user.photoURL || 'path/to/placeholder-image.png'} alt="User Avatar" />
             </button>
-            {showProfile && <UserProfile user={user} onSignOut={handleSignOut} />}
+            {showProfile && <UserProfile user={user} onSignOut={handleSignOut} onClose={closeProfilePopup} />}
           </>
         ) : (
           <button className="authBtn" onClick={handleSignInClick}>

@@ -9,8 +9,11 @@ const loadingSlice = createSlice({
   initialState,
   reducers: {
     // Action to toggle loading state
-    setLoader: (state) => {
-      state.isLoading = !state.isLoading;
+    // setLoader: (state) => {
+    //   state.isLoading = !state.isLoading;
+    // },
+    setLoader: (state, action) => {
+      state.isLoading = action.payload;
     },
   },
 });

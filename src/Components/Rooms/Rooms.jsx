@@ -75,7 +75,6 @@ const Rooms = () => {
       navigate('/booking'); // Navigate to the booking page route
     } else {
       setAuthOpen(true);
-      closePopUp();
     }
   };
 
