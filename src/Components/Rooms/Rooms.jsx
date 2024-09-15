@@ -17,7 +17,6 @@ const Rooms = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Destructure necessary state from Redux
   const { rooms, filteredRooms, searchQuery, selectedRoom, status, error } = useSelector((state) => ({
     rooms: state.rooms.rooms || [],
     filteredRooms: state.rooms.filteredRooms || [],
@@ -88,6 +87,7 @@ const Rooms = () => {
             placeholder="Where to sleep?"
             value={searchQuery}
             onChange={handleSearchChange}
+            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
           />
         </div>
       </div>

@@ -96,9 +96,10 @@ main {
   background-attachment: fixed;
   background-image: url('thaba-eco-hotel.jpg');
   background-repeat: no-repeat;
+  background-size:cover;
   animation: changeBackground 1200s 3s infinite; 
   /* display: flex; */
-  transition: background-image 1s linear; /* Smooth transition for background images */
+  /* transition: background-image 1s linear; Smooth transition for background images */
   /* background: red; */
   align-items: center;
   justify-content: center;
@@ -199,7 +200,7 @@ button{
     animation: changeBackground 1200s 3s infinite; 
     /* display: flex; */
     background-repeat: no-repeat;
-    transition: background-image 1s linear; /* Smooth transition for background images */
+    /* transition: background-image 1s linear; Smooth transition for background images */
     /* background: red; */
     align-items: center;
     justify-content: center;

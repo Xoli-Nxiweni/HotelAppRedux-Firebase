@@ -42,19 +42,19 @@ const Footer = () => {
         <div className="footer-section links">
           <h3>Quick Links</h3>
           <ul className="footer-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Rooms</a></li>
-            <li><a href="#">Contact Us</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/rooms">Rooms</a></li>
+            <li><a href="/contact">Contact Us</a></li>
           </ul>
         </div>
         <div className="footer-section social">
           <h3>Follow Us</h3>
           <div className="social-icons">
-            <a href="#" aria-label="Facebook"><FaFacebook /></a>
-            <a href="#" aria-label="Twitter"><FaTwitter /></a>
-            <a href="#" aria-label="Instagram"><FaInstagram /></a>
-            <a href="#" aria-label="LinkedIn"><FaLinkedin /></a>
+            <a href="https://Facebook.com" target='_Blank' aria-label="Facebook"><FaFacebook /></a>
+            <a href="https://Twitter.com" target='_Blank' aria-label="Twitter"><FaTwitter /></a>
+            <a href="https://Instagram.com" target='_Blank' aria-label="Instagram"><FaInstagram /></a>
+            <a href="https://LinkedIn.com" target='_Blank' aria-label="LinkedIn"><FaLinkedin /></a>
           </div>
         </div>
       </div>

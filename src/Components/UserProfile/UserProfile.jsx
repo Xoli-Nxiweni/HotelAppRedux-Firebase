@@ -90,7 +90,7 @@ const UserProfile = ({ user, onSignOut, onClose }) => {
         <Box sx={{ textAlign: 'center', mb: 3 }}>
           <Avatar
             alt={user.displayName}
-            src={user.photoURL || 'https://via.placeholder.com/150'}
+            src={user.photoURL || 'public/vecteezy_user-icon-on-transparent-background_19879186.png'}
             sx={{ width: 120, height: 120, border: '4px solid #fff', boxShadow: 2 }}
           />
         </Box>
