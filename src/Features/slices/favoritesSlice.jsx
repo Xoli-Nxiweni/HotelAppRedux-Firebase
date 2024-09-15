@@ -1,6 +1,6 @@
-// src/slices/favoritesSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchFavorites as fetchFavoritesFromService } from '../services/dataService';
+import { fetchFavorites as fetchFavoritesFromService,  } from '../services/dataService';
+import { toggleFavorite } from './roomSlice';
 
 export const fetchFavorites = createAsyncThunk(
   'favorites/fetchFavorites',
@@ -22,7 +22,14 @@ const favoritesSlice = createSlice({
     status: 'idle',
     error: null,
   },
-  reducers: {},
+  reducers: {
+    addFavorite: (state, action) => {
+      state.favorites.push(action.payload);
+    },
+    removeFavorite: (state, action) => {
+      state.favorites = state.favorites.filter(favorite => favorite !== action.payload);
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchFavorites.pending, (state) => {
@@ -35,8 +42,23 @@ const favoritesSlice = createSlice({
       .addCase(fetchFavorites.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
+      })
+      .addCase(toggleFavorite.fulfilled, (state, action) => {
+        const { roomId, newFavoriteStatus, userId } = action.payload;
+
+        if (newFavoriteStatus) {
+          state.favorites.push(roomId);
+        } else {
+          state.favorites = state.favorites.filter(id => id !== roomId);
+        }
+      })
+      .addCase(toggleFavorite.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
       });
   },
 });
+
+export const { addFavorite, removeFavorite } = favoritesSlice.actions;
 
 export default favoritesSlice.reducer;

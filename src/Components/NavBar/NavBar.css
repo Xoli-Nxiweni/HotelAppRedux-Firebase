@@ -1,24 +1,23 @@
-/* Base styles for the navbar */
 .nav-container {
     display: flex;
     justify-content: space-between;
     padding: 10px 5%;
     align-items: center;
-    z-index: 1000; /* Ensure it is on top of other elements */
+    z-index: 1000; 
     width: 100%;
-    color: #000; /* Default text color (black) */
+    color: #000; 
     border-bottom: 1px solid;
-    position: fixed; /* Ensure the navbar sticks to the top */
+    position: fixed; 
     background: #ffffff;
     top: 0;
-    transition: background-color 0.3s linear, color 0.3s linear; /* Smooth background color transition */
+    transition: background-color 0.3s linear, color 0.3s linear; 
 }
 
 /* Default link styles */
 .nav-links li a,
 .logo a,
 .userProfile .user-icon-btn,
-.authBtn {
+.hamburger svg {
     color: #000; /* Default link colors (black) */
 }
 
@@ -73,7 +72,7 @@
 .nav-container.scrolled .nav-links li a,
 .nav-container.scrolled .logo a,
 .nav-container.scrolled .userProfile .user-icon-btn,
-.nav-container.scrolled .authBtn {
+.nav-container.scrolled .hamburger {
     color: #000; /* Set link colors to black */
 }
 
@@ -123,7 +122,9 @@
 /* User Profile */
 .userProfile {
     display: flex;
+    justify-content: center;
     width: 65px;
+    gap: 10px;
     align-items: center;
     background: transparent;
     transition: all 0.3s linear;
@@ -148,11 +149,13 @@
 /* Authentication Button */
 .authBtn {
     border-radius: 10px;
-    padding: 10px;
+    padding: 10px 20px;
     border: 0;
     font-size: 14px;
+    display: flex;
+    /* width: 120px; */
     cursor: pointer;
-    color: inherit; /* Inherit color */
+    color: inherit; 
     transition: all 0.2s linear;
 }
 
@@ -171,6 +174,7 @@
 .drawer {
     position: fixed;
     top: 0;
+
     right: -100%;
     width: 250px;
     height: 100vh;

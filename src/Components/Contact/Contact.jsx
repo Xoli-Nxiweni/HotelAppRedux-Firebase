@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './Contact.css';
-import { FaCheckCircle } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaCheckCircle, FaPen } from 'react-icons/fa';
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -52,19 +52,21 @@ const ContactUs = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // Simulating successful submission
+      // Simulate successful submission
       setSubmitted(true);
-      setTimeout(() => setSubmitted(false), 3000); // Reset success message after 3 seconds
+      setTimeout(() => setSubmitted(false), 3000);
       setFormData({ name: '', email: '', message: '' });
     }
   };
 
   return (
     <div className="contactUsContainer">
-      <h2>Contact Us</h2>
+      <h2 className="contactTitle">{`Let's Connect`}</h2>
       <form onSubmit={handleSubmit} className="contactForm">
         <div className={`formGroup ${errors.name ? 'error-active' : ''}`}>
-          <label htmlFor="name">Name</label>
+          <label htmlFor="name">
+            <FaUser className="inputIcon" /> Full Name
+          </label>
           <input
             type="text"
             id="name"
@@ -72,11 +74,15 @@ const ContactUs = () => {
             value={formData.name}
             onChange={handleChange}
             placeholder="Your Name"
+            className="inputField"
           />
           {errors.name && <span className="error">{errors.name}</span>}
         </div>
+        
         <div className={`formGroup ${errors.email ? 'error-active' : ''}`}>
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">
+            <FaEnvelope className="inputIcon" /> Email Address
+          </label>
           <input
             type="email"
             id="email"
@@ -84,23 +90,30 @@ const ContactUs = () => {
             value={formData.email}
             onChange={handleChange}
             placeholder="Your Email"
+            className="inputField"
           />
           {errors.email && <span className="error">{errors.email}</span>}
         </div>
+        
         <div className={`formGroup ${errors.message ? 'error-active' : ''}`}>
-          <label htmlFor="message">Message</label>
+          <label htmlFor="message">
+            <FaPen className="inputIcon" /> Message
+          </label>
           <textarea
             id="message"
             name="message"
             value={formData.message}
             onChange={handleChange}
             placeholder="Your Message"
+            className="textareaField"
           ></textarea>
           {errors.message && <span className="error">{errors.message}</span>}
         </div>
+
         <button type="submit" className="submitButton">
           {submitted ? <FaCheckCircle /> : 'Send Message'}
         </button>
+
         {submitted && (
           <div className="successMessage">
             <FaCheckCircle /> Message sent successfully!

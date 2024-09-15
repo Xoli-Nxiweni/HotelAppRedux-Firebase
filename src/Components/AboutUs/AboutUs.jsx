@@ -10,13 +10,14 @@ const ImageContainer = styled(Box)({
 
 const AboutImage = styled('img')({
   width: '100%',
-  maxWidth: '400px',
-  // height: '40px',
+  // maxWidth: '520px',
+  objectFit: 'cover',
+  height: '400px',
   borderRadius: '10px',
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
   '&:hover': {
-    transform: 'scale(1.05)',
+    // transform: 'scale(1.05)',
     boxShadow: '0 6px 12px rgba(0, 0, 0, 0.3)',
   },
 });
@@ -39,7 +40,7 @@ const AboutUs = () => {
 
 
   return (
-    <Container maxWidth="100" className="about-container">
+    <Container maxWidth="" className="about-container">
       <ImageContainer>
         <AboutImage 
           src="pic10.jpg" 
@@ -57,7 +58,6 @@ const AboutUs = () => {
           bgcolor: 'background.paper',
           boxShadow: 3,
           borderRadius: 2,
-          maxWidth: 800,
           textAlign: 'left',
         }}
       >

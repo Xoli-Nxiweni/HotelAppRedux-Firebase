@@ -33,7 +33,7 @@ const Rooms = () => {
     if (status === 'idle') {
       dispatch(fetchRooms());
     }
-  }, [dispatch, status]);
+  }, [dispatch, status]); // This looks good  
 
   // Handle user authentication state changes
   useEffect(() => {
@@ -65,8 +65,14 @@ const Rooms = () => {
   };
 
   const handleFavoriteClick = (roomId) => {
-    dispatch(toggleFavorite(roomId));
+    const userId = auth.currentUser ? auth.currentUser.uid : null;
+    if (userId) {
+      dispatch(toggleFavorite({ roomId, userId }));
+    } else {
+      setAuthOpen(true); // Prompt authentication if user is not logged in
+    }
   };
+  
 
   // Handle 'Book Now' click
   const handleBookNow = () => {
@@ -120,7 +126,7 @@ const Rooms = () => {
                   <p>
                     {room.nights || 0} nights, <s>{room.originalPrice || ''}</s>
                   </p>
-                  <span>{room.discountedPrice || ''}</span>
+                  <span>{`R ${room.discountedPrice}`}</span>
                 </div>
               </div>
             ))
@@ -155,7 +161,7 @@ const Rooms = () => {
                 <p>{selectedRoom.nights || 0} nights</p>
                 <p>Rating: {selectedRoom.reviews || 0}</p>
                 <p>
-                  <s>{selectedRoom.originalPrice || ''}</s> <b>{selectedRoom.discountedPrice || ''}</b>
+                   <b>{`R ${selectedRoom.discountedPrice}`}</b>
                 </p>
               </div>
             </div>

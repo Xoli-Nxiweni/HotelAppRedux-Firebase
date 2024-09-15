@@ -145,6 +145,11 @@ const NavBar = ({ setActivePage }) => {
             </a>
           </li>
           <li>
+          <a href="/gallery" onClick={(e) => { e.preventDefault(); handleNavClick('/gallery'); }} className={location.pathname === '/gallery' ? 'active' : ''}>
+            Gallery
+          </a>
+        </li>
+          <li>
             <a href="/contact" onClick={(e) => { e.preventDefault(); handleNavClick('/contact'); }} className={location.pathname === '/contact' ? 'active' : ''}>
               Contact Us
             </a>
