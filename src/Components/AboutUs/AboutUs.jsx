@@ -46,9 +46,9 @@ const AboutUs = () => {
           src="pic10.jpg" 
           alt="Hotel" 
         />
-        <HotelName variant="h3" sx={{ fontFamily: 'Poppins', fontWeight: 'bold' }}>
+        {/* <HotelName variant="h3" sx={{ fontFamily: 'Poppins', fontWeight: 'bold' }}>
           RestQuest Room Finder
-        </HotelName>
+        </HotelName> */}
       </ImageContainer>
 
       <Box 

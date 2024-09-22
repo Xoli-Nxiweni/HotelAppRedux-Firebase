@@ -11,7 +11,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import './Booking.css';
 import { Card, CardContent, Typography, Divider } from '@mui/material';
 import Payment from '../Payment/Payment';
-import { addBooking } from '../../Features/slices/bookingSlice'; // Adjust the import path based on your file structure
+import { addBooking } from '../../Features/slices/bookingSlice';
 import { clearSelectedRoom } from '../../Features/slices/roomSlice';
 
 const stripePromise = loadStripe('pk_test_51Pw0PWH23g7ZtX12QkXjyxtCKNZsStiJUn2eJpykmWKLDR2dh9dCYooQCZhEgQjxRW08G0NXVDvOZ9QFuSIIoGwS00mSwX1Zhj');
@@ -46,10 +46,7 @@ const Booking = () => {
   }
 
   const toggleSection = (section) => {
-    setIsSectionOpen((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
+    setIsSectionOpen((prev) => ({ ...prev, [section]: !prev[section] }));
   };
 
   const handleInputChange = (e) => {
@@ -58,9 +55,7 @@ const Booking = () => {
       if (type === 'checkbox') {
         return {
           ...prev,
-          extras: checked
-            ? [...prev.extras, value]
-            : prev.extras.filter((item) => item !== value),
+          extras: checked ? [...prev.extras, value] : prev.extras.filter((item) => item !== value),
         };
       }
       return { ...prev, [id]: value };
@@ -68,8 +63,8 @@ const Booking = () => {
   };
 
   const handleCheckout = (e) => {
-    e.preventDefault(); // Prevent form submission
-    
+    e.preventDefault();
+
     if (!formState.checkInDate || !formState.checkOutDate) {
       alert('Please fill in all required fields.');
       return;
@@ -77,9 +72,8 @@ const Booking = () => {
 
     setIsChecked(true);
 
-    // Extract booking details from state
     const bookingDetails = {
-      userID: user.uid, // Assuming user.uid contains the user ID from authentication
+      userID: user.uid,
       name: user.displayName,
       email: user.email,
       phoneNumber: formState.contactInfo,
@@ -92,13 +86,11 @@ const Booking = () => {
       extras: formState.extras,
       specialRequests: formState.specialRequests,
       review: formState.review,
-      price: selectedRoom.discountedPrice, // Assuming this is the total price
-      accommodation: selectedRoom, // Store full room details if needed
+      price: selectedRoom.discountedPrice,
+      accommodation: selectedRoom,
     };
 
-    // Dispatch the action to add booking details to Firestore via Redux
     dispatch(addBooking(bookingDetails));
-
     alert('Booking details submitted. Redirecting to payment...');
   };
 
@@ -132,12 +124,8 @@ const Booking = () => {
               <p>{selectedRoom.size}m²</p> <p>• {selectedRoom.view}</p>
               <p>• {selectedRoom.nonSmoking ? 'Non-smoking' : 'Smoking'}</p>
             </div>
-            <p>
-              <SiTicktick /> Free Cancellation
-            </p>
-            <p>
-              <PiWarningCircleLight /> Pay Today
-            </p>
+            <p><SiTicktick /> Free Cancellation</p>
+            <p><PiWarningCircleLight /> Pay Today</p>
             <div className="price">
               <h3>{selectedRoom.discountedPrice}</h3>
             </div>
@@ -148,11 +136,7 @@ const Booking = () => {
         <div className="sectionHeader" onClick={() => toggleSection('userDetails')}>
           <div className="num">1</div>
           <h1>Your Details</h1>
-          {isSectionOpen.userDetails ? (
-            <RiArrowDropUpLine className="svg" />
-          ) : (
-            <RiArrowDropDownLine className="svg" />
-          )}
+          {isSectionOpen.userDetails ? <RiArrowDropUpLine className="svg" /> : <RiArrowDropDownLine className="svg" />}
         </div>
         {isSectionOpen.userDetails && (
           <div className="drawerContent">
@@ -188,11 +172,7 @@ const Booking = () => {
         <div className="sectionHeader" onClick={() => toggleSection('extrasDetails')}>
           <div className="num">2</div>
           <h1>Extras</h1>
-          {isSectionOpen.extrasDetails ? (
-            <RiArrowDropUpLine className="svg" />
-          ) : (
-            <RiArrowDropDownLine className="svg" />
-          )}
+          {isSectionOpen.extrasDetails ? <RiArrowDropUpLine className="svg" /> : <RiArrowDropDownLine className="svg" />}
         </div>
         {isSectionOpen.extrasDetails && (
           <div className="drawerContent">
@@ -247,11 +227,7 @@ const Booking = () => {
         <div className="sectionHeader" onClick={() => toggleSection('reviewsDetails')}>
           <div className="num">3</div>
           <h1>Reviews</h1>
-          {isSectionOpen.reviewsDetails ? (
-            <RiArrowDropUpLine className="svg" />
-          ) : (
-            <RiArrowDropDownLine className="svg" />
-          )}
+          {isSectionOpen.reviewsDetails ? <RiArrowDropUpLine className="svg" /> : <RiArrowDropDownLine className="svg" />}
         </div>
         {isSectionOpen.reviewsDetails && (
           <div className="drawerContent">
@@ -272,97 +248,26 @@ const Booking = () => {
       </div>
 
       <div className="bookingRightContainer">
-        <form onSubmit={handleCheckout} className="bookingForm">
-          <div className="form-group">
-            <label htmlFor="checkInDate">Check-In Date</label>
-            <input
-              type="date"
-              id="checkInDate"
-              value={formState.checkInDate}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="checkOutDate">Check-Out Date</label>
-            <input
-              type="date"
-              id="checkOutDate"
-              value={formState.checkOutDate}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="numRooms">Number of Rooms</label>
-            <input
-              type="number"
-              id="numRooms"
-              min="1"
-              value={formState.numRooms}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="numGuests">Number of Guests</label>
-            <input
-              type="number"
-              id="numGuests"
-              min="1"
-              value={formState.numGuests}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <Card sx={{ maxWidth: 400, margin: 'auto' }}>
-      <CardContent>
-        <Typography variant="h5" component="div">
-          Booking Summary
-        </Typography>
-        <Divider sx={{ my: 2 }} />
-        <Typography variant="body1" gutterBottom>
-          <strong>Room:</strong> {selectedRoom.heading}
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          <strong>Check-In Date:</strong> {formState.checkInDate}
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          <strong>Check-Out Date:</strong> {formState.checkOutDate}
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          <strong>Number of Rooms:</strong> {formState.numRooms}
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          <strong>Number of Guests:</strong> {formState.numGuests}
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          <strong>Extras:</strong> {formState.extras.join(', ') || 'None'}
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          <strong>Special Requests:</strong> {formState.specialRequests || 'None'}
-        </Typography>
-        <Typography variant="body1" gutterBottom>
-          <strong>Review:</strong> {formState.review || 'No review'}
-        </Typography>
-        <Divider sx={{ my: 2 }} />
-        <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-          Total Price: {selectedRoom.discountedPrice}
-        </Typography>
-      </CardContent>
-    </Card>
-    <br />
-          <button type="submit" disabled={isChecked} >Confirm Booking</button>
+        <form onSubmit={handleCheckout} className="checkoutForm">
+          <Card variant="outlined" sx={{ minWidth: 275 }}>
+            <CardContent>
+              <Typography variant="h5" component="div">Booking Summary</Typography>
+              <Divider />
+              <Typography variant="body2">Room: {selectedRoom.heading}</Typography>
+              <Typography variant="body2">Check-in: {formState.checkInDate}</Typography>
+              <Typography variant="body2">Check-out: {formState.checkOutDate}</Typography>
+              <Typography variant="body2">Guests: {formState.numGuests}</Typography>
+              <Typography variant="body2">Extras: {formState.extras.join(', ') || 'None'}</Typography>
+              <Typography variant="h6" component="div">Total: {selectedRoom.discountedPrice}</Typography>
+            </CardContent>
+          </Card>
+          <button type="submit" className="checkoutButton">Proceed to Payment</button>
         </form>
-        <br />
 
         {isChecked && (
-          <div className="paymentSection">
-            <h2>Proceed to Payment</h2>
-            <Elements stripe={stripePromise}>
-              <Payment />
-            </Elements>
-          </div>
+          <Elements stripe={stripePromise}>
+            <Payment amount={selectedRoom.discountedPrice} closePopUp={closePopUp} />
+          </Elements>
         )}
       </div>
     </div>

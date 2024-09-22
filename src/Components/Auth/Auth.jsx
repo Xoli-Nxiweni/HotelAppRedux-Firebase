@@ -5,12 +5,10 @@ import { signUpUser, signInUser, setUser } from "../../Features/slices/authSlice
 import { auth, googleProvider, signInWithPopup } from "../../Firebase/firebase";
 import { getFirestore, setDoc, doc } from 'firebase/firestore';
 import './auth.css';
-// import GoogleLogo from '../../assets/google-logo.png'; // Path to Google logo
+import PropTypes from 'prop-types';
 
-// Initialize Firestore
 const db = getFirestore();
 
-// eslint-disable-next-line react/prop-types
 const Auth = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,6 +18,7 @@ const Auth = ({ isOpen, onClose }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isRegistered, setIsRegistered] = useState(false);
   const [hasNavigated, setHasNavigated] = useState(false);
+  const [error, setError] = useState('');
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -28,7 +27,11 @@ const Auth = ({ isOpen, onClose }) => {
   const authBoxRef = useRef(null);
 
   const memoizedOnClose = useCallback(() => {
-    onClose();
+    if (typeof onClose === 'function') {
+      onClose();
+    } else {
+      console.warn('onClose is not a function');
+    }
   }, [onClose]);
 
   useEffect(() => {
@@ -61,11 +64,11 @@ const Auth = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isRegistered) {
-      if (password === confirmPassword) {
-        try {
+    setError(''); // Clear previous errors
+    try {
+      if (isRegistered) {
+        if (password === confirmPassword) {
           const result = await dispatch(signUpUser({ email, password, name, surname, phoneNumber })).unwrap();
-          // Add user to Firestore
           await setDoc(doc(db, 'users', result.uid), {
             uid: result.uid,
             name,
@@ -73,23 +76,19 @@ const Auth = ({ isOpen, onClose }) => {
             phoneNumber,
             email
           });
-          dispatch(setUser(result)); // Update state with user data
+          dispatch(setUser(result));
           memoizedOnClose();
           navigate('/');
-        } catch (error) {
-          console.error('Sign Up Error:', error);
+        } else {
+          setError('Passwords do not match');
         }
       } else {
-        alert('Passwords do not match');
-      }
-    } else {
-      try {
         const result = await dispatch(signInUser({ email, password })).unwrap();
         memoizedOnClose();
         navigate('/');
-      } catch (error) {
-        console.error('Sign In Error:', error);
       }
+    } catch (error) {
+      setError(error.message || 'An error occurred. Please try again.');
     }
   };
 
@@ -97,22 +96,18 @@ const Auth = ({ isOpen, onClose }) => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-
-      // Save user data to Firestore
       await setDoc(doc(db, 'users', user.uid), {
         uid: user.uid,
         displayName: user.displayName,
         email: user.email,
         photoURL: user.photoURL
       });
-
       dispatch(setUser({
         uid: user.uid,
         displayName: user.displayName,
         email: user.email,
         photoURL: user.photoURL,
       }));
-
       memoizedOnClose();
       navigate('/');
     } catch (error) {
@@ -135,7 +130,6 @@ const Auth = ({ isOpen, onClose }) => {
                   className="google-btn"
                   onClick={handleGoogleSignIn}
                 >
-                  {/* <img src={GoogleLogo} alt="Google Logo" className="google-logo" /> */}
                   Continue with Google
                 </button>
                 <div className="divider"><hr /></div>
@@ -199,12 +193,18 @@ const Auth = ({ isOpen, onClose }) => {
               </span>
             </p>
           </form>
+          {error && <p className="error">{error}</p>}
           {authState.error && <p className="error">{authState.error}</p>}
         </div>
         <div className="auth-info"></div>
       </div>
     </div>
   );
+};
+
+Auth.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default Auth;

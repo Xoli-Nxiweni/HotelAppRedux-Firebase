@@ -18,6 +18,7 @@
 //       localStorage.setItem('user', JSON.stringify(userCredential.user)); // Persist user
 //       return userCredential.user;
 //     } catch (error) {
+//       console.error("Error signing in:", error.message); // Detailed logging
 //       return rejectWithValue(error.message);
 //     }
 //   }
@@ -32,6 +33,7 @@
 //       localStorage.setItem('user', JSON.stringify(userCredential.user)); // Persist user
 //       return userCredential.user;
 //     } catch (error) {
+//       console.error("Error signing up:", error.message); // Detailed logging
 //       return rejectWithValue(error.message);
 //     }
 //   }
@@ -46,6 +48,7 @@
 //       localStorage.removeItem('user'); // Remove user from localStorage
 //       return null; // Return null on success
 //     } catch (error) {
+//       console.error("Error signing out:", error.message); // Detailed logging
 //       return rejectWithValue(error.message);
 //     }
 //   }
@@ -60,6 +63,7 @@
 //       localStorage.setItem('user', JSON.stringify(userCredential.user)); // Persist user
 //       return userCredential.user;
 //     } catch (error) {
+//       console.error("Error signing in with Google:", error.message); // Detailed logging
 //       return rejectWithValue(error.message);
 //     }
 //   }
@@ -74,6 +78,7 @@
 //       await setDoc(userRef, userData, { merge: true });
 //       return userData;
 //     } catch (error) {
+//       console.error("Error saving user to Firestore:", error.message); // Detailed logging
 //       return rejectWithValue(error.message);
 //     }
 //   }
@@ -92,6 +97,7 @@
 //         throw new Error('No such user!');
 //       }
 //     } catch (error) {
+//       console.error("Error fetching user from Firestore:", error.message); // Detailed logging
 //       return rejectWithValue(error.message);
 //     }
 //   }
@@ -106,6 +112,7 @@
 //       await deleteDoc(userRef);
 //       return userId;
 //     } catch (error) {
+//       console.error("Error deleting user from Firestore:", error.message); // Detailed logging
 //       return rejectWithValue(error.message);
 //     }
 //   }
@@ -165,6 +172,7 @@
 //         state.status = 'succeeded';
 //         state.user = action.payload;
 //         state.error = null;
+//         console.log("User after email/password login:", action.payload); // Detailed logging
 //       })
 //       .addCase(signInUser.rejected, (state, action) => {
 //         state.status = 'failed';
@@ -178,6 +186,7 @@
 //         state.status = 'succeeded';
 //         state.user = action.payload;
 //         state.error = null;
+//         console.log("User after sign up:", action.payload); // Detailed logging
 //       })
 //       .addCase(signUpUser.rejected, (state, action) => {
 //         state.status = 'failed';
@@ -204,6 +213,7 @@
 //         state.status = 'succeeded';
 //         state.user = action.payload;
 //         state.error = null;
+//         console.log("User after Google sign in:", action.payload); // Detailed logging
 //       })
 //       .addCase(signInWithGoogle.rejected, (state, action) => {
 //         state.status = 'failed';
@@ -239,7 +249,7 @@
 //       .addCase(deleteUserFromFirestore.pending, (state) => {
 //         state.status = 'loading';
 //       })
-//       .addCase(deleteUserFromFirestore.fulfilled, (state) => {
+//       .addCase(deleteUserFromFirestore.fulfilled, (state, action) => {
 //         state.status = 'succeeded';
 //         state.user = null;
 //         state.error = null;
@@ -254,15 +264,20 @@
 // export const { setUser, toggleAuthOpen, setCanBook } = authSlice.actions;
 // export default authSlice.reducer;
 
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from 'firebase/auth';
 import { auth } from '../../Firebase/firebase';
-import { getFirestore, collection, doc, setDoc, getDoc, deleteDoc } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDoc, deleteDoc } from 'firebase/firestore';
 
-// Initialize Firestore
+// Initialize Firestore and Google Auth Provider
 const db = getFirestore();
-
-// Initialize Google Auth Provider
 const provider = new GoogleAuthProvider();
 
 // Thunk for signing in the user
@@ -274,7 +289,7 @@ export const signInUser = createAsyncThunk(
       localStorage.setItem('user', JSON.stringify(userCredential.user)); // Persist user
       return userCredential.user;
     } catch (error) {
-      console.error("Error signing in:", error.message); // Detailed logging
+      console.error("Error signing in:", error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -283,13 +298,14 @@ export const signInUser = createAsyncThunk(
 // Thunk for signing up the user
 export const signUpUser = createAsyncThunk(
   'auth/signUpUser',
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ email, password, isAdmin = false }, { rejectWithValue }) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      localStorage.setItem('user', JSON.stringify(userCredential.user)); // Persist user
-      return userCredential.user;
+      const user = { ...userCredential.user, isAdmin }; // Attach admin role if necessary
+      localStorage.setItem('user', JSON.stringify(user)); // Persist user
+      return user;
     } catch (error) {
-      console.error("Error signing up:", error.message); // Detailed logging
+      console.error("Error signing up:", error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -302,9 +318,9 @@ export const signOutUser = createAsyncThunk(
     try {
       await signOut(auth);
       localStorage.removeItem('user'); // Remove user from localStorage
-      return null; // Return null on success
+      return null;
     } catch (error) {
-      console.error("Error signing out:", error.message); // Detailed logging
+      console.error("Error signing out:", error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -319,13 +335,13 @@ export const signInWithGoogle = createAsyncThunk(
       localStorage.setItem('user', JSON.stringify(userCredential.user)); // Persist user
       return userCredential.user;
     } catch (error) {
-      console.error("Error signing in with Google:", error.message); // Detailed logging
+      console.error("Error signing in with Google:", error.message);
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Thunk for adding/updating user data in Firestore
+// Thunk for saving user data in Firestore
 export const saveUserToFirestore = createAsyncThunk(
   'auth/saveUserToFirestore',
   async (userData, { rejectWithValue }) => {
@@ -334,7 +350,7 @@ export const saveUserToFirestore = createAsyncThunk(
       await setDoc(userRef, userData, { merge: true });
       return userData;
     } catch (error) {
-      console.error("Error saving user to Firestore:", error.message); // Detailed logging
+      console.error("Error saving user to Firestore:", error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -353,7 +369,7 @@ export const fetchUserFromFirestore = createAsyncThunk(
         throw new Error('No such user!');
       }
     } catch (error) {
-      console.error("Error fetching user from Firestore:", error.message); // Detailed logging
+      console.error("Error fetching user from Firestore:", error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -368,54 +384,58 @@ export const deleteUserFromFirestore = createAsyncThunk(
       await deleteDoc(userRef);
       return userId;
     } catch (error) {
-      console.error("Error deleting user from Firestore:", error.message); // Detailed logging
+      console.error("Error deleting user from Firestore:", error.message);
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Safe function to load user from localStorage
+// Load user from localStorage safely
 const loadUserFromLocalStorage = () => {
   try {
     const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null; // If user is found, parse it, otherwise return null
+    return user ? JSON.parse(user) : null;
   } catch (error) {
     console.error("Error parsing user from localStorage:", error);
-    return null; // Return null if there's an error
+    return null;
   }
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user: loadUserFromLocalStorage(), 
+    user: loadUserFromLocalStorage(),
     error: null,
     status: 'idle',
     authOpen: false,
     canBook: false,
+    isAdmin: false, // Track if user is an admin
+    profileLoading: false,
   },
   reducers: {
-    // Directly set the user, useful for session persistence
+    setCanBook: (state, action) => {
+      state.canBook = action.payload;
+    },
     setUser: (state, action) => {
       state.user = action.payload;
+      state.isAdmin = action.payload.isAdmin; // Set admin role
       state.status = 'succeeded';
-      localStorage.setItem('user', JSON.stringify(action.payload)); // Save to localStorage
+      state.canBook = !action.payload.isAdmin; // Admins cannot book
+      localStorage.setItem('user', JSON.stringify(action.payload));
     },
-    // Clear user state and localStorage
     signOutUser: (state) => {
       state.user = null;
       state.error = null;
       state.status = 'idle';
-      localStorage.removeItem('user'); // Remove from localStorage
+      state.isAdmin = false;
+      state.canBook = false;
+      localStorage.removeItem('user');
     },
-    // Toggle authentication modal open/close
     toggleAuthOpen: (state) => {
       state.authOpen = !state.authOpen;
     },
-    setCanBook: (state) => {
-      if(state.user){
-        state.canBook = !state.canBook;
-      }
+    setProfileLoading: (state, action) => {
+      state.profileLoading = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -428,7 +448,8 @@ const authSlice = createSlice({
         state.status = 'succeeded';
         state.user = action.payload;
         state.error = null;
-        console.log("User after email/password login:", action.payload); // Detailed logging
+        state.isAdmin = action.payload.isAdmin; // Set admin role
+        state.canBook = !action.payload.isAdmin; // Admins cannot book
       })
       .addCase(signInUser.rejected, (state, action) => {
         state.status = 'failed';
@@ -442,7 +463,8 @@ const authSlice = createSlice({
         state.status = 'succeeded';
         state.user = action.payload;
         state.error = null;
-        console.log("User after sign up:", action.payload); // Detailed logging
+        state.isAdmin = action.payload.isAdmin; // Set admin role
+        state.canBook = !action.payload.isAdmin; // Admins cannot book
       })
       .addCase(signUpUser.rejected, (state, action) => {
         state.status = 'failed';
@@ -453,8 +475,10 @@ const authSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(signOutUser.fulfilled, (state) => {
-        state.status = 'succeeded';
+        state.status = 'idle';
         state.user = null;
+        state.isAdmin = false;
+        state.canBook = false;
         state.error = null;
       })
       .addCase(signOutUser.rejected, (state, action) => {
@@ -469,53 +493,26 @@ const authSlice = createSlice({
         state.status = 'succeeded';
         state.user = action.payload;
         state.error = null;
-        console.log("User after Google sign in:", action.payload); // Detailed logging
+        state.isAdmin = action.payload.isAdmin; // Set admin role
+        state.canBook = !action.payload.isAdmin; // Admins cannot book
       })
       .addCase(signInWithGoogle.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
       })
-      // Save user to Firestore cases
-      .addCase(saveUserToFirestore.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(saveUserToFirestore.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.user = action.payload;
-        state.error = null;
-      })
-      .addCase(saveUserToFirestore.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload;
-      })
-      // Fetch user from Firestore cases
-      .addCase(fetchUserFromFirestore.pending, (state) => {
-        state.status = 'loading';
+      // Add Firestore operations (saving, fetching, deleting) similarly
+      .addCase(saveUserToFirestore.fulfilled, (state) => {
+        // Handle successful save
       })
       .addCase(fetchUserFromFirestore.fulfilled, (state, action) => {
-        state.status = 'succeeded';
         state.user = action.payload;
-        state.error = null;
-      })
-      .addCase(fetchUserFromFirestore.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload;
-      })
-      // Delete user from Firestore cases
-      .addCase(deleteUserFromFirestore.pending, (state) => {
-        state.status = 'loading';
       })
       .addCase(deleteUserFromFirestore.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.user = null;
-        state.error = null;
-      })
-      .addCase(deleteUserFromFirestore.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload;
+        // Handle successful delete
       });
   },
+  
 });
 
-export const { setUser, toggleAuthOpen, setCanBook } = authSlice.actions;
+export const { setUser, toggleAuthOpen, setProfileLoading, setCanBook } = authSlice.actions;
 export default authSlice.reducer;
