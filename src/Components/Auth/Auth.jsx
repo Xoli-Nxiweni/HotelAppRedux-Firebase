@@ -1,13 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { signUpUser, signInUser, setUser } from "../../Features/slices/authSlice";
-import { auth, googleProvider, signInWithPopup } from "../../Firebase/firebase";
-import { getFirestore, setDoc, doc } from 'firebase/firestore';
+import { signUpUser, signInUser, signInWithGoogle } from "../UserProfile/slices/authSlice";
 import './auth.css';
 import PropTypes from 'prop-types';
-
-const db = getFirestore();
 
 const Auth = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState('');
@@ -17,20 +13,17 @@ const Auth = ({ isOpen, onClose }) => {
   const [surname, setSurname] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isRegistered, setIsRegistered] = useState(false);
-  const [hasNavigated, setHasNavigated] = useState(false);
   const [error, setError] = useState('');
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const authState = useSelector(state => state.auth);
-
+  const authState = useSelector((state) => state.auth);
   const authBoxRef = useRef(null);
 
+  // Handle closing the modal when clicking outside
   const memoizedOnClose = useCallback(() => {
     if (typeof onClose === 'function') {
       onClose();
-    } else {
-      console.warn('onClose is not a function');
     }
   }, [onClose]);
 
@@ -51,15 +44,14 @@ const Auth = ({ isOpen, onClose }) => {
   }, [isOpen, memoizedOnClose]);
 
   useEffect(() => {
-    if (authState.user && !hasNavigated) {
+    if (authState.user) {
       navigate('/');
-      setHasNavigated(true);
       memoizedOnClose();
     }
-  }, [authState.user, navigate, memoizedOnClose, hasNavigated]);
+  }, [authState.user, navigate, memoizedOnClose]);
 
   const toggleForm = () => {
-    setIsRegistered(prev => !prev);
+    setIsRegistered((prev) => !prev);
   };
 
   const handleSubmit = async (e) => {
@@ -68,24 +60,12 @@ const Auth = ({ isOpen, onClose }) => {
     try {
       if (isRegistered) {
         if (password === confirmPassword) {
-          const result = await dispatch(signUpUser({ email, password, name, surname, phoneNumber })).unwrap();
-          await setDoc(doc(db, 'users', result.uid), {
-            uid: result.uid,
-            name,
-            surname,
-            phoneNumber,
-            email
-          });
-          dispatch(setUser(result));
-          memoizedOnClose();
-          navigate('/');
+          await dispatch(signUpUser({ email, password, name, surname, phoneNumber })).unwrap();
         } else {
           setError('Passwords do not match');
         }
       } else {
-        const result = await dispatch(signInUser({ email, password })).unwrap();
-        memoizedOnClose();
-        navigate('/');
+        await dispatch(signInUser({ email, password })).unwrap();
       }
     } catch (error) {
       setError(error.message || 'An error occurred. Please try again.');
@@ -94,24 +74,9 @@ const Auth = ({ isOpen, onClose }) => {
 
   const handleGoogleSignIn = async () => {
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-      await setDoc(doc(db, 'users', user.uid), {
-        uid: user.uid,
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL
-      });
-      dispatch(setUser({
-        uid: user.uid,
-        displayName: user.displayName,
-        email: user.email,
-        photoURL: user.photoURL,
-      }));
-      memoizedOnClose();
-      navigate('/');
+      await dispatch(signInWithGoogle()).unwrap();
     } catch (error) {
-      console.error("Google sign-in error:", error);
+      setError('Google sign-in failed. Please try again.', error);
     }
   };
 

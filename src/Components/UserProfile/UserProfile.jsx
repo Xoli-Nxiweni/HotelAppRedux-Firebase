@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button, Avatar, Typography, Box, Divider, Modal, TextField, List, ListItem, ListItemText, Paper, CircularProgress, Snackbar } from '@mui/material';
 import { Alert } from '@mui/lab';
-import { fetchBookings, fetchFavorites } from '../../Firebase/dataService';
+import { fetchBookings, fetchFavorites, updatePassword } from '../../Firebase/dataService';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBookings, setFavorites, setLoading, setError, setSuccess } from '../../Features/slices/userProfileSlice';
 import './UserProfile.css';
@@ -10,6 +10,8 @@ import './UserProfile.css';
 const UserProfile = ({ user, onSignOut, onClose }) => {
   const [openChangePassword, setOpenChangePassword] = useState(false);
   const [newPassword, setNewPassword] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const bookings = useSelector((state) => state.userProfile.bookings);
   const favorites = useSelector((state) => state.userProfile.favorites);
@@ -21,151 +23,135 @@ const UserProfile = ({ user, onSignOut, onClose }) => {
 
   useEffect(() => {
     const loadData = async () => {
-      try {
-        if (user && user.uid) {
-          dispatch(setLoading(true));
-
+      if (user?.uid) { // Check if user and user.uid exist
+        dispatch(setLoading(true));
+        try {
           const [fetchedBookings, fetchedFavorites] = await Promise.all([
             fetchBookings(user.uid),
             fetchFavorites(user.uid),
           ]);
-
           dispatch(setBookings(fetchedBookings));
           dispatch(setFavorites(fetchedFavorites));
-          
+        } catch (err) {
+          dispatch(setError('Failed to fetch data. Please try again later.'));
+        } finally {
           dispatch(setLoading(false));
         }
-      } catch (error) {
-        console.error('Failed to fetch data:', error);
-        dispatch(setError('Failed to fetch data. Please try again later.'));
-        dispatch(setLoading(false));
       }
     };
 
-    if (user && user.uid) {
-      loadData();
-    }
+    loadData();
   }, [user, dispatch]);
 
-  const handlePasswordChange = () => {
+  const handlePasswordChange = async () => {
     if (newPassword.length < 6) {
       dispatch(setError('Password must be at least 6 characters long.'));
       return;
     }
-    console.log('New Password:', newPassword); // Replace with actual password change logic
-    dispatch(setSuccess('Password changed successfully.'));
-    setOpenChangePassword(false);
-    setNewPassword('');
+    try {
+      await updatePassword(user, newPassword);
+      dispatch(setSuccess('Password changed successfully.'));
+      setSnackbarMessage('Password changed successfully!');
+      setSnackbarOpen(true);
+    } catch (error) {
+      dispatch(setError('Failed to change password. Please try again.'));
+    } finally {
+      setOpenChangePassword(false);
+      setNewPassword('');
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
+
+  const renderList = (items, type) => {
+    return items.length > 0 ? (
+      items.map((item) => (
+        <ListItem key={item.id}>
+          <ListItemText 
+            primary={type === 'favorites' ? item.name : `Booking #${item.id}`} 
+            secondary={type === 'favorites' ? item.description : `Date: ${new Date(item.checkInDate).toLocaleDateString()} - ${new Date(item.checkOutDate).toLocaleDateString()}`} 
+          />
+        </ListItem>
+      ))
+    ) : (
+      <Typography>No {type} found.</Typography>
+    );
   };
 
   return (
-    <Modal
-      open={true} // Ensure this is controlled by a parent state or prop
-      onClose={onClose}
-      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-    >
-      <Box 
-        sx={{ 
+    <Modal open={true} onClose={onClose} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Box
+        sx={{
           position: 'relative',
           width: '100%',
-          maxWidth: 800, 
-          height: '80vh', 
-          bgcolor: 'background.paper', 
-          borderRadius: 2, 
-          boxShadow: 3, 
-          overflow: 'auto', 
-          p: 3 
+          maxWidth: 800,
+          height: '80vh',
+          bgcolor: 'background.paper',
+          borderRadius: 2,
+          boxShadow: 3,
+          overflow: 'auto',
+          p: 3,
         }}
       >
-        <Button
-          variant="contained"
-          color="error"
-          onClick={onClose}
-          sx={{ position: 'absolute', top: 16, right: 16 }}
-        >
+        <Button variant="contained" color="error" onClick={onClose} sx={{ position: 'absolute', top: 16, right: 16 }}>
           Close
         </Button>
 
-        {/* User Avatar */}
         <Box sx={{ textAlign: 'center', mb: 3 }}>
           <Avatar
-            alt={user.displayName}
-            src={user.photoURL || 'public/vecteezy_user-icon-on-transparent-background_19879186.png'}
+            alt={user?.displayName || `${user?.name || ''} ${user?.surname || ''}`}
+            src={user?.photoURL || '/path/to/default/avatar.png'}
             sx={{ width: 120, height: 120, border: '4px solid #fff', boxShadow: 2 }}
           />
         </Box>
 
-        {/* User Details */}
         <Typography variant="h4" align="center" sx={{ fontWeight: '600', mb: 1, color: '#333' }}>
-          {user.displayName || 'Anonymous User'}
+          {user?.displayName || `${user?.name || ''} ${user?.surname || ''}`}
         </Typography>
         <Typography variant="body1" align="center" color="textSecondary" sx={{ mb: 2 }}>
-          {user.email || 'user@example.com'}
+          {user?.email || 'user@example.com'}
         </Typography>
 
         <Divider sx={{ borderColor: 'rgba(255,255,255,0.3)', mb: 2 }} />
 
-        {/* Favorites Section */}
-        <Typography variant="h6" align="left" sx={{ mb: 1, color: '#555' }}>
-          Favorites:
-        </Typography>
+        <Typography variant="h6" align="left" sx={{ mb: 1, color: '#555' }}>Favorites:</Typography>
         {isLoading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 150 }}>
             <CircularProgress />
           </Box>
         ) : (
           <List dense sx={{ maxHeight: 150, overflowY: 'auto', mb: 2 }}>
-            {favorites.length > 0 ? (
-              favorites.map((item) => (
-                <ListItem key={item.id}>
-                  <ListItemText primary={item.name} secondary={item.description} />
-                </ListItem>
-              ))
-            ) : (
-              <Typography>No favorites found.</Typography>
-            )}
+            {renderList(favorites, 'favorites')}
           </List>
         )}
 
         <Divider sx={{ mb: 2 }} />
 
-        {/* Bookings Section */}
-        <Typography variant="h6" align="left" sx={{ mb: 1, color: '#555' }}>
-          Your Bookings:
-        </Typography>
+        <Typography variant="h6" align="left" sx={{ mb: 1, color: '#555' }}>Your Bookings:</Typography>
         {isLoading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 150 }}>
             <CircularProgress />
           </Box>
         ) : (
           <List dense sx={{ maxHeight: 150, overflowY: 'auto', mb: 2 }}>
-            {bookings.length > 0 ? (
-              bookings.map((booking) => (
-                <ListItem key={booking.id}>
-                  <ListItemText
-                    primary={`Booking #${booking.id}`}
-                    secondary={`Date: ${new Date(booking.checkInDate).toLocaleDateString()} - ${new Date(booking.checkOutDate).toLocaleDateString()}`}
-                  />
-                </ListItem>
-              ))
-            ) : (
-              <Typography>No bookings found.</Typography>
-            )}
+            {renderList(bookings, 'bookings')}
           </List>
         )}
 
         <Divider sx={{ mb: 2 }} />
 
-        {/* Action Buttons */}
-        <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-          <Button variant="contained" color="primary" sx={{ width: 200, fontSize: '14px' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-around', mt: 3 }}>
+          <Button variant="contained" color="primary" sx={{ width: 120, fontSize: '14px' }} disabled={isLoading}>
             Edit Profile
           </Button>
           <Button
             variant="contained"
             color="secondary"
             onClick={() => setOpenChangePassword(true)}
-            sx={{ width: 200, fontSize: '14px' }}
+            sx={{ width: 120, fontSize: '14px' }}
+            disabled={isLoading}
           >
             Change Password
           </Button>
@@ -173,49 +159,36 @@ const UserProfile = ({ user, onSignOut, onClose }) => {
             variant="contained"
             color="error"
             onClick={onSignOut}
-            sx={{ width: 200, fontSize: '14px', fontWeight: 'bold' }}
+            sx={{ width: 120, fontSize: '14px', fontWeight: 'bold' }}
+            disabled={isLoading}
           >
             Sign Out
           </Button>
         </Box>
 
-        {/* Change Password Modal */}
-        <Modal
-          open={openChangePassword}
-          onClose={() => setOpenChangePassword(false)}
-          sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-        >
-          <Paper sx={{ padding: 3, width: 300, borderRadius: 2 }}>
-            <Typography variant="h6" sx={{ mb: 2 }}>Change Password</Typography>
-            {error && (
-              <Alert severity="error" sx={{ mb: 2 }}>
-                {error}
-              </Alert>
-            )}
-            {success && (
-              <Alert severity="success" sx={{ mb: 2 }}>
-                {success}
-              </Alert>
-            )}
+        <Modal open={openChangePassword} onClose={() => setOpenChangePassword(false)} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Box sx={{ padding: 3, bgcolor: 'background.paper', borderRadius: 2, boxShadow: 3 }}>
+            <Typography variant="h6" gutterBottom>Change Password</Typography>
             <TextField
               label="New Password"
+              type="password"
               variant="outlined"
               fullWidth
-              type="password"
+              margin="normal"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              sx={{ mb: 2 }}
             />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handlePasswordChange}
-              sx={{ width: '100%' }}
-            >
-              Submit
+            <Button variant="contained" color="primary" onClick={handlePasswordChange}>
+              Update
             </Button>
-          </Paper>
+          </Box>
         </Modal>
+
+        <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+          <Alert onClose={handleCloseSnackbar} severity={error ? 'error' : 'success'} sx={{ width: '100%' }}>
+            {error || snackbarMessage}
+          </Alert>
+        </Snackbar>
       </Box>
     </Modal>
   );

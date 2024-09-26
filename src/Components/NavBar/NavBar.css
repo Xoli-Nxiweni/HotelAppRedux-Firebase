@@ -1,3 +1,16 @@
+:root {
+    --text-color: #7b7b7b;
+    --active-color: #000000;
+    --hover-color: #ffffff;
+    --hover-color-two: #7b7b7b;
+    --background-color: #ffffff;
+    --scrolled-background: rgb(255, 255, 255);
+    --navbar-home-active-color: #fff;
+    --drawer-background: rgb(63, 102, 130);
+    --border-color: #bfbfbf;
+}
+
+/* Navbar Container */
 .nav-container {
     display: flex;
     justify-content: space-between;
@@ -5,10 +18,10 @@
     align-items: center;
     z-index: 1000; 
     width: 100%;
-    color: #000; 
-    border-bottom: 1px solid;
+    color: var(--text-color); 
+    border-bottom: 1px solid var(--border-color);
     position: fixed; 
-    background: #ffffff;
+    background: var(--background-color);
     top: 0;
     transition: background-color 0.3s linear, color 0.3s linear; 
 }
@@ -18,19 +31,21 @@
 .logo a,
 .userProfile .user-icon-btn,
 .hamburger svg {
-    color: #000; /* Default link colors (black) */
+    color: var(--text-color);
+    transition: all 0.4s ease-in-out;
 }
 
+/* Hover effects */
 .nav-links li a:hover,
 .logo a:hover,
 .userProfile .user-icon-btn:hover,
 .authBtn:hover {
-    color: #ff7f50; /* Default hover effect color */
+    color: var(--hover-color); /* Default hover effect color */
 }
 
 /* Active link style */
 .nav-links li a.active {
-    color: #ff7f50 !important; /* Active link color */
+    color: var(--active-color) !important; /* Active link color */
 }
 
 /* Navbar in the home-active state (homepage) */
@@ -38,20 +53,20 @@
     background: unset;
     backdrop-filter: blur(40px);
     border: 0;
-    color: #fff; /* White text color */
+    color: var(--navbar-home-active-color); /* White text color */
 }
 
-/* Navbar links in home-active state (white links) */
+/* Navbar links in home-active state */
 .nav-container.home-active .nav-links li a,
 .nav-container.home-active .logo a,
 .nav-container.home-active .userProfile .user-icon-btn,
 .nav-container.home-active .authBtn {
-    color: #fff; /* Set link colors to white */
+    color: var(--hover-color); /* Set link colors to white */
 }
 
 /* Active link on homepage */
 .nav-container.home-active .nav-links li a.active {
-    color: #ff7f50 !important; /* Active link color on homepage */
+    color: var(--hover-color) !important; /* Active link color on homepage */
 }
 
 /* Hover effect on homepage */
@@ -59,13 +74,13 @@
 .nav-container.home-active .logo a:hover,
 .nav-container.home-active .userProfile .user-icon-btn:hover,
 .nav-container.home-active .authBtn:hover {
-    color: #ff7f50; /* Hover effect */
+    color: var(--hover-color); /* Hover effect */
 }
 
 /* Styles for the navbar when scrolled */
 .nav-container.scrolled {
-    background-color: rgb(255, 255, 255); /* Change background color when scrolled */
-    color: #000000; /* Change text color to black */
+    background-color: var(--scrolled-background); /* Change background color when scrolled */
+    color: var(--text-color); /* Change text color */
 }
 
 /* Link colors when scrolled */
@@ -73,12 +88,12 @@
 .nav-container.scrolled .logo a,
 .nav-container.scrolled .userProfile .user-icon-btn,
 .nav-container.scrolled .hamburger {
-    color: #000; /* Set link colors to black */
+    color: var(--text-color); /* Set link colors */
 }
 
 /* Active link when scrolled */
 .nav-container.scrolled .nav-links li a.active {
-    color: #ff7f50 !important; /* Active link color when scrolled */
+    color: var(--active-color) !important; /* Active link color when scrolled */
 }
 
 /* Hover effect when scrolled */
@@ -86,7 +101,7 @@
 .nav-container.scrolled .logo a:hover,
 .nav-container.scrolled .userProfile .user-icon-btn:hover,
 .nav-container.scrolled .authBtn:hover {
-    color: #ff7f50; /* Hover effect */
+    color: var(--active-color); /* Hover effect */
 }
 
 /* Navigation links */
@@ -108,15 +123,13 @@
 }
 
 /* Logo */
-
-
 .logo a {
     text-decoration: none;
     font-size: .7em;
 }
 
 .logo span {
-    color: #ff7f50;
+    color: var(--border-color);
 }
 
 /* User Profile */
@@ -153,32 +166,30 @@
     border: 0;
     font-size: 14px;
     display: flex;
-    /* width: 120px; */
     cursor: pointer;
     color: inherit; 
     transition: all 0.2s linear;
 }
 
 .authBtn:hover {
-    background-color: #ffffff;
+    background-color: var(--background-color);
 }
 
 /* Drawer for mobile view */
 .hamburger {
     display: none;
     font-size: 2em;
-    color: #fff;
+    color: var(--navbar-home-active-color);
     cursor: pointer;
 }
 
 .drawer {
     position: fixed;
     top: 0;
-
     right: -100%;
     width: 250px;
     height: 100vh;
-    background: rgb(63, 102, 130);
+    background: var(--drawer-background);
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
     transition: right 0.3s ease;
     padding: 20px;
@@ -207,7 +218,7 @@
 }
 
 .drawer ul li a:hover {
-    color: #ffffff;
+    color: var(--hover-color);
 }
 
 .closeDrawer {

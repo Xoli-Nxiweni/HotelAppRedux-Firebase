@@ -6,7 +6,7 @@ import {
   signOut 
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { auth, db, googleProvider } from '../../Firebase/firebase'; // Firebase config file
+import { auth, db, googleProvider } from '../../../Firebase/firebase'; // Firebase config file
 
 // Thunks for authentication
 
@@ -114,9 +114,6 @@ const authSlice = createSlice({
       state.user = action.payload;
       state.isAuthenticated = !!action.payload;
     },
-    setCanBook(state, action) {
-      state.canBook = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -180,6 +177,6 @@ const authSlice = createSlice({
 });
 
 // Export the setUser action
-export const { setUser: setUserAction, setCanBook } = authSlice.actions;
+export const { setUser: setUserAction } = authSlice.actions;
 
 export default authSlice.reducer;

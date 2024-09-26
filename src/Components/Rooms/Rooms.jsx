@@ -23,16 +23,17 @@ const Rooms = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { rooms, filteredRooms, searchQuery, selectedRoom, status, error } = useSelector((state) => ({
+  const { rooms, filteredRooms, searchQuery, status, error } = useSelector((state) => ({
     rooms: state.rooms.rooms || [],
     filteredRooms: state.rooms.filteredRooms || [],
     searchQuery: state.rooms.searchQuery || "",
-    selectedRoom: state.rooms.selectedRoom || null,
     status: state.rooms.status || "idle",
     error: state.rooms.error || null,
   }));
 
-  const isAuthenticated = useSelector((state) => state.auth.canBook);
+  // const isAuthenticated = useSelector((state) => state.auth.canBook);
+  const selectedRoom = useSelector((state) => state.rooms.selectedRoom);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   // Fetch rooms on component mount if status is idle
   useEffect(() => {
@@ -61,9 +62,10 @@ const Rooms = () => {
   const handleSearch = useCallback(() => {
     dispatch(setSearchQuery(searchQuery));
   }, [dispatch, searchQuery]);
-
+  
   const handlePopUp = (roomId) => {
     dispatch(setSelectedRoom(roomId));
+    console.log(selectedRoom, isAuthenticated) // Check their values
   };
 
   const closePopUp = () => {
@@ -82,7 +84,7 @@ const Rooms = () => {
   // Handle 'Book Now' click
   const handleBookNow = () => {
     if (isAuthenticated) {
-      navigate("/booking"); // Navigate to the booking page route
+      navigate("/booking"); 
     } else {
       setAuthOpen(true);
     }
@@ -177,7 +179,8 @@ const Rooms = () => {
               <button className="bookNowBtn" onClick={handleBookNow}>
                 Book Now
               </button>
-            )}
+            )
+}
           </div>
         </div>
       )}

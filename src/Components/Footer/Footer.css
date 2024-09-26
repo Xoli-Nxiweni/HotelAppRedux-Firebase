@@ -53,7 +53,7 @@
 }
 
 .footer-links a:hover {
-  color: #ff7f50; /* Coral color on hover for modern contrast */
+  color: #000000; /* Coral color on hover for modern contrast */
 }
 
 .social-icons {
@@ -70,7 +70,7 @@
 }
 
 .social-icons a:hover {
-  color: #ff7f50; /* Coral color on hover */
+  color: #000000; /* Coral color on hover */
   transform: scale(1.2); /* Slight scaling on hover */
 }
 
