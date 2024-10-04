@@ -1,107 +1,47 @@
-:root {
-    --text-color: #7b7b7b;
-    --active-color: #000000;
-    --hover-color: #ffffff;
-    --hover-color-two: #7b7b7b;
-    --background-color: #ffffff;
-    --scrolled-background: rgb(255, 255, 255);
-    --navbar-home-active-color: #fff;
-    --drawer-background: rgb(63, 102, 130);
-    --border-color: #bfbfbf;
-}
-
-/* Navbar Container */
+/* Base styles for the navbar */
 .nav-container {
     display: flex;
     justify-content: space-between;
     padding: 10px 5%;
     align-items: center;
-    z-index: 1000; 
+    z-index: 1000; /* Ensure it is on top of other elements */
     width: 100%;
-    color: var(--text-color); 
-    border-bottom: 1px solid var(--border-color);
-    position: fixed; 
-    background: var(--background-color);
+    border-bottom: 1px solid;
+    position: fixed; /* Ensure the navbar sticks to the top */
+    background: #ffffff;
     top: 0;
-    transition: background-color 0.3s linear, color 0.3s linear; 
+    transition: background-color 0.3s linear; /* Smooth background color transition */
 }
 
-/* Default link styles */
-.nav-links li a,
-.logo a,
-.userProfile .user-icon-btn,
-.hamburger svg {
-    color: var(--text-color);
-    transition: all 0.4s ease-in-out;
+.logo span{
+    color: #ff7f50;
+    text-decoration: none;
 }
-
-/* Hover effects */
-.nav-links li a:hover,
-.logo a:hover,
-.userProfile .user-icon-btn:hover,
-.authBtn:hover {
-    color: var(--hover-color); /* Default hover effect color */
-}
-
-/* Active link style */
-.nav-links li a.active {
-    color: var(--active-color) !important; /* Active link color */
-}
-
-/* Navbar in the home-active state (homepage) */
-.nav-container.home-active {
-    background: unset;
-    backdrop-filter: blur(40px);
-    border: 0;
-    color: var(--navbar-home-active-color); /* White text color */
-}
-
-/* Navbar links in home-active state */
-.nav-container.home-active .nav-links li a,
-.nav-container.home-active .logo a,
-.nav-container.home-active .userProfile .user-icon-btn,
-.nav-container.home-active .authBtn {
-    color: var(--hover-color); /* Set link colors to white */
-}
-
-/* Active link on homepage */
-.nav-container.home-active .nav-links li a.active {
-    color: var(--hover-color) !important; /* Active link color on homepage */
-}
-
-/* Hover effect on homepage */
-.nav-container.home-active .nav-links li a:hover,
-.nav-container.home-active .logo a:hover,
-.nav-container.home-active .userProfile .user-icon-btn:hover,
-.nav-container.home-active .authBtn:hover {
-    color: var(--hover-color); /* Hover effect */
+.logo a{
+    color: rgb(0, 0, 0);
+    text-decoration: none;
 }
 
 /* Styles for the navbar when scrolled */
 .nav-container.scrolled {
-    background-color: var(--scrolled-background); /* Change background color when scrolled */
-    color: var(--text-color); /* Change text color */
+    background-color: rgb(255, 255, 255); /* Change background color when scrolled */
+    color: #000000;
 }
 
-/* Link colors when scrolled */
-.nav-container.scrolled .nav-links li a,
-.nav-container.scrolled .logo a,
-.nav-container.scrolled .userProfile .user-icon-btn,
-.nav-container.scrolled .hamburger {
-    color: var(--text-color); /* Set link colors */
+.nav-container.scrolled svg {
+    color: #000000;
 }
 
-/* Active link when scrolled */
-.nav-container.scrolled .nav-links li a.active {
-    color: var(--active-color) !important; /* Active link color when scrolled */
+.nav-container.scrolled a {
+    color: #000;
 }
 
-/* Hover effect when scrolled */
-.nav-container.scrolled .nav-links li a:hover,
-.nav-container.scrolled .logo a:hover,
-.nav-container.scrolled .userProfile .user-icon-btn:hover,
-.nav-container.scrolled .authBtn:hover {
-    color: var(--active-color); /* Hover effect */
+.nav-container.scrolled a.active {
+    color: #ff7f50;
+}
+
+.nav-container.scrolled a:hover {
+    color: #ff7f50;
 }
 
 /* Navigation links */
@@ -114,72 +54,88 @@
 /* Link styles */
 .nav-links li a {
     text-decoration: none;
-    transition: color 0.2s linear;
+    color: rgb(0, 0, 0);
+    transition: all 0.2s linear;
     text-transform: uppercase;
     font-size: 14px;
     letter-spacing: 1px;
     font-weight: 600;
-    color: inherit; /* Inherit color based on state */
 }
 
+.nav-links li a:hover {
+    color: #ff7f50;
+}
+
+.nav-links li a.active {
+    color: #ff7f50;
+}
+.home-active{
+    background: rgba(118, 117, 114, 0.504);
+    backdrop-filter: blur(40px);
+    border: 0;
+}
 /* Logo */
-.logo a {
-    text-decoration: none;
-    font-size: .7em;
+.logo {
+    border-radius: 50%;
 }
 
-.logo span {
-    color: var(--border-color);
+.logo svg {
+    font-size: 4em;
+    color: #000000;
 }
 
 /* User Profile */
 .userProfile {
     display: flex;
-    justify-content: center;
+    /* gap: 10px; */
     width: 65px;
-    gap: 10px;
     align-items: center;
     background: transparent;
     transition: all 0.3s linear;
 }
-
-.userProfile .user-icon-btn {
+.userProfile .user-icon-btn{
     display: flex;
     align-items: center;
     background: transparent;
     border: 0;
-    color: inherit; /* Inherit color */
+    color: #fff;
+    /* padding: 10px; */
     cursor: pointer;
+    overflow: hidden;
 }
-
-.userProfile .user-icon-btn img {
+.userProfile .user-icon-btn img{
     width: 100%;
     border-radius: 50%;
     height: 100%;
     object-fit: contain;
 }
 
+.userProfile svg {
+    font-size: 3em;
+    /* color: #fff; */
+
+}
+
 /* Authentication Button */
 .authBtn {
-    border-radius: 10px;
-    padding: 10px 20px;
+    padding: 10px 15px;
+    border-radius: 15px 0 15px 0;
     border: 0;
-    font-size: 14px;
-    display: flex;
     cursor: pointer;
-    color: inherit; 
+    /* background: #3f6682; */
+    color: #fff;
     transition: all 0.2s linear;
 }
 
 .authBtn:hover {
-    background-color: var(--background-color);
+    background: rgba(25, 80, 25, 0.361)
 }
 
 /* Drawer for mobile view */
 .hamburger {
-    display: none;
+    display: none; /* Adjust visibility based on screen size with media queries */
     font-size: 2em;
-    color: var(--navbar-home-active-color);
+    color: #fff;
     cursor: pointer;
 }
 
@@ -188,12 +144,12 @@
     top: 0;
     right: -100%;
     width: 250px;
-    height: 100vh;
-    background: var(--drawer-background);
+    height: 100%;
+    background: rgb(63, 102, 130);
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
     transition: right 0.3s ease;
     padding: 20px;
-    z-index: 999;
+    z-index: 10;
 }
 
 .drawer.open {
@@ -218,7 +174,7 @@
 }
 
 .drawer ul li a:hover {
-    color: var(--hover-color);
+    color: #ffffff;
 }
 
 .closeDrawer {
