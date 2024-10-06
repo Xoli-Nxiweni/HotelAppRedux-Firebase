@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import './Home.css';
 import { useNavigate } from 'react-router-dom';
-import { FaAirbnb, FaAlgolia, FaAws, FaStripe, FaSlack, FaAtlassian, FaFigma, FaDropbox, FaSalesforce, FaShopify, FaJira, FaTrello } from 'react-icons/fa'; 
 
 const Home = () => {
   const sectionRefs = useRef([]);
@@ -51,32 +50,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Asymmetrical Section */}
-      <section
-        className="home-section home-section-split"
-        ref={(el) => (sectionRefs.current[1] = el)}
-      >
-        <div className="home-content-left">
-          <h2>Our Trusted Partners</h2>
-          <p>
-            Partnering with leading brands to ensure your stay is exceptional. Explore our exclusive deals and offers brought to you by our partners.
-          </p>
-          <div className="sponsors-icons">
-            <FaAirbnb size={30} title="Airbnb" />
-            <FaAlgolia size={30} title="Algolia" />
-            <FaAws size={30} title="AWS" />
-            <FaStripe size={30} title="Stripe" />
-            <FaSlack size={30} title="Slack" />
-            <FaAtlassian size={30} title="Atlassian" />
-            <FaFigma size={30} title="Figma" />
-            <FaDropbox size={30} title="Dropbox" />
-            <FaSalesforce size={30} title="Salesforce" />
-            <FaShopify size={30} title="Shopify" />
-            <FaJira size={30} title="Jira" />
-            <FaTrello size={30} title="Trello" />
-          </div>
-        </div>
-      </section>
     </div>
   );
 };

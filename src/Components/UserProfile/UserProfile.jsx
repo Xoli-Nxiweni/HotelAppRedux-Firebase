@@ -1,12 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Button, Avatar, Typography, Box, Divider, Modal, TextField, List, ListItem, ListItemText, Paper, CircularProgress, Snackbar } from '@mui/material';
-import { Alert } from '@mui/lab';
 import { fetchBookings, fetchFavorites, updatePassword } from '../../Firebase/dataService';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBookings, setFavorites, setLoading, setError, setSuccess } from '../../Features/slices/userProfileSlice';
 import './UserProfile.css';
 
-// eslint-disable-next-line react/prop-types
 const UserProfile = ({ user, onSignOut, onClose }) => {
   const [openChangePassword, setOpenChangePassword] = useState(false);
   const [newPassword, setNewPassword] = useState('');
@@ -23,7 +20,7 @@ const UserProfile = ({ user, onSignOut, onClose }) => {
 
   useEffect(() => {
     const loadData = async () => {
-      if (user?.uid) { // Check if user and user.uid exist
+      if (user?.uid) {
         dispatch(setLoading(true));
         try {
           const [fetchedBookings, fetchedFavorites] = await Promise.all([
@@ -68,129 +65,87 @@ const UserProfile = ({ user, onSignOut, onClose }) => {
   const renderList = (items, type) => {
     return items.length > 0 ? (
       items.map((item) => (
-        <ListItem key={item.id}>
-          <ListItemText 
-            primary={type === 'favorites' ? item.name : `Booking #${item.id}`} 
-            secondary={type === 'favorites' ? item.description : `Date: ${new Date(item.checkInDate).toLocaleDateString()} - ${new Date(item.checkOutDate).toLocaleDateString()}`} 
-          />
-        </ListItem>
+        <li key={item.id}>
+          {type === 'favorites' ? item.name : `Booking #${item.id}`} - 
+          {type === 'favorites'
+            ? item.description
+            : `Date: ${new Date(item.checkInDate).toLocaleDateString()} - ${new Date(item.checkOutDate).toLocaleDateString()}`}
+        </li>
       ))
     ) : (
-      <Typography>No {type} found.</Typography>
+      <p>No {type} found.</p>
     );
   };
 
   return (
-    <Modal open={true} onClose={onClose} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <Box
-        sx={{
-          position: 'relative',
-          width: '100%',
-          maxWidth: 800,
-          height: '80vh',
-          bgcolor: 'background.paper',
-          borderRadius: 2,
-          boxShadow: 3,
-          overflow: 'auto',
-          p: 3,
-        }}
-      >
-        <Button variant="contained" color="error" onClick={onClose} sx={{ position: 'absolute', top: 16, right: 16 }}>
-          Close
-        </Button>
-
-        <Box sx={{ textAlign: 'center', mb: 3 }}>
-          <Avatar
+    <div className="modal" open={true}>
+      <div className="modal-content">
+        <span className="close" onClick={onClose}>X</span>
+        <div className="profile-header">
+          <img
             alt={user?.displayName || `${user?.name || ''} ${user?.surname || ''}`}
             src={user?.photoURL || '/path/to/default/avatar.png'}
-            sx={{ width: 120, height: 120, border: '4px solid #fff', boxShadow: 2 }}
+            className="profile-avatar"
           />
-        </Box>
+          <h2>{user?.displayName || `${user?.name || ''} ${user?.surname || ''}`}</h2>
+          <p>{user?.email || 'user@example.com'}</p>
+        </div>
 
-        <Typography variant="h4" align="center" sx={{ fontWeight: '600', mb: 1, color: '#333' }}>
-          {user?.displayName || `${user?.name || ''} ${user?.surname || ''}`}
-        </Typography>
-        <Typography variant="body1" align="center" color="textSecondary" sx={{ mb: 2 }}>
-          {user?.email || 'user@example.com'}
-        </Typography>
+        <hr />
 
-        <Divider sx={{ borderColor: 'rgba(255,255,255,0.3)', mb: 2 }} />
-
-        <Typography variant="h6" align="left" sx={{ mb: 1, color: '#555' }}>Favorites:</Typography>
+        <h3>Favorites</h3>
         {isLoading ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 150 }}>
-            <CircularProgress />
-          </Box>
+          <div className="loading">Loading...</div>
         ) : (
-          <List dense sx={{ maxHeight: 150, overflowY: 'auto', mb: 2 }}>
+          <ul className="list">
             {renderList(favorites, 'favorites')}
-          </List>
+          </ul>
         )}
 
-        <Divider sx={{ mb: 2 }} />
+        <hr />
 
-        <Typography variant="h6" align="left" sx={{ mb: 1, color: '#555' }}>Your Bookings:</Typography>
+        <h3>Your Bookings</h3>
         {isLoading ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 150 }}>
-            <CircularProgress />
-          </Box>
+          <div className="loading">Loading...</div>
         ) : (
-          <List dense sx={{ maxHeight: 150, overflowY: 'auto', mb: 2 }}>
+          <ul className="list">
             {renderList(bookings, 'bookings')}
-          </List>
+          </ul>
         )}
 
-        <Divider sx={{ mb: 2 }} />
-
-        <Box sx={{ display: 'flex', justifyContent: 'space-around', mt: 3 }}>
-          <Button variant="contained" color="primary" sx={{ width: 120, fontSize: '14px' }} disabled={isLoading}>
-            Edit Profile
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => setOpenChangePassword(true)}
-            sx={{ width: 120, fontSize: '14px' }}
-            disabled={isLoading}
-          >
+        <div className="actions">
+          <button disabled={isLoading}>Edit Profile</button>
+          <button onClick={() => setOpenChangePassword(true)} disabled={isLoading}>
             Change Password
-          </Button>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={onSignOut}
-            sx={{ width: 120, fontSize: '14px', fontWeight: 'bold' }}
-            disabled={isLoading}
-          >
+          </button>
+          <button onClick={onSignOut} disabled={isLoading}>
             Sign Out
-          </Button>
-        </Box>
+          </button>
+        </div>
 
-        <Modal open={openChangePassword} onClose={() => setOpenChangePassword(false)} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Box sx={{ padding: 3, bgcolor: 'background.paper', borderRadius: 2, boxShadow: 3 }}>
-            <Typography variant="h6" gutterBottom>Change Password</Typography>
-            <TextField
-              label="New Password"
-              type="password"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-            <Button variant="contained" color="primary" onClick={handlePasswordChange}>
-              Update
-            </Button>
-          </Box>
-        </Modal>
+        {openChangePassword && (
+          <div className="modal">
+            <div className="modal-content">
+              <span className="close" onClick={() => setOpenChangePassword(false)}>&times;</span>
+              <h3>Change Password</h3>
+              <input
+                type="password"
+                placeholder="New Password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+              <button onClick={handlePasswordChange}>Update Password</button>
+            </div>
+          </div>
+        )}
 
-        <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-          <Alert onClose={handleCloseSnackbar} severity={error ? 'error' : 'success'} sx={{ width: '100%' }}>
+        {snackbarOpen && (
+          <div className={`snackbar ${error ? 'error' : 'success'}`}>
             {error || snackbarMessage}
-          </Alert>
-        </Snackbar>
-      </Box>
-    </Modal>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

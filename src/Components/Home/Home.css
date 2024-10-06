@@ -14,7 +14,7 @@
   align-items: center;
   height: 100vh;
   padding: 0 20px;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.826) 0%, rgba(255, 255, 255, 0.283) 100%);
+  /* background: linear-gradient(135deg, rgba(0, 0, 0, 0.826) 0%, rgba(255, 255, 255, 0.283) 100%); */
   color: #ffffff;
   transition: opacity 0.4s ease-in-out;
   opacity: 0;
@@ -40,7 +40,7 @@
   font-size: 2.8rem;
   font-weight: 800;
   margin-bottom: 20px;
-  color: #ffffff;
+  color: #000000;
   text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
@@ -48,7 +48,7 @@
   font-size: 1.4rem;
   margin-bottom: 30px;
   line-height: 1.8;
-  color: #eeeeee;
+  color: #414141;
 }
 
 /* CTA Button */
@@ -56,10 +56,10 @@
   padding: 16px 32px;
   font-size: 1.4rem;
   font-weight: 600;
-  color: #ffffff;
+  color: #282828;
   background-color: #ff7f50;
   border: none;
-  border-radius: 35px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.4s ease;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
@@ -175,3 +175,5 @@
     flex: none; /* Ensures it doesn't grow or shrink */
   }
 }
+
+

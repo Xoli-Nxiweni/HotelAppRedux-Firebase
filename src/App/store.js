@@ -5,7 +5,8 @@ import roomReducer from '../Features/slices/roomSlice';
 import bookingReducer from '../Features/slices/bookingSlice';
 import userProfileReducer from '../Features/slices/userProfileSlice';
 import favoritesReducer from '../Features/slices/favoritesSlice'; // Import the favorites slice
-
+import contactReducer from '../Features/slices/contactSlice';
+import ratingsReducer from '../Features/slices/ratingsSlice';
 // Configure store
 export const store = configureStore({
   reducer: {
@@ -14,7 +15,9 @@ export const store = configureStore({
     rooms: roomReducer,
     booking: bookingReducer,
     userProfile: userProfileReducer,
-    favorites: favoritesReducer, // Add the favorites reducer
+    favorites: favoritesReducer,
+    contact: contactReducer,
+    ratings: ratingsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

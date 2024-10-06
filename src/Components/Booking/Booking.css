@@ -159,7 +159,7 @@
 }
 
 /* Buttons */
-button {
+.bookingForm button {
   font-size: 16px;
   font-weight: 600;
   padding: 12px;
@@ -169,22 +169,22 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button.addThings {
+.bookingForm button.addThings {
   background-color: #007bff;
   color: #ffffff;
   margin-top: 20px;
 }
 
-button.addThings:hover {
+.bookingForm button.addThings:hover {
   background-color: #0056b3;
 }
 
-button[type="submit"] {
+.bookingForm button[type="submit"] {
   background-color: #28a745;
   color: #ffffff;
 }
 
-button[type="submit"]:hover {
+.bookingForm button[type="submit"]:hover {
   background-color: #218838;
 }
 

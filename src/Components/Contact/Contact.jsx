@@ -1,42 +1,59 @@
 import { useState } from 'react';
 import './Contact.css';
-import { FaUser, FaEnvelope, FaCheckCircle, FaPen } from 'react-icons/fa';
+import { TextField, Button, Snackbar, Typography, Box } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact, selectContacts } from '../../Features/slices/contactSlice';
+import { FaUser, FaEnvelope, FaPhoneAlt, FaPen } from 'react-icons/fa';
 
 const ContactUs = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts);
+
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
+    surname: '',
+    phone: '',
     message: '',
+    email: '',
   });
 
-  const [errors, setErrors] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
-
-  const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    setErrors({ ...errors, [name]: '' }); // Clear errors as user types
+    setErrors({ ...errors, [name]: '' }); // Clear the field's error on input
   };
 
   const validateForm = () => {
+    const newErrors = {};
     let isValid = true;
-    const newErrors = { name: '', email: '', message: '' };
 
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
       isValid = false;
     }
 
+    if (!formData.surname.trim()) {
+      newErrors.surname = 'Surname is required';
+      isValid = false;
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+      isValid = false;
+    } else if (!/^[\d-+\s()]+$/.test(formData.phone)) {
+      newErrors.phone = 'Invalid phone number format';
+      isValid = false;
+    }
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
       isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email address is invalid';
+    } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email)) {
+      newErrors.email = 'Invalid email address';
       isValid = false;
     }
 
@@ -49,77 +66,136 @@ const ContactUs = () => {
     return isValid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // Simulate successful submission
-      setSubmitted(true);
-      setTimeout(() => setSubmitted(false), 3000);
-      setFormData({ name: '', email: '', message: '' });
+      try {
+        await dispatch(addContact(formData)).unwrap();
+        setSnackbarMessage('Message sent successfully!');
+        setOpenSnackbar(true);
+        setFormData({ name: '', surname: '', phone: '', message: '', email: '' });
+      } catch (error) {
+        setSnackbarMessage('Failed to send message');
+        setOpenSnackbar(true);
+        console.error('Error sending contact:', error);
+      }
     }
   };
 
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
   return (
-    <div className="contactUsContainer">
-      <h2 className="contactTitle">{`Let's Connect`}</h2>
-      <form onSubmit={handleSubmit} className="contactForm">
-        <div className={`formGroup ${errors.name ? 'error-active' : ''}`}>
-          <label htmlFor="name">
-            <FaUser className="inputIcon" /> Full Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Your Name"
-            className="inputField"
-          />
-          {errors.name && <span className="error">{errors.name}</span>}
-        </div>
-        
-        <div className={`formGroup ${errors.email ? 'error-active' : ''}`}>
-          <label htmlFor="email">
-            <FaEnvelope className="inputIcon" /> Email Address
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Your Email"
-            className="inputField"
-          />
-          {errors.email && <span className="error">{errors.email}</span>}
-        </div>
-        
-        <div className={`formGroup ${errors.message ? 'error-active' : ''}`}>
-          <label htmlFor="message">
-            <FaPen className="inputIcon" /> Message
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            value={formData.message}
-            onChange={handleChange}
-            placeholder="Your Message"
-            className="textareaField"
-          ></textarea>
-          {errors.message && <span className="error">{errors.message}</span>}
-        </div>
+    <div className="contactUs">
+      <div className="contactUsLeft">
+        <Typography variant="h4" className="contactTitle">Get in Touch</Typography>
 
-        <button type="submit" className="submitButton">
-          {submitted ? <FaCheckCircle /> : 'Send Message'}
-        </button>
-
-        {submitted && (
-          <div className="successMessage">
-            <FaCheckCircle /> Message sent successfully!
+        <Box className="formGroup">
+          {/** Name Field */}
+          <div className="inputFieldGroup">
+            <label htmlFor="name" className="labelIcon">
+              <FaUser className="inputIcon" /> Name
+            </label>
+            <TextField
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              error={!!errors.name}
+              helperText={errors.name}
+              variant="outlined"
+              fullWidth
+            />
           </div>
-        )}
-      </form>
+
+          {/** Surname Field */}
+          <div className="inputFieldGroup">
+            <label htmlFor="surname" className="labelIcon">
+              <FaUser className="inputIcon" /> Surname
+            </label>
+            <TextField
+              id="surname"
+              name="surname"
+              value={formData.surname}
+              onChange={handleChange}
+              error={!!errors.surname}
+              helperText={errors.surname}
+              variant="outlined"
+              fullWidth
+            />
+          </div>
+
+          {/** Email Field */}
+          <div className="inputFieldGroup">
+            <label htmlFor="email" className="labelIcon">
+              <FaEnvelope className="inputIcon" /> Email
+            </label>
+            <TextField
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              error={!!errors.email}
+              helperText={errors.email}
+              variant="outlined"
+              fullWidth
+            />
+          </div>
+
+          {/** Phone Field */}
+          <div className="inputFieldGroup">
+            <label htmlFor="phone" className="labelIcon">
+              <FaPhoneAlt className="inputIcon" /> Phone
+            </label>
+            <TextField
+              id="phone"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              error={!!errors.phone}
+              helperText={errors.phone}
+              variant="outlined"
+              fullWidth
+            />
+          </div>
+
+          {/** Message Field */}
+          <div className="inputFieldGroup">
+            <label htmlFor="message" className="labelIcon">
+              <FaPen className="inputIcon" /> Message
+            </label>
+            <TextField
+              id="message"
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
+              error={!!errors.message}
+              helperText={errors.message}
+              variant="outlined"
+              fullWidth
+              multiline
+              rows={4}
+            />
+          </div>
+
+          <Button variant="contained" className="submitButton" onClick={handleSubmit}>
+            Send Message
+          </Button>
+        </Box>
+      </div>
+
+      <div className="contactUsRight">
+        <img src="pic9.jpg" alt="Contact us" />
+      </div>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        message={snackbarMessage}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 /* General Footer Styling */
 .footer {
+  border-top: 1px solid rgb(201, 201, 201);
   background-color: #f8f9fa; /* Soft light background color */
   padding: 0 5%;
   font-family: 'Open Sans', sans-serif;

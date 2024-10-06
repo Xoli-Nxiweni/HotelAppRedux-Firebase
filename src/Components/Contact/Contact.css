@@ -1,29 +1,42 @@
-.contactUsContainer {
-  max-width: 500px;
-  margin: 100px auto;
-  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-  padding: 40px;
-  border-radius: 15px;
+.contactUs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.contactUsLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50%;
+  height: 100vh;
+  padding: 100px 40px 40px 40px;
+  background: #ffffff;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  font-family: 'Roboto', sans-serif;
+}
+
+.contactUsRight {
+  width: 50%;
+  height: 100vh;
+}
+
+.contactUsRight img {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
 }
 
 .contactTitle {
-  font-size: 2.5rem;
+  font-size: 2rem;
   text-align: center;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   color: #333;
-}
-
-.contactForm {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
 }
 
 .formGroup {
   display: flex;
   flex-direction: column;
+  gap: 5px;
 }
 
 .labelIcon {
@@ -73,21 +86,21 @@
   box-shadow: 0 8px 15px rgba(90, 84, 224, 0.3);
 }
 
-.successMessage {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  color: green;
-  margin-top: 15px;
-}
-
 .error {
   color: red;
   font-size: 0.9rem;
+  margin-top: 5px;
 }
 
 .error-active input, .error-active textarea {
   border-color: red;
 }
+.error-active {
+  border-color: red;
+}
 
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}

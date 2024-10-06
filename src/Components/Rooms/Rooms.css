@@ -5,7 +5,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 10% 0 0 0;
+    padding: 100px 0 0 0;
 }
 
 .bottomPart {
@@ -121,7 +121,7 @@ label {
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 15px;
-    padding: 15px;
+    padding: 7px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 285px;
     flex-shrink: 0;
@@ -184,10 +184,11 @@ label {
     font-weight: bold;
 }
 .cardBottom button {
-    padding: 5px;
+    padding: 5px 10px;
     border-radius: 10px;
     border: 0;
     cursor: pointer;
+    background: rgb(139, 139, 139);
     color: #fff;
     text-transform: uppercase;
     font-size: .9em;
@@ -200,27 +201,27 @@ label {
     justify-content: space-between;
 }
 
-.reviews b {
+.review {
     background-color: rgba(255, 200, 0, 0.416);
     font-size: 12px;
     padding: 5px;
-    border-radius: 30px;
-    display: flex;
+    /* border-radius: 30px; */
+    /* display: flex; */
     align-items: center;
     gap: 4px;
     margin: 5px 0;
 }
-.reviews h3 svg{
+.review h3 svg{
     cursor: pointer;
     color: #ff0000;
 }
 
-.reviews svg {
+.review svg {
     color: orange;
 }
 
 /* Popup Overlay */
-.popupOverlay {
+.popupOverlay2 {
     position: fixed;
     top: 0;
     left: 0;
@@ -231,35 +232,58 @@ label {
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+.roomCard2{
+width: 100%;
+height: auto;
+display: flex;
+}
+.roomDetails2{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 140px rgb(196, 196, 196);
+    border-radius: 10px;
 }
 
 /* Popup Content */
-.popupContent {
+.popupContent2 {
     background: #fff;
     padding: 20px;
     border-radius: 8px;
-    max-width: 500px;
+    max-width: auto;
     width: 90%;
-    position: relative;
+    /* position: relative; */
     text-align: center;
+    height: auto;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.popupContent img {
+.popupContent2 img {
     width: 100%;
-    max-width: 220px;
+    width: 720px;
+    height: 520px;
     border-radius: 8px;
 }
 
 /* Close Button */
-.closeBtn {
+.closeBtn2 {
     position: absolute;
     top: 10px;
     right: 10px;
-    background: transparent;
+    /* display: flex; */
+    /* align-items: center; */
+    /* justify-content: center; */
     border: none;
-    font-size: 20px;
+    font-size: 2.2em;
     cursor: pointer;
+    color: #ffffff;
+    background: none;
+    /* width: 40px; */
+    /* height: 40px; */
 }
 
 /* Book Now Button */
@@ -267,7 +291,7 @@ label {
     background-color: #3f6682;
     color: white;
     padding: 10px 20px;
-    border: none;
+    border: 0;
     border-radius: 5px;
     cursor: pointer;
     margin-top: 15px;

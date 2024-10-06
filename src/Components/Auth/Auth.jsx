@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { signUpUser, signInUser, signInWithGoogle } from "../UserProfile/slices/authSlice";
+import { signUpUser, signInUser, signInWithGoogle } from "../../Features/slices/authSlice";
 import './auth.css';
 import PropTypes from 'prop-types';
 
@@ -97,7 +97,6 @@ const Auth = ({ isOpen, onClose }) => {
                 >
                   Continue with Google
                 </button>
-                <div className="divider"><hr /></div>
               </>
             )}
             {isRegistered && (
@@ -132,6 +131,7 @@ const Auth = ({ isOpen, onClose }) => {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
+            <br />
             <input
               type="password"
               placeholder="Password"
@@ -139,6 +139,7 @@ const Auth = ({ isOpen, onClose }) => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            <br />
             {isRegistered && (
               <input
                 type="password"
@@ -151,6 +152,7 @@ const Auth = ({ isOpen, onClose }) => {
             <button type="submit" className="submit-btn">
               {isRegistered ? 'Sign Up' : 'Sign In'}
             </button>
+            <br />
             <p>
               {isRegistered ? 'Already have an account? ' : 'New User? '}
               <span onClick={toggleForm} className="toggle-link">

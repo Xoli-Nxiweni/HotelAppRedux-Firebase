@@ -3,6 +3,10 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
+import { setPersistence, browserLocalPersistence } from "firebase/auth";
+
+
+
 // Your Firebase configuration object
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -19,6 +23,7 @@ const app = initializeApp(firebaseConfig);
 
 // Get Firestore and Auth instances
 export const auth = getAuth(app);
+
 export const db = getFirestore(app);
 
 // Initialize Google Auth Provider

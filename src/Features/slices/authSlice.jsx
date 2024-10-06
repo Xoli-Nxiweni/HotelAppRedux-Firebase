@@ -3,10 +3,27 @@ import {
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
   signInWithPopup, 
-  signOut 
+  signOut,
+  onAuthStateChanged
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db, googleProvider } from '../../Firebase/firebase'; // Firebase config file
+
+// Utility to save user data to localStorage
+const saveUserToLocalStorage = (user) => {
+  localStorage.setItem('user', JSON.stringify(user));
+};
+
+// Utility to load user data from localStorage
+const loadUserFromLocalStorage = () => {
+  const user = localStorage.getItem('user');
+  return user ? JSON.parse(user) : null;
+};
+
+// Utility to remove user data from localStorage
+const removeUserFromLocalStorage = () => {
+  localStorage.removeItem('user');
+};
 
 // Thunks for authentication
 
@@ -20,7 +37,9 @@ export const signUpUser = createAsyncThunk(
 
       const userData = { uid: user.uid, email, name, surname, phoneNumber };
       await setDoc(doc(db, 'users', user.uid), userData);
-      localStorage.setItem('user', JSON.stringify(userData));
+
+      // Save user data to localStorage
+      saveUserToLocalStorage(userData);
 
       return userData;
     } catch (error) {
@@ -41,7 +60,10 @@ export const signInUser = createAsyncThunk(
 
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        localStorage.setItem('user', JSON.stringify(userData));
+        
+        // Save user data to localStorage
+        saveUserToLocalStorage(userData);
+
         return userData;
       }
       throw new Error('User data not found in Firestore');
@@ -63,7 +85,10 @@ export const signInWithGoogle = createAsyncThunk(
 
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        localStorage.setItem('user', JSON.stringify(userData));
+        
+        // Save user data to localStorage
+        saveUserToLocalStorage(userData);
+
         return userData;
       }
       throw new Error('User data not found in Firestore');
@@ -80,7 +105,10 @@ export const signOutUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await signOut(auth);
-      localStorage.removeItem('user');
+      
+      // Remove user data from localStorage
+      removeUserFromLocalStorage();
+
       return null; // Return null to indicate no user
     } catch (error) {
       console.error('Error signing out:', error.message);
@@ -89,18 +117,10 @@ export const signOutUser = createAsyncThunk(
   }
 );
 
-// Set User Action
-export const setUser = (user) => {
-  return {
-    type: 'auth/setUser',
-    payload: user,
-  };
-};
-
 // Initial state
 const initialState = {
-  user: JSON.parse(localStorage.getItem('user')) || null,
-  isAuthenticated: !!localStorage.getItem('user'),
+  user: loadUserFromLocalStorage(),  // Load from localStorage if available
+  isAuthenticated: !!loadUserFromLocalStorage(),  // Check if user is already authenticated
   status: 'idle',
   error: null,
 };
@@ -113,6 +133,12 @@ const authSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
       state.isAuthenticated = !!action.payload;
+
+      if (action.payload) {
+        saveUserToLocalStorage(action.payload); // Save user to localStorage when set
+      } else {
+        removeUserFromLocalStorage(); // Remove user from localStorage if no user
+      }
     },
     setCanBook(state, action) {
       state.canBook = action.payload;
@@ -179,7 +205,27 @@ const authSlice = createSlice({
   },
 });
 
+// Firebase Auth State Listener
+export const checkAuthState = () => {
+  return (dispatch) => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+        const userData = {
+          uid: user.uid,
+          email: user.email,
+          // Add other user properties if needed
+        };
+        dispatch(authSlice.actions.setUser(userData));
+      } else {
+        // User is signed out
+        dispatch(authSlice.actions.setUser(null));
+      }
+    });
+  };
+};
+
 // Export the setUser action
-export const { setUser: setUserAction, setCanBook } = authSlice.actions;
+export const { setUser, setCanBook } = authSlice.actions;
 
 export default authSlice.reducer;

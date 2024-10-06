@@ -7,9 +7,10 @@ import Loader from './Components/Loader/Loader';
 import { setUser } from './Features/slices/authSlice'; 
 import './App.css';
 import { FaAnglesUp } from 'react-icons/fa6';
+import AboutUs from './Components/AboutUs/AboutUs';
 
 const Home = lazy(() => import('./Components/Home/Home'));
-const AboutUs = lazy(() => import('./Components/AboutUs/AboutUs'));
+// const AboutUs = lazy(() => import('./Components/AboutUs/AboutUs'));
 const Rooms = lazy(() => import('./Components/Rooms/Rooms'));
 const Gallery = lazy(() => import('./Components/Gallery/Gallery'));
 const ContactUs = lazy(() => import('./Components/Contact/Contact'));
@@ -57,8 +58,8 @@ const App = () => {
         <main>
           <Suspense fallback={<Loader />}>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<AboutUs />} />
+              <Route path="/" element={<><Home />,  <AboutUs/></>} />
+              {/* <Route path="/about" element={<AboutUs />} /> */}
               <Route path="/rooms" element={<Rooms />} />
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/contact" element={<ContactUs />} />

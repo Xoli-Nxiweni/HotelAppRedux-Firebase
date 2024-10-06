@@ -16,16 +16,30 @@ export const fetchBookings = async (userId) => {
 };
 
 // Fetch favorites for a user
+// Enhanced fetchFavorites function
 export const fetchFavorites = async (userId) => {
   try {
+    // Ensure userId is passed correctly
+    if (!userId) throw new Error('User ID is required to fetch favorites');
+
+    // Query the favorites collection where userID matches the provided userId
     const favoritesQuery = query(collection(db, 'favorites'), where('userID', '==', userId));
     const querySnapshot = await getDocs(favoritesQuery);
+
+    // Check if query returns any data
+    if (querySnapshot.empty) {
+      console.warn('No favorites found for user:', userId);
+      return [];
+    }
+
+    // Map over the documents and return them
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (error) {
     console.error('Error fetching favorites:', error);
     throw new Error('Could not fetch favorites. Please try again later.');
   }
 };
+
 
 // Update the user's password
 export const updatePassword = async (user, newPassword) => {

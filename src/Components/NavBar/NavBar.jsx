@@ -4,11 +4,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../Firebase/firebase';
-import { setUser } from '../../Features/slices/authSlice';
+import { checkAuthState, setUser } from '../../Features/slices/authSlice';
 import Auth from '../Auth/Auth';
 import UserProfile from '../UserProfile/UserProfile';
 import { setLoader } from '../../Features/slices/loadingSlice';
 import './NavBar.css';
+import { FaHotel } from "react-icons/fa6";
+import { FaHome } from "react-icons/fa";
+import { IoMail } from "react-icons/io5";
+import { GrGallery } from "react-icons/gr";
 
 // eslint-disable-next-line react/prop-types
 const NavBar = ({ setActivePage }) => {
@@ -36,6 +40,11 @@ const NavBar = ({ setActivePage }) => {
       setActivePage(location.pathname);
     }
   }, [location.pathname, setActivePage]);
+
+  useEffect(() => {
+    // Check the authentication state on app load
+    // dispatch(checkAuthState());
+}, [dispatch]);
 
   // Toggle Drawer Open/Close
   const toggleDrawer = () => setDrawerOpen((prev) => !prev);
@@ -82,27 +91,31 @@ const NavBar = ({ setActivePage }) => {
       <ul className={`nav-links ${drawerOpen ? 'open' : ''}`}>
         <li>
           <a href="/" onClick={(e) => { e.preventDefault(); handleNavClick('/'); }} className={location.pathname === '/' ? 'active' : ''}>
+          <FaHome/>
             Home
           </a>
         </li>
-        <li>
+        {/* <li>
           <a href="/about" onClick={(e) => { e.preventDefault(); handleNavClick('/about'); }} className={location.pathname === '/about' ? 'active' : ''}>
             About Us
           </a>
-        </li>
+        </li> */}
         <li>
           <a href="/rooms" onClick={(e) => { e.preventDefault(); handleNavClick('/rooms'); }} className={location.pathname === '/rooms' ? 'active' : ''}>
+          <FaHotel/>
             Rooms
           </a>
         </li>
         <li>
           <a href="/gallery" onClick={(e) => { e.preventDefault(); handleNavClick('/gallery'); }} className={location.pathname === '/gallery' ? 'active' : ''}>
+          <GrGallery/>
             Gallery
           </a>
         </li>
         <li>
           <a href="/contact" onClick={(e) => { e.preventDefault(); handleNavClick('/contact'); }} className={location.pathname === '/contact' ? 'active' : ''}>
-            Contact Us
+          <IoMail/>
+            Contact
           </a>
         </li>
       </ul>

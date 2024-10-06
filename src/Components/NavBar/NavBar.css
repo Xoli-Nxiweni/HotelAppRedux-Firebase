@@ -36,20 +36,24 @@
     color: #000;
 }
 
-.nav-container.scrolled a.active {
+.nav-container.scrolled a.active,
+.nav-container.scrolled svg.active {
     color: #ff7f50;
 }
 
 .nav-container.scrolled a:hover {
     color: #ff7f50;
 }
-
+.nav-container.scrolled .nav-links li.active{
+    color: #ff7f50;
+}
 /* Navigation links */
 .nav-links {
     display: flex;
     gap: 20px;
     list-style: none;
 }
+
 
 /* Link styles */
 .nav-links li a {
@@ -60,13 +64,19 @@
     font-size: 14px;
     letter-spacing: 1px;
     font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
 }
 
-.nav-links li a:hover {
+.nav-links li a:hover,
+.nav-links li:hover {
     color: #ff7f50;
 }
 
-.nav-links li a.active {
+.nav-links li a.active,
+.nav-links li.active{
     color: #ff7f50;
 }
 .home-active{
@@ -118,17 +128,20 @@
 
 /* Authentication Button */
 .authBtn {
-    padding: 10px 15px;
-    border-radius: 15px 0 15px 0;
+    width: 100%;
+    border-radius: 15px;
+    height: 45px;
     border: 0;
     cursor: pointer;
-    /* background: #3f6682; */
-    color: #fff;
+    background: #ff7f50;
+    color: #000000;
     transition: all 0.2s linear;
+    font-weight: 900;
+    text-transform: uppercase;
 }
 
 .authBtn:hover {
-    background: rgba(25, 80, 25, 0.361)
+    background: #ffb499;
 }
 
 /* Drawer for mobile view */
