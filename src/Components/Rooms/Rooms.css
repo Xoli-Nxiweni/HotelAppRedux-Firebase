@@ -120,7 +120,7 @@ label {
 .card {
     background: #fff;
     border: 1px solid #ddd;
-    border-radius: 15px;
+    border-radius: 15px 15px 15px 0;
     padding: 7px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     width: 285px;
@@ -135,11 +135,22 @@ label {
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.53);
 } */
 
+.imageSection{
+    position: relative;
+}
+
 .card img {
     width: 100%;
     height: 200px;
     object-fit: cover;
     border-radius: 10px;
+}
+.card h3{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #fff;
+    cursor: pointer;
 }
 .cardHeading{
     display: flex;
@@ -168,7 +179,7 @@ label {
 }
 
 .cardBottom {
-    margin-top: 10px;
+    /* margin-top: 10px; */
     font-size: 14px;
     display: flex;
     justify-content: space-between;
@@ -181,14 +192,12 @@ label {
 
 .cardBottom span {
     color: #3f6682;
-    font-weight: bold;
 }
 .cardBottom button {
     padding: 5px 10px;
     border-radius: 10px;
     border: 0;
     cursor: pointer;
-    background: rgb(139, 139, 139);
     color: #fff;
     text-transform: uppercase;
     font-size: .9em;
@@ -287,17 +296,17 @@ display: flex;
 }
 
 /* Book Now Button */
-.bookNowBtn {
+.bookNowBtn, .btn {
     background-color: #3f6682;
     color: white;
     padding: 10px 20px;
     border: 0;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 15px;
+    /* margin-top: 15px; */
 }
 
-.bookNowBtn:hover {
+.bookNowBtn:hover, .btn:hover {
     background-color: #2b4b6d;
 }
 
@@ -307,21 +316,25 @@ display: flex;
         grid-template-columns: repeat(4, 1fr);
     } 
 }
+
 @media (max-width: 1300px) {
     .roomCard {
         grid-template-columns: repeat(3, 1fr);
     } 
 }
+
 @media (max-width: 916px) {
     .roomCard {
         grid-template-columns: repeat(2, 1fr);
     } 
 }
+
 @media (max-width: 800px) {
     .roomCard {
         grid-template-columns: repeat(2, 1fr);
     } 
 }
+
 @media (max-width: 695px) {
     .roomCard {
         grid-template-columns: repeat(1, 1fr);

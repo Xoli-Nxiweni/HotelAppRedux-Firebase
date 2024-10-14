@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { bookRoom } from '../../Features/slices/bookingSlice'; // Import the action from your booking slice
 import { Box, Button, Snackbar, Alert, CircularProgress } from '@mui/material';
@@ -6,7 +6,8 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { setLoader } from '../../Features/slices/loadingSlice'; // Import the setLoader action
 import { useNavigate } from 'react-router-dom';
 
-const Payment = () => {
+// eslint-disable-next-line react/prop-types
+const Payment = ({ onPayment }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const stripe = useStripe(); // Stripe instance
@@ -100,7 +101,8 @@ const Payment = () => {
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
-    navigate('/rooms');
+    navigate('/');
+    window.location.reload();
   };
 
   return (
@@ -134,8 +136,9 @@ const Payment = () => {
         {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Pay Now'}
       </Button>
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-        <Alert onClose={handleCloseSnackbar} severity="success">
+        <Alert onClose={()=>{handleCloseSnackbar(); onPayment();}} severity="success">
           Payment Successful!
+          
         </Alert>
       </Snackbar>
       

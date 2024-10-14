@@ -11,11 +11,13 @@ import { loadStripe } from '@stripe/stripe-js';
 import './Booking.css';
 import { Card, CardContent, Typography, Divider } from '@mui/material';
 import Payment from '../Payment/Payment';
-import { addBooking } from '../../Features/slices/bookingSlice'; // Adjust the import path based on your file structure
+import { bookRoom } from '../../Features/slices/bookingSlice'; // Adjust the import path based on your file structure
+import axios from 'axios';
+// import {  useNavigate } from 'react-router-dom';
 
 const stripePromise = loadStripe('pk_test_51Pw0PWH23g7ZtX12QkXjyxtCKNZsStiJUn2eJpykmWKLDR2dh9dCYooQCZhEgQjxRW08G0NXVDvOZ9QFuSIIoGwS00mSwX1Zhj');
-
 const Booking = () => {
+  // const navigate = useNavigate()
   const dispatch = useDispatch();
   const [isSectionOpen, setIsSectionOpen] = useState({
     userDetails: false,
@@ -24,21 +26,25 @@ const Booking = () => {
   });
 
   const [formState, setFormState] = useState({
-    extras: [],
-    specialRequests: '',
-    review: '',
-    checkInDate: '',
-    checkOutDate: '',
-    numRooms: 1,
-    numGuests: 1,
-    guestName: '',
-    contactInfo: '',
-  });
+    extras: [],                     // Optional: array for extra items selected
+    specialRequests: '',            // Optional: any special requests from the guest
+    review: '',                     // Optional: guest's review
+    checkInDate: '',                // Required: check-in date (initialized as empty)
+    checkOutDate: '',               // Required: check-out date (initialized as empty)
+    numRooms: 1,                    // Default number of rooms (can change as needed)
+    numGuests: 1,                   // Default number of guests (can change as needed)
+    guestName: '',                  // Required: guest's name (initialized as empty)
+    contactInfo: '',                // Required: contact information (initialized as empty)
+});
+
 
   const [isChecked, setIsChecked] = useState(false);
 
   const selectedRoom = useSelector((state) => state.rooms.selectedRoom);
   const user = useSelector((state) => state.auth.user);
+  console.log('user',user);
+  console.log('selected room', selectedRoom);
+  
 
   if (!selectedRoom) {
     return <div className="noRoomSelected">No room selected. Please go back and select a room.</div>;
@@ -66,40 +72,82 @@ const Booking = () => {
     });
   };
 
-  const handleCheckout = (e) => {
-    e.preventDefault(); // Prevent form submission
-    
-    if (!formState.checkInDate || !formState.checkOutDate) {
-      alert('Please fill in all required fields.');
-      return;
-    }
-
-    setIsChecked(true);
-
-    // Extract booking details from state
+  const handleCheckout = () => {
+    // Prepare booking details
     const bookingDetails = {
-      userID: user.uid, // Assuming user.uid contains the user ID from authentication
-      name: user.displayName,
-      email: user.email,
-      phoneNumber: formState.contactInfo,
+      uid: user.uid || '',
+      name: user.displayName || user.name || '',
+      email: user.email || '',
       room: selectedRoom.heading,
-      guests: selectedRoom.guests,
+      selectedRoom: selectedRoom.heading,
       checkInDate: formState.checkInDate,
       checkOutDate: formState.checkOutDate,
-      numRooms: formState.numRooms,
-      numGuests: formState.numGuests,
-      extras: formState.extras,
-      specialRequests: formState.specialRequests,
-      review: formState.review,
-      price: selectedRoom.discountedPrice, // Assuming this is the total price
-      accommodation: selectedRoom, // Store full room details if needed
+      numRooms: formState.numRooms || 1,
+      numGuests: selectedRoom.guests || 1,
+      extras: formState.extras || [],
+      specialRequests: formState.specialRequests || '',
+      price: selectedRoom.discountedPrice * formState.numRooms,
+      status: 'Pending',
+      createdAt: new Date().toISOString(), // Convert to ISO string
     };
-
+  
+    // Log the booking details for debugging
+    console.log("Booking Details:", bookingDetails);
+  
+    // Check for required fields and log missing ones
+    const requiredFields = [
+      'uid', 
+      'name', 
+      'email', 
+      'checkInDate', 
+      'checkOutDate',
+      'selectedRoom'
+    ];
+  
+    const missingFields = requiredFields.filter(field => !bookingDetails[field]);
+  
+    if (missingFields.length > 0) {
+      console.log("Missing fields:", missingFields);
+      alert("Please fill in all required fields: " + missingFields.join(', '));
+      return;
+    }
+  
+    // Validate check-in and check-out dates
+    const checkInDate = new Date(bookingDetails.checkInDate);
+    const checkOutDate = new Date(bookingDetails.checkOutDate);
+  
+    if (checkOutDate <= checkInDate) {
+      console.log("Check-out date must be after check-in date.");
+      alert("Check-out date must be after check-in date.");
+      return;
+    }
+  
     // Dispatch the action to add booking details to Firestore via Redux
-    dispatch(addBooking(bookingDetails));
-
-    alert('Booking details submitted. Redirecting to payment...');
+    dispatch(bookRoom(bookingDetails))
+      .then(() => {
+        alert('Booking submitted successfully.');
+      })
+      .catch((error) => {
+        console.error('Error booking room:', error);
+        alert('Failed to book room. Please try again.');
+      });
+  
+    setIsChecked(true);
+  
+    // Send booking data to the server
+    const submitBooking = async (bookingDetails) => {
+      try {
+        const response = await axios.post('http://localhost:5200/bookings', bookingDetails);
+        console.log(response.data); // Success response
+      } catch (error) {
+        console.error('Error booking room:', error); // Handle error
+      }
+    };
+  
+    // Submit the booking
+    submitBooking(bookingDetails);
   };
+  
 
   return (
     <div className="bookingWrapper">
@@ -267,7 +315,7 @@ const Booking = () => {
       </div>
 
       <div className="bookingRightContainer">
-        <form onSubmit={handleCheckout} className="bookingForm">
+        <form onSubmit={e => handleCheckout(e)} className="bookingForm">
           <div className="form-group">
             <label htmlFor="checkInDate">Check-In Date</label>
             <input
@@ -347,7 +395,10 @@ const Booking = () => {
       </CardContent>
     </Card>
     <br />
-          <button type="submit" disabled={isChecked}>Confirm Booking</button>
+          <button type="submit" disabled={isChecked} onClick={(e)=>{
+            handleCheckout(e);
+            // navigate('/')
+          }}>Confirm Booking</button>
         </form>
         <br />
 

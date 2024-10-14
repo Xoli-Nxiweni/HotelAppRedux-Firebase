@@ -10,6 +10,7 @@
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(6px);
+  z-index: 99999999;
 }
 
 /* Box that contains the form and additional info */
@@ -83,13 +84,13 @@
 }
 
 /* Form input fields */
-input[type="text"], input[type="password"], input[type="tel"], input[type="email"] {
+.auth-form input[type="text"], input[type="password"], input[type="tel"], input[type="email"] {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
   outline: 0;
-  /* margin-bottom: 15px; */
+  margin-bottom: 10px;
 }
 
 /* Submit button styles */

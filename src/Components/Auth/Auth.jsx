@@ -131,7 +131,7 @@ const Auth = ({ isOpen, onClose }) => {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <br />
+            {/* <br /> */}
             <input
               type="password"
               placeholder="Password"
@@ -139,7 +139,7 @@ const Auth = ({ isOpen, onClose }) => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <br />
+            {/* <br /> */}
             {isRegistered && (
               <input
                 type="password"

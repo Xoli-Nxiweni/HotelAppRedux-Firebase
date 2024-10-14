@@ -10,68 +10,68 @@ import {
   CardActionArea
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import './Gallery.css'; // You can keep your custom styles if needed.
+import './Gallery.css';
 
 const Gallery = () => {
   const galleryItems = [
     { 
       id: 1, 
-      src: 'https://images.pexels.com/photos/261197/pexels-photo-261197.jpeg', 
+      src: 'https://images.pexels.com/photos/9119735/pexels-photo-9119735.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1', 
       alt: 'White Sunloungers Beside Pool' 
     },
     { 
       id: 2, 
-      src: 'https://images.pexels.com/photos/271619/pexels-photo-271619.jpeg', 
+      src: 'https://castrolighting.com/uploads/photos/blog/Luxury-Lighting-for-the-hotel-lobby/Luxury-Lighting-Hotel-Lobby-Jagdhof-Hotel-Aurea-Chandelier-Castro-Lighting-Banner.jpg', 
       alt: 'Elegant Hotel Lobby with Chandelier' 
     },
     { 
       id: 3, 
-      src: 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg', 
+      src: 'https://images.squarespace-cdn.com/content/v1/62dfa656a2986f7b76f75c92/1658824442495-VQ2TUKVIBERFA152ZIWS/Screenshot+2022-05-04+at+17.59.16.png', 
       alt: 'Luxury Hotel Room Interior' 
     },
     { 
       id: 4, 
-      src: 'https://images.pexels.com/photos/189296/pexels-photo-189296.jpeg', 
+      src: 'https://www.tallboxdesign.com/wp-content/uploads/2024/09/NEW_SSSVVHJARRFQLMCDJBZCJ7YFW-1024x574.webp', 
       alt: 'Restaurant with Cozy Seating' 
     },
     { 
       id: 5, 
-      src: 'https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg', 
+      src: 'https://m.media-amazon.com/images/I/61+C23kpfYL._AC_UF1000,1000_QL80_.jpg', 
       alt: 'Hotel Bed with Clean White Linens' 
     },
     { 
       id: 6, 
-      src: 'https://images.pexels.com/photos/258155/pexels-photo-258155.jpeg', 
+      src: 'https://cdn.mos.cms.futurecdn.net/ievf8Cy6TqFtRo7h22Jmvm-1200-80.jpg', 
       alt: 'Modern Bathroom with Marble Accents' 
     },
     { 
       id: 7, 
-      src: 'https://images.pexels.com/photos/248837/pexels-photo-248837.jpeg', 
+      src: 'https://st.hzcdn.com/simgs/pictures/patios/backyard-patio-lounge-degoey-designs-img~07f1e14f0afb1e6d_14-5884-1-911cb55.jpg', 
       alt: 'Outdoor Dining Area with Garden View' 
     },
     { 
       id: 8, 
-      src: 'https://images.pexels.com/photos/261393/pexels-photo-261393.jpeg', 
+      src: 'https://www.patioproductions.com/blog/wp-content/uploads/chaise_lounge_chairs_by_a_luxury_pool-1024x574.jpg.webp', 
       alt: 'Poolside with Blue Lounge Chairs' 
     },
     { 
       id: 9, 
-      src: 'https://images.pexels.com/photos/290120/pexels-photo-290120.jpeg', 
+      src: 'https://s32249.pcdn.co/wp-content/uploads/2017/10/gallery9-845x430.jpg', 
       alt: 'Spa Room with Relaxing Atmosphere' 
     },
     { 
       id: 10, 
-      src: 'https://images.pexels.com/photos/276583/pexels-photo-276583.jpeg', 
+      src: 'https://www.yanrefitness.com/wp-content/uploads/2020/09/hotel-gym-setup-banner.jpg', 
       alt: 'Hotel Gym with Modern Equipment' 
     },
     { 
       id: 11, 
-      src: 'https://images.pexels.com/photos/2113566/pexels-photo-2113566.jpeg', 
+      src: 'https://i.pinimg.com/736x/9f/02/9b/9f029bae8880da0c6baeb5ac6eb4babd.jpg', 
       alt: 'Balcony with Scenic City View' 
     },
     { 
       id: 12, 
-      src: 'https://images.pexels.com/photos/112831/pexels-photo-112831.jpeg', 
+      src: 'https://cf.bstatic.com/xdata/images/hotel/max1024x768/536254999.jpg?k=2419bacb7837c9e032c3132da0006dc71d8a20548222d85c2a954836db618cf7&o=&hp=1', 
       alt: 'Luxurious Hotel Entrance at Night' 
     },
   ];

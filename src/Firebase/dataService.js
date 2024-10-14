@@ -1,13 +1,24 @@
 // src/services/dataService.js
 import { db } from './firebase'; // Your Firebase initialization file
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { getAuth as firebaseUpdatePassword } from 'firebase/auth'; // Ensure you have these imports
+import { getAuth, updatePassword as firebaseUpdatePassword } from 'firebase/auth'; // Ensure correct imports
 
 // Fetch bookings for a user
-export const fetchBookings = async (userId) => {
+export const fetchBookings = async (uid) => {
   try {
-    const bookingsQuery = query(collection(db, 'bookings'), where('userID', '==', userId));
+    // Ensure userId is passed correctly
+    if (!uid) throw new Error('User ID is required to fetch bookings');
+
+    const bookingsQuery = query(collection(db, 'bookings'), where('uid', '==', uid));
     const querySnapshot = await getDocs(bookingsQuery);
+
+    // Check if query returns any data
+    if (querySnapshot.empty) {
+      console.warn('No bookings found for user:', uid);
+      return [];
+    }
+
+    // Map over the documents and return them
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (error) {
     console.error('Error fetching bookings:', error);
@@ -16,19 +27,18 @@ export const fetchBookings = async (userId) => {
 };
 
 // Fetch favorites for a user
-// Enhanced fetchFavorites function
-export const fetchFavorites = async (userId) => {
+export const fetchFavorites = async (uid) => {
   try {
     // Ensure userId is passed correctly
-    if (!userId) throw new Error('User ID is required to fetch favorites');
+    if (!uid) throw new Error('User ID is required to fetch favorites');
 
     // Query the favorites collection where userID matches the provided userId
-    const favoritesQuery = query(collection(db, 'favorites'), where('userID', '==', userId));
+    const favoritesQuery = query(collection(db, 'favorites'), where('userID', '==', uid));
     const querySnapshot = await getDocs(favoritesQuery);
 
     // Check if query returns any data
     if (querySnapshot.empty) {
-      console.warn('No favorites found for user:', userId);
+      console.warn('No favorites found for user:', uid);
       return [];
     }
 
@@ -40,12 +50,11 @@ export const fetchFavorites = async (userId) => {
   }
 };
 
-
 // Update the user's password
 export const updatePassword = async (user, newPassword) => {
   try {
     const auth = getAuth(); // Ensure you have initialized auth properly
-    await firebaseUpdatePassword(user, newPassword);
+    await firebaseUpdatePassword(auth.currentUser, newPassword); // Pass the current user to update password
   } catch (error) {
     console.error('Error updating password:', error);
     throw new Error('Could not update password. Please try again later.');

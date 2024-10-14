@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  
 }
 
 .contactUsLeft {
@@ -11,18 +12,25 @@
   width: 50%;
   height: 100vh;
   padding: 100px 40px 40px 40px;
-  background: #ffffff;
+  background: #f5f5f5;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .contactUsRight {
   width: 50%;
+  background: rgb(255, 255, 255);
   height: 100vh;
+  padding: 66px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .contactUsRight img {
-  width: 100%;
-  height: 100vh;
+  width: 70%;
+  height: 50%;
+  /* height: 100vh; */
   object-fit: cover;
 }
 
@@ -34,9 +42,11 @@
 }
 
 .formGroup {
+  padding: 10px 10%;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: .5em;
+  font-size: 14px;
 }
 
 .labelIcon {
@@ -47,7 +57,7 @@
 
 .inputIcon {
   margin-right: 10px;
-  color: #ff7f50;
+  color: #3f6682;
 }
 
 .inputField, .textareaField {
@@ -72,17 +82,17 @@
 
 .submitButton {
   padding: 15px 20px;
-  background-color: #ff7f50;
+  background-color: #3f6682;
   color: white;
   font-size: 1.2rem;
   border: none;
-  border-radius: 50px;
+  border-radius: 7px;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .submitButton:hover {
-  background-color: #ff7f5066;
+  background-color: #2b4b6d;
   box-shadow: 0 8px 15px rgba(90, 84, 224, 0.3);
 }
 
@@ -95,6 +105,7 @@
 .error-active input, .error-active textarea {
   border-color: red;
 }
+
 .error-active {
   border-color: red;
 }

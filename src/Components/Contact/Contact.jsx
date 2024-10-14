@@ -186,7 +186,9 @@ const ContactUs = () => {
       </div>
 
       <div className="contactUsRight">
-        <img src="pic9.jpg" alt="Contact us" />
+        {/* <img src="pic9.jpg" alt="Contact us" /> */}
+        <img src="https://www.excelprint.co.za/wp-content/uploads/2022/12/Contact-Us-Vector-Illustration-Part-02-1-1600x1200-1.jpg" alt="Contact us" />
+        <img src="https://www.excelprint.co.za/wp-content/uploads/2022/12/istockphoto-1271752802-170667a.jpg" alt="Contact us" />
       </div>
 
       <Snackbar

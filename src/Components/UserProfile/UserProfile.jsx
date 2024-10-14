@@ -134,6 +134,12 @@ const UserProfile = ({ user, onSignOut, onClose }) => {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
               />
+              <input
+                type="password"
+                placeholder="Repeat Password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
               <button onClick={handlePasswordChange}>Update Password</button>
             </div>
           </div>

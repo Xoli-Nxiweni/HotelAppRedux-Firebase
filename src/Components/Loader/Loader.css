@@ -8,7 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(133, 133, 133, 0.616); /* Semi-transparent background */
+  background: rgba(0, 0, 0, 0.616); /* Semi-transparent background */
   backdrop-filter: blur(6px); /* Blurs the content behind the loader */
   z-index: 1000; /* Ensure it appears above other content */
 }
@@ -25,14 +25,14 @@
 @keyframes expand {
   0% {
     transform: scale(1);
-    background: #ff7f50; /* Initial color */
+    background: #3f6682; /* Initial color */
   }
   50% {
     transform: scale(5); /* Adjust scaling for better visibility */
-    background: #ff7f5026; /* Lighter color on expansion */
+    background: #3f668226; /* Lighter color on expansion */
   }
   100% {
     transform: scale(1); /* Reset to original scale */
-    background: #ff7f50; /* Restore original color */
+    background: #3f6682; /* Restore original color */
   }
 }

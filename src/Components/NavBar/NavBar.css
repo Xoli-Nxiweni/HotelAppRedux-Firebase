@@ -28,9 +28,9 @@
     color: #000000;
 }
 
-.nav-container.scrolled svg {
-    color: #000000;
-}
+/* .nav-container.scrolled svg {
+    color: #ff7f50;
+} */
 
 .nav-container.scrolled a {
     color: #000;
@@ -44,7 +44,8 @@
 .nav-container.scrolled a:hover {
     color: #ff7f50;
 }
-.nav-container.scrolled .nav-links li.active{
+.nav-container.scrolled .nav-links li.active,
+.nav-container.scrolled svg.active{
     color: #ff7f50;
 }
 /* Navigation links */
@@ -84,6 +85,7 @@
     backdrop-filter: blur(40px);
     border: 0;
 }
+
 /* Logo */
 .logo {
     border-radius: 50%;
@@ -129,19 +131,20 @@
 /* Authentication Button */
 .authBtn {
     width: 100%;
-    border-radius: 15px;
+    border-radius: 10px;
     height: 45px;
     border: 0;
     cursor: pointer;
-    background: #ff7f50;
-    color: #000000;
+    background: #3f6682;
+    color: #ffffff;
     transition: all 0.2s linear;
-    font-weight: 900;
+    /* font-weight: 900; */
     text-transform: uppercase;
+
 }
 
 .authBtn:hover {
-    background: #ffb499;
+    background: #2b4b6d;
 }
 
 /* Drawer for mobile view */

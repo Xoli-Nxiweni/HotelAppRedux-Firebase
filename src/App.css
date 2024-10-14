@@ -11,7 +11,7 @@
 
 /* Custom selection color */
 ::selection {
-  background-color: #ff7f50;
+  background-color: #3f6682;
   color: #fff;
 }
 
@@ -168,19 +168,19 @@ main {
   padding: 10px;
   display: flex;
   cursor: pointer;
-  background: #000000;
+  background: #3f6682;
   color: #fff;
   font-size: 2em;
-  border: 1px solid #000000;
+  border: 1px solid #3f6682;
   transition: all .2s linear;
   z-index: 99;
 }
 .upArrow:hover{
   transform: scale(1.1);
   background: #fff;
-  color: #000000;
-  border: 1px solid #000000;
-  box-shadow: 0 0 4px 1px #00000080;
+  color: #3f6682;
+  border: 1px solid #3f6682;
+  box-shadow: 0 0 4px 1px #3f668288;
 }
 
 /* App.css */

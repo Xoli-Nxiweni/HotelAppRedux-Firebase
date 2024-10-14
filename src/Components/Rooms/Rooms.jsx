@@ -22,6 +22,16 @@ import Rating from "@mui/material/Rating";
 import { IoMdCloseCircle } from "react-icons/io";
 import scrollreveal from "scrollreveal";
 
+import {
+  selectRooms,
+  selectFilteredRoomsMemoized,
+  selectSearchQuery,
+  selectStatus,
+  selectError,
+  selectSelectedRoom,
+  selectIsAuthenticated,
+} from '../../Features/Selectors';
+
 const Rooms = () => {
   const [authOpen, setAuthOpen] = useState(false);
   const dispatch = useDispatch();
@@ -36,13 +46,13 @@ const Rooms = () => {
     selectedRoom,
     isAuthenticated,
   } = useSelector((state) => ({
-    rooms: state.rooms.rooms || [],
-    filteredRooms: state.rooms.filteredRooms || [],
-    searchQuery: state.rooms.searchQuery || "",
-    status: state.rooms.status || "idle",
-    error: state.rooms.error || null,
-    selectedRoom: state.rooms.selectedRoom,
-    isAuthenticated: state.auth.isAuthenticated,
+    rooms: selectRooms(state),
+    filteredRooms: selectFilteredRoomsMemoized(state),
+    searchQuery: selectSearchQuery(state),
+    status: selectStatus(state),
+    error: selectError(state),
+    selectedRoom: selectSelectedRoom(state),
+    isAuthenticated: selectIsAuthenticated(state),
   }));
 
   // Fetch rooms on component mount
@@ -118,6 +128,10 @@ const Rooms = () => {
     }
   };
 
+  const closeAuthPopup = ()=>{
+    setAuthOpen(false)
+  }
+
   const userId = useSelector((state) => state.auth);
 
   const handleRatingChange = (roomId) => (event, newValue) => {
@@ -144,7 +158,7 @@ const Rooms = () => {
           <IoSearchSharp />
           <input
             type="text"
-            placeholder="Where to sleep?"
+            placeholder="Search room of choice"
             value={searchQuery}
             onChange={handleSearchChange}
             onKeyPress={handleSearch}
@@ -166,7 +180,19 @@ const Rooms = () => {
               const isFavorite = room.isFavorite || false; // Ensure `isFavorite` is initialized
               return (
                 <div key={room.id} className="card">
+                  <div className="imageSection">
                   <img src={room.image} alt={room.heading || "No image"} />
+                    <h3
+                      onClick={() => handleFavoriteClick(room.id, isFavorite)}
+                      aria-label={
+                        isFavorite
+                          ? "Remove from favorites"
+                          : "Add to favorites"
+                      }
+                    >
+                      {isFavorite ? <FaHeart /> : <FaRegHeart />}
+                    </h3>
+                  </div>
                   <div className="cardHeading">
                     <h4>{room.heading || "No title"}</h4>
                     <span className={room.isBooked ? "booked" : "notBooked"}>
@@ -193,26 +219,16 @@ const Rooms = () => {
                       />
                     </div>
 
-                    <h3
-                      onClick={() => handleFavoriteClick(room.id, isFavorite)}
-                      aria-label={
-                        isFavorite
-                          ? "Remove from favorites"
-                          : "Add to favorites"
-                      }
-                    >
-                      {isFavorite ? <FaHeart /> : <FaRegHeart />}
-                    </h3>
                   </div>
                   <div className="cardBottom">
-                    <button onClick={() => handlePopUp(room.id)}>
+                    <button className="btn" onClick={() => handlePopUp(room.id)}>
                       View Room
                     </button>
                     <p>
-                      {room.nights || 0} nights,{" "}
+                      
                       <s>{room.originalPrice || ""}</s>
                     </p>
-                    <span>{`R ${room.discountedPrice}`}</span>
+                    <span>{`R ${room.discountedPrice}`} <span style={{color: 'coral'}}> | {room.nights || 0} nights{" "}</span></span>
                   </div>
                 </div>
               );
@@ -275,15 +291,19 @@ const Rooms = () => {
               <button className="bookNowBtn" onClick={handleBookNow} aria-label="Book now">
                 Book Now
               </button> 
-            ) : isAuthenticated ? "Room Already Booked" : <p onClick={()=>{
-            closePopUp()}}>Not Authorized to book! Try signing in!</p>}
+            ) : isAuthenticated ? "Room Already Booked" : <button className="btn" onClick={()=>{
+            // closePopUp();
+            setAuthOpen(true)}}> Sign In Now! </button>}
+          {authOpen && <Auth setAuthOpen={setAuthOpen} />}
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {authOpen && <Auth setAuthOpen={setAuthOpen} />}
+
+      {authOpen && <Auth isOpen={authOpen} onClose={closeAuthPopup} />}
+      {/* {authOpen && <Auth setAuthOpen={setAuthOpen} />} */}
     </div>
   );
 };

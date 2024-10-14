@@ -1,9 +1,16 @@
 import './Loader.css';
+import { Backdrop, CircularProgress } from '@mui/material';
 
-const Loader = () => {
+// eslint-disable-next-line react/prop-types
+const Loader = ({ isLoading = true }) => {
   return (
     <div className="loader-overlay">
-      <div className="loader"></div>
+      <Backdrop
+        sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+        open={isLoading}  // Always open on render based on the prop
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
 };

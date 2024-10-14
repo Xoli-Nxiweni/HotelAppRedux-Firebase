@@ -3,19 +3,17 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-import { setPersistence, browserLocalPersistence } from "firebase/auth";
-
 
 
 // Your Firebase configuration object
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
+  apiKey: "AIzaSyAtN8IJTVyI2UhFecJPyWIY92ZgCo1Dql8",
+  authDomain: "hotelapp-323da.firebaseapp.com",
+  projectId: "hotelapp-323da",
+  storageBucket: "hotelapp-323da.appspot.com",
+  messagingSenderId: "511781411551",
+  appId: "1:511781411551:web:a2d9a450970bc21123276a",
+  measurementId: "G-BM5VPT88V4"
 };
 
 // Initialize Firebase app
