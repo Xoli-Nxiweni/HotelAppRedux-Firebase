@@ -26,15 +26,15 @@ const Booking = () => {
   });
 
   const [formState, setFormState] = useState({
-    extras: [],                     // Optional: array for extra items selected
-    specialRequests: '',            // Optional: any special requests from the guest
-    review: '',                     // Optional: guest's review
-    checkInDate: '',                // Required: check-in date (initialized as empty)
-    checkOutDate: '',               // Required: check-out date (initialized as empty)
-    numRooms: 1,                    // Default number of rooms (can change as needed)
-    numGuests: 1,                   // Default number of guests (can change as needed)
-    guestName: '',                  // Required: guest's name (initialized as empty)
-    contactInfo: '',                // Required: contact information (initialized as empty)
+    extras: [],
+    specialRequests: '',
+    review: '',
+    checkInDate: '',
+    checkOutDate: '',
+    numRooms: 1,
+    numGuests: 1,
+    guestName: '',
+    contactInfo: '',
 });
 
 
