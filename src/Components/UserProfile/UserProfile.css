@@ -1,6 +1,6 @@
-.modal {
+.user-profile-modal {
   position: fixed;
-  top: 0%;
+  top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
@@ -8,77 +8,321 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .modal-content {
-  background-color: #fff;
-  padding: 20px;
+  background-color: white;
   border-radius: 8px;
-  max-width: 600px;
-  color: #000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: 75%;
+  /* max-width: 600px; */
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px;
   position: relative;
-  width: 100%;
 }
 
-.close {
+.close-button {
   position: absolute;
-  top: 10px;
-  right: 20px;
-  color: #fff;
-  font-weight: 900;
+  top: 15px;
+  right: 15px;
   font-size: 24px;
   cursor: pointer;
-  background: rgb(255, 0, 0);
-  width: 40px;
+  color: #666;
+  transition: color 0.2s;
+}
+
+.close-button:hover {
+  color: #000;
+}
+
+/* Profile Header */
+.profile-header {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 40px;
-  border-radius: 50%;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eee;
 }
 
 .profile-avatar {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  display: block;
-  margin: 0 auto 10px auto;
+  object-fit: cover;
+  border: 3px solid #f0f0f0;
+  margin-bottom: 12px;
 }
 
-.profile-header {
+.avatar-container {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.change-avatar-btn {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.edit-name-input {
+  font-size: 18px;
   text-align: center;
+  margin-bottom: 8px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 80%;
 }
 
-.list {
-  max-height: 150px;
-  overflow-y: auto;
+.user-email {
+  color: #666;
+  margin-top: 4px;
 }
 
-.actions {
+/* Sections */
+.profile-section {
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-size: 18px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+/* Lists */
+.items-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list-item {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 8px;
+  transition: all 0.2s;
+}
+
+.list-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.list-item.favorites {
+  border-left: 4px solid #4a90e2;
+}
+
+.list-item.bookings {
+  border-left: 4px solid #56c969;
+}
+
+.item-header {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.item-details {
+  font-size: 14px;
+  color: #666;
+}
+
+.empty-list {
+  color: #999;
+  font-style: italic;
+  padding: 12px;
+  text-align: center;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+}
+
+/* Loading */
+.loading-spinner {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  padding: 20px;
+  color: #666;
+}
+
+/* Buttons */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
   margin-top: 20px;
 }
 
-.loading {
-  text-align: center;
+.action-buttons button {
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
 }
 
+.action-buttons button:hover {
+  transform: translateY(-2px);
+}
+
+.action-buttons button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.edit-btn {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.save-btn {
+  background-color: #56c969;
+  color: white;
+}
+
+.cancel-btn {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.password-btn {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.signout-btn {
+  background-color: #e94e4e;
+  color: white;
+}
+
+/* Password Modal */
+.password-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1001;
+}
+
+.password-modal-content {
+  background-color: white;
+  padding: 24px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.close-password-modal {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+}
+
+.password-form {
+  margin-top: 16px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #555;
+}
+
+.password-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.update-password-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+/* Snackbar */
 .snackbar {
   position: fixed;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 10px 20px;
+  min-width: 250px;
+  padding: 16px;
   border-radius: 4px;
+  color: white;
+  text-align: center;
+  z-index: 1002;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s, fadeOut 0.3s 2.7s;
 }
 
 .snackbar.success {
-  background-color: green;
-  color: white;
+  background-color: #56c969;
 }
 
 .snackbar.error {
-  background-color: red;
-  color: white;
+  background-color: #e94e4e;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; bottom: 0; }
+  to { opacity: 1; bottom: 20px; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; bottom: 20px; }
+  to { opacity: 0; bottom: 0; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 16px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .action-buttons button {
+    width: 100%;
+    margin-bottom: 8px;
+  }
 }

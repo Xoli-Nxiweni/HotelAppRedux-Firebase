@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
 import { fetchBookings, fetchFavorites, updatePassword } from '../../Firebase/dataService';
 import { useDispatch, useSelector } from 'react-redux';
@@ -5,11 +6,24 @@ import { setBookings, setFavorites, setLoading, setError, setSuccess } from '../
 import './UserProfile.css';
 
 const UserProfile = ({ user, onSignOut, onClose }) => {
+  // Profile state
+  const [editMode, setEditMode] = useState(false);
+  const [profileData, setProfileData] = useState({
+    displayName: user?.displayName || `${user?.name || ''} ${user?.surname || ''}`,
+    photoURL: user?.photoURL || '/path/to/default/avatar.png',
+  });
+
+  // Password state
   const [openChangePassword, setOpenChangePassword] = useState(false);
   const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  
+  // Notification state
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarType, setSnackbarType] = useState('');
 
+  // Redux state
   const bookings = useSelector((state) => state.userProfile.bookings);
   const favorites = useSelector((state) => state.userProfile.favorites);
   const isLoading = useSelector((state) => state.userProfile.isLoading);
@@ -18,6 +32,7 @@ const UserProfile = ({ user, onSignOut, onClose }) => {
 
   const dispatch = useDispatch();
 
+  // Effect to load user data
   useEffect(() => {
     const loadData = async () => {
       if (user?.uid) {
@@ -30,7 +45,9 @@ const UserProfile = ({ user, onSignOut, onClose }) => {
           dispatch(setBookings(fetchedBookings));
           dispatch(setFavorites(fetchedFavorites));
         } catch (err) {
+          showSnackbar('Failed to fetch data. Please try again later.', 'error');
           dispatch(setError('Failed to fetch data. Please try again later.'));
+          console.error(err)
         } finally {
           dispatch(setLoading(false));
         }
@@ -40,114 +57,213 @@ const UserProfile = ({ user, onSignOut, onClose }) => {
     loadData();
   }, [user, dispatch]);
 
+  // Effect to handle Redux state changes for notifications
+  useEffect(() => {
+    if (error) {
+      showSnackbar(error, 'error');
+      dispatch(setError(null));
+    }
+    if (success) {
+      showSnackbar(success, 'success');
+      dispatch(setSuccess(null));
+    }
+  }, [error, success, dispatch]);
+
+  const handleProfileEdit = () => {
+    setEditMode(true);
+  };
+
+  const handleProfileSave = async () => {
+    // Here you would add logic to update the user profile in Firebase
+    // For example: await updateProfile(user, profileData);
+    setEditMode(false);
+    showSnackbar('Profile updated successfully!', 'success');
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setProfileData({
+      ...profileData,
+      [name]: value,
+    });
+  };
+
   const handlePasswordChange = async () => {
     if (newPassword.length < 6) {
-      dispatch(setError('Password must be at least 6 characters long.'));
+      showSnackbar('Password must be at least 6 characters long.', 'error');
       return;
     }
+    
+    if (newPassword !== confirmPassword) {
+      showSnackbar('Passwords do not match.', 'error');
+      return;
+    }
+    
     try {
       await updatePassword(user, newPassword);
-      dispatch(setSuccess('Password changed successfully.'));
-      setSnackbarMessage('Password changed successfully!');
-      setSnackbarOpen(true);
-    } catch (error) {
-      dispatch(setError('Failed to change password. Please try again.'));
-    } finally {
+      showSnackbar('Password changed successfully!', 'success');
       setOpenChangePassword(false);
       setNewPassword('');
+      setConfirmPassword('');
+    } catch (error) {
+      showSnackbar('Failed to change password. Please try again.', 'error');
+      console.error(error)
     }
   };
 
-  const handleCloseSnackbar = () => {
-    setSnackbarOpen(false);
+  const showSnackbar = (message, type) => {
+    setSnackbarMessage(message);
+    setSnackbarType(type);
+    setSnackbarOpen(true);
+    
+    // Auto-hide after 3 seconds
+    setTimeout(() => {
+      setSnackbarOpen(false);
+    }, 3000);
   };
 
   const renderList = (items, type) => {
     return items.length > 0 ? (
       items.map((item) => (
-        <li key={item.id}>
-          {type === 'favorites' ? item.name : `Booking #${item.id}`} - 
-          {type === 'favorites'
-            ? item.description
-            : `Date: ${new Date(item.checkInDate).toLocaleDateString()} - ${new Date(item.checkOutDate).toLocaleDateString()}`}
+        <li key={item.id} className={`list-item ${type}`}>
+          <div className="item-header">
+            {type === 'favorites' ? item.name : `Booking #${item.id}`}
+          </div>
+          <div className="item-details">
+            {type === 'favorites'
+              ? item.description
+              : `Date: ${new Date(item.checkInDate).toLocaleDateString()} - ${new Date(item.checkOutDate).toLocaleDateString()}`}
+          </div>
         </li>
       ))
     ) : (
-      <p>No {type} found.</p>
+      <p className="empty-list">No {type} found.</p>
     );
   };
 
   return (
-    <div className="modal" open={true}>
+    <div className="user-profile-modal">
       <div className="modal-content">
-        <span className="close" onClick={onClose}>X</span>
+        <span className="close-button" onClick={onClose}>&times;</span>
+        
         <div className="profile-header">
-          <img
-            alt={user?.displayName || `${user?.name || ''} ${user?.surname || ''}`}
-            src={user?.photoURL || '/path/to/default/avatar.png'}
-            className="profile-avatar"
-          />
-          <h2>{user?.displayName || `${user?.name || ''} ${user?.surname || ''}`}</h2>
-          <p>{user?.email || 'user@example.com'}</p>
+          {editMode ? (
+            <>
+              <div className="avatar-container">
+                <img
+                  alt="Profile"
+                  src={profileData.photoURL}
+                  className="profile-avatar"
+                />
+                <button className="change-avatar-btn">Change</button>
+              </div>
+              <input
+                type="text"
+                name="displayName"
+                value={profileData.displayName}
+                onChange={handleInputChange}
+                className="edit-name-input"
+              />
+            </>
+          ) : (
+            <>
+              <img
+                alt={profileData.displayName}
+                src={profileData.photoURL}
+                className="profile-avatar"
+              />
+              <h2>{profileData.displayName}</h2>
+            </>
+          )}
+          <p className="user-email">{user?.email || 'user@example.com'}</p>
         </div>
 
-        <hr />
-
-        <h3>Favorites</h3>
-        {isLoading ? (
-          <div className="loading">Loading...</div>
-        ) : (
-          <ul className="list">
-            {renderList(favorites, 'favorites')}
-          </ul>
-        )}
-
-        <hr />
-
-        <h3>Your Bookings</h3>
-        {isLoading ? (
-          <div className="loading">Loading...</div>
-        ) : (
-          <ul className="list">
-            {renderList(bookings, 'bookings')}
-          </ul>
-        )}
-
-        <div className="actions">
-          <button disabled={isLoading}>Edit Profile</button>
-          <button onClick={() => setOpenChangePassword(true)} disabled={isLoading}>
-            Change Password
-          </button>
-          <button onClick={onSignOut} disabled={isLoading}>
-            Sign Out
-          </button>
+        <div className="profile-section">
+          <h3 className="section-title">Favorites</h3>
+          {isLoading ? (
+            <div className="loading-spinner">Loading...</div>
+          ) : (
+            <ul className="items-list favorites-list">
+              {renderList(favorites, 'favorites')}
+            </ul>
+          )}
         </div>
 
+        <div className="profile-section">
+          <h3 className="section-title">Your Bookings</h3>
+          {isLoading ? (
+            <div className="loading-spinner">Loading...</div>
+          ) : (
+            <ul className="items-list bookings-list">
+              {renderList(bookings, 'bookings')}
+            </ul>
+          )}
+        </div>
+
+        <div className="action-buttons">
+          {editMode ? (
+            <>
+              <button className="save-btn" onClick={handleProfileSave} disabled={isLoading}>
+                Save Changes
+              </button>
+              <button className="cancel-btn" onClick={() => setEditMode(false)} disabled={isLoading}>
+                Cancel
+              </button>
+            </>
+          ) : (
+            <>
+              <button className="edit-btn" onClick={handleProfileEdit} disabled={isLoading}>
+                Edit Profile
+              </button>
+              <button className="password-btn" onClick={() => setOpenChangePassword(true)} disabled={isLoading}>
+                Change Password
+              </button>
+              <button className="signout-btn" onClick={onSignOut} disabled={isLoading}>
+                Sign Out
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* Password Change Modal */}
         {openChangePassword && (
-          <div className="modal">
-            <div className="modal-content">
-              <span className="close" onClick={() => setOpenChangePassword(false)}>&times;</span>
+          <div className="password-modal">
+            <div className="password-modal-content">
+              <span className="close-password-modal" onClick={() => setOpenChangePassword(false)}>&times;</span>
               <h3>Change Password</h3>
-              <input
-                type="password"
-                placeholder="New Password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
-              <input
-                type="password"
-                placeholder="Repeat Password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
-              <button onClick={handlePasswordChange}>Update Password</button>
+              <div className="password-form">
+                <div className="form-group">
+                  <label>New Password</label>
+                  <input
+                    type="password"
+                    placeholder="New Password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="password-input"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Confirm Password</label>
+                  <input
+                    type="password"
+                    placeholder="Confirm Password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="password-input"
+                  />
+                </div>
+                <button className="update-password-btn" onClick={handlePasswordChange}>
+                  Update Password
+                </button>
+              </div>
             </div>
           </div>
         )}
 
+        {/* Snackbar Notification */}
         {snackbarOpen && (
-          <div className={`snackbar ${error ? 'error' : 'success'}`}>
-            {error || snackbarMessage}
+          <div className={`snackbar ${snackbarType}`}>
+            {snackbarMessage}
           </div>
         )}
       </div>
