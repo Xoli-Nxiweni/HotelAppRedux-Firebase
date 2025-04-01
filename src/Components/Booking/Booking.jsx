@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { LuBedDouble } from 'react-icons/lu';
 import { GiBathtub } from 'react-icons/gi';
@@ -39,6 +39,11 @@ const Booking = () => {
 
 
   const [isChecked, setIsChecked] = useState(false);
+
+  useEffect(()=>{
+    getBookings()
+  },[])
+
 
   const selectedRoom = useSelector((state) => state.rooms.selectedRoom);
   const user = useSelector((state) => state.auth.user);
@@ -147,6 +152,15 @@ const Booking = () => {
     // Submit the booking
     submitBooking(bookingDetails);
   };
+
+  const getBookings = async () =>{
+    try {
+      const response = await axios.get('https://hotelappredux-firebaseemailsender.onrender.com/bookings',)
+      console.log('my api response', response.data)
+    } catch (error) {
+      console.error('error', error)
+    }
+  }
   
 
   return (

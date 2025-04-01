@@ -10,7 +10,7 @@ const UserProfile = ({ user, onSignOut, onClose }) => {
   const [editMode, setEditMode] = useState(false);
   const [profileData, setProfileData] = useState({
     displayName: user?.displayName || `${user?.name || ''} ${user?.surname || ''}`,
-    photoURL: user?.photoURL || '/path/to/default/avatar.png',
+    photoURL: user?.photoURL || 'https://www.v0.app/api/image/tabler-user-icon.png?id=eyJmbiI6ImdldEljb25IZXJvSW1hZ2UiLCJhcmdzIjp7Imljb25TZXRTbHVnIjoidGFibGVyIiwiaWNvblNsdWciOiJ1c2VyIn19',
   });
 
   // Password state

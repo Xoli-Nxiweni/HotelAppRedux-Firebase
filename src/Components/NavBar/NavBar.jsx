@@ -123,7 +123,7 @@ const NavBar = ({ setActivePage }) => {
         {isAuthenticated ? (
           <>
             <button className="user-icon-btn" onClick={() => setShowProfile((prev) => !prev)}>
-              <img src={user.photoURL || 'public/vecteezy_user-icon-on-transparent-background_19879186.png'} alt="User Avatar" />
+              <img src={user.photoURL || 'https://www.v0.app/api/image/tabler-user-icon.png?id=eyJmbiI6ImdldEljb25IZXJvSW1hZ2UiLCJhcmdzIjp7Imljb25TZXRTbHVnIjoidGFibGVyIiwiaWNvblNsdWciOiJ1c2VyIn19'} alt="User Avatar" />
             </button>
             {showProfile && <UserProfile user={user} onSignOut={handleSignOut} onClose={closeProfilePopup} />}
           </>

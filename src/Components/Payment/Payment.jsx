@@ -137,7 +137,7 @@ const Payment = ({ onPayment }) => {
       </Button>
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert onClose={()=>{handleCloseSnackbar(); onPayment();}} severity="success">
-          Payment Successful!
+          Payment Successful! Check your emails or spam folder for booking details!
           
         </Alert>
       </Snackbar>
