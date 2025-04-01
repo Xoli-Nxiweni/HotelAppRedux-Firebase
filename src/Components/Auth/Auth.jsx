@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signUpUser, signInUser, signInWithGoogle } from "../../Features/slices/authSlice";
-import './auth.css';
+import './Auth.css';
 import PropTypes from 'prop-types';
 
 const Auth = ({ isOpen, onClose }) => {
