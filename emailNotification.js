@@ -160,6 +160,7 @@ app.get('/bookings', async (req, res) => {
             ...doc.data(),
         }));
 
+    
         console.log('Bookings:', bookings); // Optional: Log for debugging
 
         // Send bookings as response

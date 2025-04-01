@@ -137,7 +137,7 @@ const Booking = () => {
     // Send booking data to the server
     const submitBooking = async (bookingDetails) => {
       try {
-        const response = await axios.post('http://localhost:5200/bookings', bookingDetails);
+        const response = await axios.post('https://hotelappredux-firebaseemailsender.onrender.com/bookings', bookingDetails);
         console.log(response.data); // Success response
       } catch (error) {
         console.error('Error booking room:', error); // Handle error
