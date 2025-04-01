@@ -81,6 +81,9 @@ Ensure you have the following installed:
 ├── package.json      # Node.js dependencies and scripts
 └── vite.config.js    # Vite configuration
 ```
+## Quick link
+
+https://hotelappredux-firebase.onrender.com
 
 ## CSS Styling
 
