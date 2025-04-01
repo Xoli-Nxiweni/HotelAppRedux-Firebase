@@ -94,7 +94,7 @@
 /* Main content styling */
 main {
   background-attachment: fixed;
-  background-image: url('pic10.jpg');
+  background-image: url('https://plus.unsplash.com/premium_photo-1661881436846-5a0f53025711?q=80&w=1528&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
   background-repeat: no-repeat;
   background-size:cover;
   animation: changeBackground 1200s 3s infinite; 
@@ -199,7 +199,7 @@ main {
 @media (max-width: 412px) {
   main {
     background-position: cover;
-    background-image: url('thaba-eco-hotel.jpg');
+    /* background-image: url('thaba-eco-hotel.jpg'); */
     animation: changeBackground 1200s 3s infinite; 
     /* display: flex; */
     background-repeat: no-repeat;
