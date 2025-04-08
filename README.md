@@ -1,7 +1,3 @@
-It looks like you're preparing documentation for your hotel management application, "HotelAppRedux-Firebase." Here’s a cleaned-up version of your README to make it more polished:
-
----
-
 # HotelAppRedux-Firebase
 
 This is a hotel management application built using React, Redux, Firebase, and Vite for rapid development. The application allows users to manage hotel bookings, view available rooms, and interact with a Firebase backend for real-time data handling.
@@ -107,6 +103,10 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export default app;
+```
+## Usage
+
+to use this application, users are advised to create credentials for a smooth performance of the system and validate you as the user.
 
 
 ## License
